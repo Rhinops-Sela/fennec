@@ -87,7 +87,13 @@ jobs:
       with:
         name: metadata
         path: ./devops/metadata/
-      
+
+  build-and-Push-Base-Image:
+    needs: [build-components,build-devops,build-backend,build-webclient]
+    runs-on: ubuntu-latest
+    steps:   
+    - uses: actions/checkout@v2 
+    
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
       
@@ -96,12 +102,6 @@ jobs:
       with:
         username: blancahot
         password: ${{ secrets.DOCKER_PASSWORD }}
-
-  build-and-Push-Base-Image:
-    needs: [build-components,build-devops,build-backend,build-webclient]
-    runs-on: ubuntu-latest
-    steps:   
-    - uses: actions/checkout@v2 
     - name: Build and push
       id: docker_build
       uses: docker/build-push-action@v2
