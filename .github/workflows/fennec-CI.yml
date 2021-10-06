@@ -35,11 +35,11 @@ jobs:
           node-version: '12.x'
           
       - name: npm install & build
-        working-directory: fennec/webclient
         run: |
           npm install
           npm install -g @angular/cli
           ng build --prod
+        working-directory: Rhinops-Sela/fennec/webclient
       
       #Publish artifacts-webclient
       - name: Archive production artifacts
@@ -58,11 +58,11 @@ jobs:
           node-version: '12.x'
           
       - name: npm install & build & run
-        working-directory: fennec/backend
         run: |
           npm install
           npm install pm2
           npm run build
+        working-directory: Rhinops-Sela/fennec/backend
       
       #Publish artifacts-backend
       - name: Publish dist
