@@ -125,22 +125,26 @@ jobs:
       - name: download artifacts-devops
         uses: dawidd6/action-download-artifact@v2
         with:
+          workflow: fennec-CI.yml
           name: metadata
           path: ${{ github.workspace }}/build-workspace/devops
       
       - name: download artifacts-components
         uses: dawidd6/action-download-artifact@v2
         with:
+          workflow: fennec-CI.yml
           path: ${{ github.workspace }}/build-workspace/components
           
       - name: download artifacts-backend
         uses: dawidd6/action-download-artifact@v2
         with:
+          workflow: fennec-CI.yml
           path: ${{ github.workspace }}/build-workspace/backend
                
       - name: download artifacts-webclient
         uses: dawidd6/action-download-artifact@v2
         with:
+          workflow: fennec-CI.yml
           name: wizard
           path: ${{ github.workspace }}/build-workspace/webclient/wizard
       
