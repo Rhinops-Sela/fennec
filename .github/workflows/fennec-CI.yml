@@ -1,0 +1,182 @@
+name: fennec-CI
+
+on:
+  push:
+    # Sequence of patterns matched against refs/heads
+    branches:
+      - develop
+      
+  pull_request:
+    branches:
+      - main
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build-components:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      #Publish artifacts-components
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: components
+          path: ${{ github.workspace }}
+  
+  build-webclient:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Install Node.js & npm install & build
+        uses: actions/setup-node@v2 
+        with:
+          node-version: '12.x'
+          
+      - name: npm install & build
+        run: |
+          npm install
+          npm install -g @angular/cli
+          ng build --prod
+      
+      #Publish artifacts-webclient
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: wizard
+          path: dist/wizard
+  
+  build-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2      
+      - name: Install Node.js 
+        uses: actions/setup-node@v2 
+        with:
+          node-version: '12.x'
+          
+      - name: npm install & build & run
+        run: |
+          npm install
+          npm install pm2
+          npm run build
+      
+      #Publish artifacts-backend
+      - name: Publish dist
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: dist
+          
+      - name: Publish node_modules
+        uses: actions/upload-artifact@v2
+        with:
+          name: node_modules
+          path: node_modules
+    
+  build-devops:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      # Publish artifacts-devops
+    - name: Archive production artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: metadata
+        path: metadata/
+      
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+      
+    - name: Login to DockerHub
+      uses: docker/login-action@v1 
+      with:
+        username: blancahot
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+  build-and-Push-Base-Image:
+    needs: [build-components,build-devops,build-backend,build-webclient]
+    runs-on: ubuntu-latest
+    steps:   
+    - uses: actions/checkout@v2 
+    - name: Build and push
+      id: docker_build
+      uses: docker/build-push-action@v2
+      with:
+        push: true
+        tags: blancahot/fennec-base:${{ github.run_number }},blancahot/fennec-base:latest,blancahot/fennec-base:develop
+        file: DockerfileBase
+  
+  
+  Download_artifacts_and_build-and-push-image:
+    needs: build-and-Push-Base-Image 
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: create workspace
+        run: |
+          pwd
+          mkdir -p "$GITHUB_WORKSPACE/build-workspace"
+          
+      - name: download artifacts-devops
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          github_token: ${{ secrets.PERSONAL_TOKEN }}
+          repo: Rhinops-Sela/devops
+          workflow: ci-cd-pipeline.yml
+          name: metadata
+          path: ${{ github.workspace }}/build-workspace/devops
+      
+      - name: download artifacts-components
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          github_token: ${{ secrets.PERSONAL_TOKEN }}
+          repo: Rhinops-Sela/components
+          workflow: ci-cd-pipeline.yaml
+          path: ${{ github.workspace }}/build-workspace/components
+          
+      - name: download artifacts-backend
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          github_token: ${{ secrets.PERSONAL_TOKEN }}
+          repo: Rhinops-Sela/backend
+          workflow: ci-cd-pipeline.yml
+          path: ${{ github.workspace }}/build-workspace/backend
+               
+      - name: download artifacts-webclient
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          github_token: ${{ secrets.PERSONAL_TOKEN }}
+          repo: Rhinops-Sela/webclient
+          workflow: ci-cd-pipeline.yaml
+          name: wizard
+          path: ${{ github.workspace }}/build-workspace/webclient/wizard
+      
+      - name: Copy nginx.conf to build workspace
+        run: |
+          cp ${{ github.workspace }}/build-workspace/devops/nginx.conf ${{ github.workspace }}/build-workspace/nginx.conf
+      
+      - name: Copy Dockerfile to build workspace
+        run: |
+          cp ${{ github.workspace }}/build-workspace/devops/Dockerfile ${{ github.workspace }}/build-workspace/Dockerfile
+          cd ${{ github.workspace }}/build-workspace
+          ls
+          
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      
+      - name: Login to DockerHub
+        uses: docker/login-action@v1 
+        with:
+          username: blancahot
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: blancahot/fennec:${{ github.run_number }},blancahot/fennec:latest
+          context: ${{ github.workspace }}/build-workspace/
