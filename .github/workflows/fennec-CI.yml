@@ -39,7 +39,7 @@ jobs:
           npm install
           npm install -g @angular/cli
           ng build --prod
-        working-directory: Rhinops-Sela/fennec/webclient
+        working-directory: ./webclient
       
       #Publish artifacts-webclient
       - name: Archive production artifacts
@@ -62,7 +62,7 @@ jobs:
           npm install
           npm install pm2
           npm run build
-        working-directory: Rhinops-Sela/fennec/backend
+        working-directory: ./backend
       
       #Publish artifacts-backend
       - name: Publish dist
