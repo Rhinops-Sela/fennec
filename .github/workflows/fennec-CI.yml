@@ -30,11 +30,12 @@ jobs:
       - uses: actions/checkout@v2
       
       - name: Install Node.js & npm install & build
-        uses: actions/setup-node@v2 
+        uses: actions/setup-node@v2  
         with:
           node-version: '12.x'
           
       - name: npm install & build
+        working-directory: fennec/webclient
         run: |
           npm install
           npm install -g @angular/cli
@@ -45,7 +46,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: wizard
-          path: dist/wizard
+          path: ./webclient/dist/wizard
   
   build-backend:
     runs-on: ubuntu-latest
@@ -57,6 +58,7 @@ jobs:
           node-version: '12.x'
           
       - name: npm install & build & run
+        working-directory: fennec/backend
         run: |
           npm install
           npm install pm2
@@ -67,13 +69,13 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: dist
-          path: dist
+          path: ./backend/dist
           
       - name: Publish node_modules
         uses: actions/upload-artifact@v2
         with:
           name: node_modules
-          path: node_modules
+          path: ./backend/node_modules
     
   build-devops:
     runs-on: ubuntu-latest
@@ -84,7 +86,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: metadata
-        path: metadata/
+        path: ./devops/metadata/
       
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
@@ -106,7 +108,7 @@ jobs:
       with:
         push: true
         tags: blancahot/fennec-base:${{ github.run_number }},blancahot/fennec-base:latest,blancahot/fennec-base:develop
-        file: DockerfileBase
+        file: devops/DockerfileBase
   
   
   Download_artifacts_and_build-and-push-image:
@@ -124,8 +126,6 @@ jobs:
         uses: dawidd6/action-download-artifact@v2
         with:
           github_token: ${{ secrets.PERSONAL_TOKEN }}
-          repo: Rhinops-Sela/devops
-          workflow: ci-cd-pipeline.yml
           name: metadata
           path: ${{ github.workspace }}/build-workspace/devops
       
@@ -133,24 +133,18 @@ jobs:
         uses: dawidd6/action-download-artifact@v2
         with:
           github_token: ${{ secrets.PERSONAL_TOKEN }}
-          repo: Rhinops-Sela/components
-          workflow: ci-cd-pipeline.yaml
           path: ${{ github.workspace }}/build-workspace/components
           
       - name: download artifacts-backend
         uses: dawidd6/action-download-artifact@v2
         with:
           github_token: ${{ secrets.PERSONAL_TOKEN }}
-          repo: Rhinops-Sela/backend
-          workflow: ci-cd-pipeline.yml
           path: ${{ github.workspace }}/build-workspace/backend
                
       - name: download artifacts-webclient
         uses: dawidd6/action-download-artifact@v2
         with:
           github_token: ${{ secrets.PERSONAL_TOKEN }}
-          repo: Rhinops-Sela/webclient
-          workflow: ci-cd-pipeline.yaml
           name: wizard
           path: ${{ github.workspace }}/build-workspace/webclient/wizard
       
