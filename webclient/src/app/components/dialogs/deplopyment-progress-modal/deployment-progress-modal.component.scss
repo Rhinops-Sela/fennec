@@ -1,0 +1,54 @@
+.progressbar-section {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  flex-direction: column;
+
+}
+
+.line-container{
+  height: 85vh;
+  background-color: black;
+  padding-top: 10px;
+  padding-left: 10px;
+  overflow-y: auto;
+}
+.log-container{
+  width: 60vw;
+}
+mat-list-item{
+  cursor: pointer !important;
+}
+
+.list-container{
+  width: 15vw;
+
+}
+
+.main-container{
+  display: inline-flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  width: 100vw;
+  padding: 5px;
+}
+
+.button-container{
+  display: flex;
+  align-self: left;
+  justify-content: left;
+}
+
+.deployement-spinner{
+  margin-left: 2.8vw;
+}
+
+.deployed-page-name{
+  font-size: smaller;
+}
+
+.mat-list-item-content{
+  padding: 0 !important;
+}

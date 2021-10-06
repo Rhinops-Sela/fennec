@@ -1,0 +1,38 @@
+<div mat-button class="main-div">
+  <mat-card *ngIf="page" class="inputs-card">
+    <mat-card-header>
+      <mat-card-title>{{ page.displayName }}</mat-card-title>
+      <img mat-card-avatar class="component-logo" mat-card-avatar src="{{ page.image }}" />
+    </mat-card-header>
+    <mat-card-content>
+      <form (ngSubmit)="onSubmit()" [formGroup]="form">
+        <div class="form-container">
+          <div *ngFor="let input of page.inputs">
+            <app-input-component class="form-row" *ngIf="input.group_enabler_master" (click)="enablerClicked(input)"
+              [input]="input" [form]="form"></app-input-component>
+            <app-input-component class="form-row" *ngIf="!input.group_enabler_master && checkIfEnabled(input)"
+              [input]="input" [form]="form"></app-input-component>
+          </div>
+        </div>
+        <div class="button-row">
+          <div class="row-spacer"></div>
+          <div>
+            <button class="form-button" submit color="primary" [disabled]="!form.valid" mat-stroked-button disabled>
+              Save
+            </button>
+          </div>
+          <div>
+            <button class="form-button" type="button" color="primary" (click)="onCancel()" mat-stroked-button>
+              Cancel
+            </button>
+          </div>
+          <div>
+            <button class="form-button" type="button" color="primary" (click)="onReset()" mat-stroked-button>
+              Reset
+            </button>
+          </div>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

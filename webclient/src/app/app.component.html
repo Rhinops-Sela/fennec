@@ -1,0 +1,22 @@
+<ng-container>
+  <app-toolbar-component></app-toolbar-component>
+  <mat-sidenav-container class="layout-container">
+    <mat-sidenav opened mode="side" class="layout-sidenav">
+      <app-side-nav></app-side-nav>
+
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+  <mat-toolbar class="layout-footer" color="primary">
+    <app-command-buttons></app-command-buttons>
+    <span class="row-spacer"></span>
+    <div class="logo-fennec-div">
+      <img class="logo-image" src="assets/logo-fennec.png">
+    </div>
+    <!-- <div class="logo-div">
+      <img class="logo-image" src="assets/logo-rhinops.png">
+    </div> -->
+  </mat-toolbar>
+</ng-container>

@@ -1,0 +1,50 @@
+<div class="button-row">
+  <h1>S3 Bucket Configuratoin</h1>
+</div>
+<form *ngIf="credentialsForm" class="credentials-container" (ngSubmit)="verifyCredentials()"
+  [formGroup]="credentialsForm">
+  <div class="form-row">
+    <mat-form-field appearance="legacy">
+      <mat-label>Access Key ID</mat-label>
+      <input class="input-component" matInput formControlName="accessKeyId" required/>
+      <mat-hint>"AWS credentials to store informaiton to s3 bucket"</mat-hint>
+    </mat-form-field>
+  </div>
+  <div class="form-row">
+    <mat-form-field appearance="legacy">
+      <mat-label>Secret Access Key</mat-label>
+      <input class="input-component" matInput formControlName="secretAccessKey" type="password" required />
+      <mat-hint>"AWS credentials to store informaiton to s3 bucket"</mat-hint>
+    </mat-form-field>
+  </div>
+  <div class="form-row">
+    <mat-form-field appearance="legacy">
+      <mat-label>AWS Bucket Region</mat-label>
+      <input class="input-component" matInput formControlName="region" required />
+      <mat-hint>"AWS credentials to store informaiton to s3 bucket"</mat-hint>
+    </mat-form-field>
+  </div>
+  <div class="form-row">
+    <mat-form-field appearance="legacy">
+      <mat-label>AWS S3 Bucket Name</mat-label>
+      <input class="input-component" matInput formControlName="bucketName" />
+      <mat-hint>"AWS credentials to store informaiton to s3 bucket"</mat-hint>
+    </mat-form-field>
+  </div>
+  <div class="form-row">
+    <mat-checkbox matInput formControlName="storeCredentials">Save credentials?</mat-checkbox>
+  </div>
+  <div class="button-row">
+    <div>
+      <button class="form-button" submit color="primary" [disabled]="!credentialsForm.valid" mat-stroked-button
+        disabled>
+        Save
+      </button>
+    </div>
+    <div>
+      <button class="form-button" color="primary" (click)="onCancel()" mat-stroked-button>
+        Skip
+      </button>
+    </div>
+  </div>
+</form>

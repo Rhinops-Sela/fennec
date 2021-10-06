@@ -1,0 +1,19 @@
+<h1 mat-dialog-title>Save Configuration</h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Filename</mat-label>
+    <input matInput [(ngModel)]="selectedFileName">
+  </mat-form-field>
+  <mat-form-field required *ngIf="s3">
+    <mat-label>Save To:</mat-label>
+    <select matNativeControl [(ngModel)]="exportDesitination">
+      <option value="s3">S3</option>
+      <option value="local">Local</option>
+    </select>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button submit *ngIf="s3" (click)="confirm()" [disabled]="selectedFileName?.length < 1 || !exportDesitination" cdkFocusInitial>Save</button>
+  <button mat-button submit *ngIf="!s3" (click)="confirm()" [disabled]="selectedFileName?.length < 1" cdkFocusInitial>Save</button>
+  <button mat-button (click)="cancel()">Cancel</button>
+</div>

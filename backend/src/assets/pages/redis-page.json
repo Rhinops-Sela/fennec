@@ -1,0 +1,63 @@
+{
+  "name": "redis",
+  "executer": "pwsh",
+  "displayName": "Redis",
+  "image": "assets/component_logos/redis.png",
+  "description": "Redis configuration & parameters",
+  "inputs": [
+    {
+      "template": "instance-select",
+      "tooltip": "Selecte Redis cluster instance type",
+      "options": [
+        "m5.large",
+        "m5.xlarge",
+        "m5.2xlarge",
+        "r4.large",
+        "r4.xlarge",
+        "r4.2xlarge"
+      ]
+    },
+    {
+      "template": "spot",
+      "group_enabler_master": "use_spot"
+    },
+    {
+      "controlType": "text",
+      "sub_group": "use_spot",
+      "tooltip": "How many on demand instances will be created",
+      "displayName": "# of On Demand Instances to Use",
+      "serverValue": "${ON_DEMAND_INSTANCES}",
+      "regexValidation": ".*"
+    },
+    {
+      "template": "namespace"
+    },
+    {
+      "template": "slave-nodes"
+    },
+    {
+      "controlType": "multi-select",
+      "displayName": "Extra ARGS?",
+      "options": [
+        "--maxmemory-policy allkeys-lru"
+      ],
+      "serverValue": "${EXTRA_FLAGS}"
+    },
+    {
+      "controlType": "text",
+      "tooltip": "Disabled commands (,) seperated i.e. FLUSHDB,FLUSHALL",
+      "displayName": "Disabled Commands",
+      "serverValue": "${DISABLED_COMMANDS}"
+    },
+    {
+      "template": "dns-entry",
+      "displayName": "Redis DNS Record",
+      "serverValue": "${REDIS_DNS_RECORD}"
+    },
+    {
+      "template": "dns-entry",
+      "displayName": "Redis Admin DNS Record",
+      "serverValue": "${REDIS_ADMIN_DNS_RECORD}"
+    }
+  ]
+}

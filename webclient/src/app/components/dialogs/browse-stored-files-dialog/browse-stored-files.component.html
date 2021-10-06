@@ -1,0 +1,9 @@
+<div class="main-container">
+  <div mat-subheader>Please Select a File To Open</div>
+  <mat-list class="files-list-container">
+    <mat-list-item *ngFor="let file of fileList" (click)="load(file)" class="file-list-item">
+      <mat-icon mat-list-icon>text_snippet</mat-icon>
+      <div mat-line>{{file}}</div>
+    </mat-list-item>
+  </mat-list>
+</div>

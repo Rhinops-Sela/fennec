@@ -1,0 +1,8 @@
+<div *ngIf="domains" class="main-div">
+  <mat-card *ngFor="let domain of domains" class="wizard-card" (click)="selectDomain(domain)">
+    <mat-card-title>{{ domain.displayName }}</mat-card-title>
+    <mat-card-content>
+      <p class="wizard-card-content">{{ domain.description }}</p>
+    </mat-card-content>
+  </mat-card>
+</div>

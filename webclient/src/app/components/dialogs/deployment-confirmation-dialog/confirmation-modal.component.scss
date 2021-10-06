@@ -1,0 +1,24 @@
+mat-form-field {
+  margin: 10px;
+  width: 100%;
+  width: 20vw;
+}
+/* .list-container{
+  width: 30vw;
+} */
+.container {
+  max-height: 50vh;
+  overflow-y: auto;
+}
+
+.button-row {
+  display: flex;
+  align-self: center;
+  justify-content: center;
+  margin-top: 10px;
+  margin-right: 10px;
+}
+
+.page-card {
+  margin: 10px;
+}

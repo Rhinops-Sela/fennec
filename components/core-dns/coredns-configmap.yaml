@@ -1,0 +1,29 @@
+# Please edit the object below. Lines beginning with a '#' will be ignored,
+# and an empty file will abort the edit. If an error occurs while saving this file will be
+# reopened with the relevant failures.
+#
+apiVersion: v1
+data:
+  Corefile: |
+    .:53 {
+        errors
+        health
+        rewrite name fennec.io fennec.io
+        kubernetes cluster.local in-addr.arpa ip6.arpa {
+          pods insecure
+          fallthrough in-addr.arpa ip6.arpa
+        }
+        prometheus :9153
+        forward . /etc/resolv.conf
+        cache 30
+        loop
+        reload
+        loadbalance
+    }    
+kind: ConfigMap
+metadata:
+  labels:
+    eks.amazonaws.com/component: coredns
+    k8s-app: kube-dns
+  name: coredns
+  namespace: kube-system

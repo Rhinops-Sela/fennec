@@ -1,0 +1,19 @@
+<mat-tree [dataSource]="dataSource" [treeControl]="treeControl" #tree>
+  <mat-tree-node  matTreeNodePadding matTreeNodePaddingIndent="10" *matTreeNodeDef="let node" matTreeNodePadding>
+    <button class="sidnav-button" (click)="pageSelected(node)"  mat-button>
+      <mat-icon>{{ node.icon }}</mat-icon>
+      {{getPageName(node)}}
+    </button>
+  </mat-tree-node>
+  <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding>
+    <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.name">
+      <mat-icon class="mat-icon-rtl-mirror">
+        {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+      </mat-icon>
+    </button>
+    <div class="domain-node" (click)="domainSelected(node.name)" mat-button>
+      {{node.name}}
+    </div>
+
+  </mat-tree-node>
+</mat-tree>

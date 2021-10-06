@@ -1,0 +1,46 @@
+# Node.js with Angular
+# Build a Node.js project that uses Angular.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+resources:
+  repositories:
+    - repository: devops
+      type: github
+      name: Rhinops-Sela/devops
+      endpoint: Rhinops-Sela
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+jobs:
+- job: Build
+  displayName: Build webclient
+  steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '12.x'
+    displayName: 'Install Node.js'
+
+  - script: |
+      npm install -g @angular/cli
+      npm install
+      ng build --prod
+    displayName: 'npm install and build'
+
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: '$(Build.SourcesDirectory)/dist/wizard'
+      artifact: 'wizard'
+      publishLocation: 'pipeline'
+    displayName: 'Publish wizard'
+
+# - job: Publish
+#   displayName: Publish a new container image
+#   condition: and(succeeded(), eq(variables['publish'], 'true'))
+#   dependsOn: Build
+#   steps:
+#     - template: build-and-push.yaml@devops 

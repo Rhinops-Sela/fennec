@@ -1,0 +1,12 @@
+{
+  "name": "grafana",
+  "executer": "pwsh",
+  "displayName": "Grafana",
+  "image": "assets/component_logos/grafana.png",
+  "description": "Grafana configuration & parameters",
+  "inputs": [
+    {
+      "template": "dns-entry"
+    }
+  ]
+}

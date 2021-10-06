@@ -1,0 +1,50 @@
+.layout-container {
+  position: absolute;
+  top: 60px;
+  bottom: 60px;
+  left: 0;
+  right: 0;
+}
+
+.layout-sidenav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+}
+
+.row-spacer {
+  flex: 1 1 auto;
+}
+
+.layout-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.main-div {
+  display: inline-flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+mat-card {
+  flex: 0 0 20%;
+  text-align: center;
+  padding: 1vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 15px;
+}
+
+.wizard-card {
+  margin-top: 2vh;
+  margin-bottom: 2vh;
+  width: 40vw;
+}

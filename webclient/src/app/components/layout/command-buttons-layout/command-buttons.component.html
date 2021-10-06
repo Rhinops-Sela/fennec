@@ -1,0 +1,40 @@
+<div class="control-buttons-row">
+  <div class="toolbar-button-container">
+    <button mat-mini-fab md-fab-bottom-right (click)="home()" color="accent" matTooltip="Home">
+      <mat-icon>home</mat-icon>
+    </button>
+  </div>
+  <div class="toolbar-button-container">
+    <button mat-mini-fab md-fab-bottom-right (click)="openConfirmationDialog(false)" color="accent"
+      matTooltip="Deploy Environment">
+      <mat-icon>check</mat-icon>
+    </button>
+  </div>
+  <div class="toolbar-button-container">
+    <button mat-mini-fab md-fab-bottom-right (click)="openConfirmationDialog(true)" color="accent"
+      matTooltip="Delete Entire Environment">
+      <mat-icon>clear</mat-icon>
+    </button>
+  </div>
+  <div class="toolbar-button-container">
+    <button mat-mini-fab md-fab-bottom-right (click)="export()" color="accent" matTooltip="Export Current Form">
+      <mat-icon class="white-icon">share</mat-icon>
+    </button>
+  </div>
+  <div class="toolbar-button-container">
+    <button mat-mini-fab md-fab-bottom-right (click)="browse()" color="accent" matTooltip="Load Saved Form From S3 Bucket">
+      <mat-icon>cloud_download</mat-icon>
+    </button>
+  </div>
+  <div class="toolbar-button-container">
+    <input type="file" ng2FileSelect hidden #fileInput accept=".json" (change)="onFileChanged($event)" />
+    <button mat-mini-fab md-fab-bottom-right (click)="upload()" color="accent" matTooltip="Load Saved Form From Local Storage">
+      <mat-icon>get_app</mat-icon>
+    </button>
+  </div>
+  <div class="toolbar-button-container">
+    <button mat-mini-fab md-fab-bottom-right (click)="deleteAll()" color="accent" matTooltip="Delete & Reset From Data">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
+</div>

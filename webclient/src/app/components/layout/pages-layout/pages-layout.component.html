@@ -1,0 +1,55 @@
+<!-- <div *ngIf="activeDomain" class="main-div">
+  <mat-card *ngFor="let page of activeDomain.pages" class="wizard-card">
+    <mat-card-header>
+      <mat-card-title>{{ page.displayName }}</mat-card-title>
+      <mat-card-subtitle>{{ page.description }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <app-page-component [page]="page"></app-page-component>
+    </mat-card-content>
+  </mat-card>
+</div>
+ -->
+
+
+<!--  <div *ngIf="activeDomain" class="main-div">
+  <mat-card *ngFor="let page of activeDomain.pages" class="wizard-card">
+    <mat-card-header>
+      <mat-card-title>{{ page.displayName }}</mat-card-title>
+      <mat-card-subtitle>{{ page.description }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <app-page-component [page]="page"></app-page-component>
+    </mat-card-content>
+  </mat-card>
+</div>
+ -->
+
+<div mat-button class="main-div" *ngIf="activeDomain">
+  <div *ngFor="let page of activeDomain.pages; trackBy: trackbyFn; let i = index">
+    <mat-card class="wizard-card">
+      <mat-card-header class="wizard-header">
+        <mat-card-title>{{ page.displayName }}</mat-card-title>
+        <img mat-card-avatar class="component-logo" mat-card-avatar src="{{ page.image }}" />
+        <mat-card-subtitle *ngIf="page.repeatable">{{ page.inputs[0].value }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p class="wizard-card-content">{{ page.description }}</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <div >
+          <button color="secondary" type="button" (click)="selectPage(page)" mat-button>Edit</button>
+        </div>
+        <div *ngIf="page.repeatable">
+          <button color="secondary" type="button" (click)="clone(page)" mat-button>Clone</button>
+        </div>
+        <div *ngIf="canDelete(page) &&  page.repeatable">
+          <button class="form-button" color="warn" mat-button (click)="delete(page)">
+            Delete
+          </button>
+        </div>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+</div>

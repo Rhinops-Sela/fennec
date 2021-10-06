@@ -1,0 +1,14 @@
+.file-list-item{
+  cursor: pointer;
+  border-bottom: solid 1px white;
+  max-width: 25vw;
+}
+
+.files-list-container{
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.main-container{
+  max-width: 30vw;
+}

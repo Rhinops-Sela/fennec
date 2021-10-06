@@ -1,0 +1,30 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "debug fennec-backend",
+      "sourceMaps": true,
+      "protocol": "inspector",
+      "program": "${workspaceFolder}/src/index.ts",
+      "cwd": "${workspaceFolder}",
+      "preLaunchTask": "tsc: build - tsconfig.json",
+      "outFiles": [
+        "${workspaceFolder}/dist/**/*.js"
+      ],
+      "env": {
+        "AWS_ACCESS_KEY_ID": "${env:FENNEC_AWS_ACCESS_KEY_ID}",
+        "AWS_SECRET_ACCESS_KEY": "${env:FENNEC_AWS_SECRET_ACCESS_KEY}",
+        "AWS_DEFAULT_REGION": "${env:FENNEC_AWS_DEFAULT_REGION}",
+        "COMPONENTS_ROOT": "../components",
+        "WORKING_ROOT": "../working_folder",
+        "MAIN_TEMPLATE_FORM": "fennec/fennec_ui_components/forms/development-form.json",
+        "FORM_TEMPLATES_FOLDER": "fennec/fennec_ui_components/templates"
+      }
+    }
+  ]
+}
