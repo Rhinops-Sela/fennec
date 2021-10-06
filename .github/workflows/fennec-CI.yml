@@ -125,26 +125,22 @@ jobs:
       - name: download artifacts-devops
         uses: dawidd6/action-download-artifact@v2
         with:
-          github_token: ${{ secrets.PERSONAL_TOKEN }}
           name: metadata
           path: ${{ github.workspace }}/build-workspace/devops
       
       - name: download artifacts-components
         uses: dawidd6/action-download-artifact@v2
         with:
-          github_token: ${{ secrets.PERSONAL_TOKEN }}
           path: ${{ github.workspace }}/build-workspace/components
           
       - name: download artifacts-backend
         uses: dawidd6/action-download-artifact@v2
         with:
-          github_token: ${{ secrets.PERSONAL_TOKEN }}
           path: ${{ github.workspace }}/build-workspace/backend
                
       - name: download artifacts-webclient
         uses: dawidd6/action-download-artifact@v2
         with:
-          github_token: ${{ secrets.PERSONAL_TOKEN }}
           name: wizard
           path: ${{ github.workspace }}/build-workspace/webclient/wizard
       
