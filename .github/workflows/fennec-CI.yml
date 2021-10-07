@@ -60,7 +60,6 @@ jobs:
       - name: npm install & build & run
         run: |
           npm install
-          npm install pm2
           npm run build
         working-directory: ./backend
       
