@@ -30,4 +30,4 @@ RUN cd $COMPONENTS_ROOT \
 EXPOSE 3000
 EXPOSE 9090
 
-CMD ["sh", "-c","/pm2 start /app/backend/dist/src/index.js && nginx -g \"daemon off;\""]
+CMD ["sh", "-c","pm2 start /app/backend/dist/src/index.js && nginx -g \"daemon off;\""]
