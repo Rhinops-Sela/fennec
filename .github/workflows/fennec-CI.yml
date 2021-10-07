@@ -137,11 +137,6 @@ jobs:
           cp ${{ github.workspace }}/build-workspace/devops/Dockerfile ${{ github.workspace }}/build-workspace/Dockerfile
           cd ${{ github.workspace }}/build-workspace
           ls
-
-  build-and-push-image:
-    needs: Download_artifacts
-    runs-on: ubuntu-latest
-    steps:    
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
       
@@ -169,4 +164,6 @@ jobs:
           tags: blancahot/fennec:${{ github.run_number }},blancahot/fennec:latest
           context: ${{ github.workspace }}/build-workspace/
 
+
+      
 
