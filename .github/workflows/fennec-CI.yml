@@ -172,7 +172,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           
       - name: Build and push
-        if: ${{ github.ref == 'refs/heads/develop' }}
+        if: contains('refs/heads/develop', github.ref)
         id: docker_build_develop
         uses: docker/build-push-action@v2
         with:
@@ -181,7 +181,7 @@ jobs:
           context: ${{ github.workspace }}/build-workspace/
           
       - name: Build and push
-        if: (!${{ github.ref == 'refs/heads/develop' }})
+        if: "!contains('refs/heads/develop', github.ref)"
         id: docker_build
         uses: docker/build-push-action@v2
         with:
