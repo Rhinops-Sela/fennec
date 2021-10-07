@@ -176,10 +176,12 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: blancahot/fennec:${{ github.run_number }},blancahot/fennec:latest
+          tags: |
+            if ${{ github.ref == 'refs/heads/develop' }}
+              blancahot/fennec:${{ github.run_number }},blancahot/fennec:latest,blancahot/fennec:develop
+            else
+              blancahot/fennec:${{ github.run_number }},blancahot/fennec:latest
+            fi
           context: ${{ github.workspace }}/build-workspace/
-      
-      - name: Print image tag
-        run: |
-          echo "blancahot/fennec:${{ github.run_number }}"
+
 
