@@ -138,13 +138,13 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: dist
-          path: ${{ github.workspace }}/build-workspace/backend
+          path: ${{ github.workspace }}/build-workspace/backend/dist
       
       - name: download artifacts-backend
         uses: actions/download-artifact@v2
-        with:
+        with:S
           name: node_modules
-          path: ${{ github.workspace }}/build-workspace/backend
+          path: ${{ github.workspace }}/build-workspace/backend/node_modules
                
       - name: download artifacts-webclient
         uses: actions/download-artifact@v2
