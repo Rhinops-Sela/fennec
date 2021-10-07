@@ -90,7 +90,7 @@ class Execution:
 
     def create_kubernetes_client(self):
         self.__kube_config_file = os.path.join(self.working_folder, '.kube')
-        command = f'aws eks update-kubeconfig --name {self.cluster_name} --kubeconfig {self.kube_config_file}'
+        command = f'aws eks update-kubeconfig --name {self.cluster_name} --kubeconfig {self.kube_config_file}  --region {self.cluster_region}'
         print(command)
         os.remove(self.kube_config_file)
         os.system(command)
