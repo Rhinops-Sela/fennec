@@ -35,6 +35,13 @@ export class DeploymentExecuter {
     return workingFolder;
   }
 
+  public static getOutputsFolder(identifier: string): string {
+    const workingFolder = DeploymentExecuter.getWorkingFolder(identifier);
+    const outputsFoldet = path.join(workingFolder, `outputs-${identifier}`);
+    Logger.info("Using outputs folder: " + outputsFoldet);
+    return outputsFoldet;
+  }
+
   public async startDeletion(workingFolders: string[]) {
     const deployPages = this.flattenDomains(
       "Deleting",
@@ -50,7 +57,7 @@ export class DeploymentExecuter {
     fs.readdirSync(sourceFolder).forEach((file: any) => {
       Logger.info(file);
     });
-    let output = `${sourceFolder}.zip`;
+    let output = path.join(sourceFolder, '..','outputs.zip')
     Logger.info(`Destination: ${output}`);
     const archiver = require("archiver");
     const archive = archiver("zip", { zlib: { level: 9 } });
@@ -158,9 +165,9 @@ export class DeploymentExecuter {
         ) == -1
       ) {
         try {
-          if (deployPages.length > 1 && deployPage.page.name == "cluster") {
-            continue;
-          }
+          // if (deployPages.length > 1 && deployPage.page.name == "cluster") {
+          //   continue;
+          // }
           deployPage.executionData.progress.totalPages = deployPages.length;
           const exitCode = await this.executeScript(deployPage);
           this.sendFinalMessage(exitCode, deployPage);

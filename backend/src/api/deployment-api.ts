@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, request } from "express";
 import path from "path";
 import { Logger } from "../logger/logger";
 import { DeploymentExecuter } from "../deployment/deployment-worker";
@@ -13,8 +13,9 @@ export let validateJson = async (req: Request, res: Response, next: any) => {
 
 export let downloadOutputs = async (req: Request, res: Response, next: any) => {
   try {
-    const folder = DeploymentExecuter.getWorkingFolder(req.body.identifier)
-    let fileName = await DeploymentExecuter.compressFolder(folder)
+    const identifier = req.query.identifier?.toString() || "";
+    const folder = DeploymentExecuter.getWorkingFolder(identifier);
+    let fileName = await DeploymentExecuter.compressFolder(DeploymentExecuter.getOutputsFolder(identifier));
     res.download(path.resolve(fileName));
   } catch (error) {
     Logger.error(error.message, error.stack);
@@ -24,9 +25,11 @@ export let downloadOutputs = async (req: Request, res: Response, next: any) => {
 
 export let cleanOutputs = async (req: Request, res: Response, next: any) => {
   try {
-    let workingFolder = DeploymentExecuter.getWorkingFolder(req.body.identifier)
+    let workingFolder = DeploymentExecuter.getWorkingFolder(
+      req.body.identifier
+    );
     var rimraf = require("rimraf");
-    Logger.info(`Deleting folder: ${workingFolder}`)
+    Logger.info(`Deleting folder: ${workingFolder}`);
     rimraf.sync(workingFolder);
   } catch (error) {
     Logger.error(error.message, error.stack);
