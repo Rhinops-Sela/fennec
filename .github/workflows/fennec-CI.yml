@@ -178,3 +178,8 @@ jobs:
           push: true
           tags: blancahot/fennec:${{ github.run_number }},blancahot/fennec:latest
           context: ${{ github.workspace }}/build-workspace/
+      
+      - name: Print image tag
+        run: |
+          echo "blancahot/fennec:${{ github.run_number }}"
+
