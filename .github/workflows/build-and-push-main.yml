@@ -1,0 +1,22 @@
+name: build-and-push-main
+
+on:      
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-push-main:
+  if: github.event.pull_request.merged
+  runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: blancahot/fennec:${{ github.run_number }},blancahot/fennec:latest,blancahot/fennec:main
+          context: ${{ github.workspace }}/build-workspace/
+
