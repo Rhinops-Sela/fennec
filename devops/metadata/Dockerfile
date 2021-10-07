@@ -16,7 +16,7 @@ COPY webclient/wizard /usr/share/nginx/html
 
 # add backend
 COPY backend/. /app/backend/.
-RUN chmod +x /app/backend/node_modules/pm2/bin/pm2
+RUN npm i pm2 -g
 
 #add components
 COPY components/. /app/.
@@ -30,4 +30,4 @@ RUN cd $COMPONENTS_ROOT \
 EXPOSE 3000
 EXPOSE 9090
 
-CMD ["sh", "-c","/app/backend/node_modules/pm2/bin/pm2 start /app/backend/dist/src/index.js && nginx -g \"daemon off;\""]
+CMD ["sh", "-c","/pm2 start /app/backend/dist/src/index.js && nginx -g \"daemon off;\""]
