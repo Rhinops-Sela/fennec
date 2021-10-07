@@ -6,16 +6,16 @@ on:
 
 jobs:
   build-and-push-main:
-  if: github.event.pull_request.merged
-  runs-on: ubuntu-latest
-  steps:
-    - uses: actions/checkout@v2
-      # Build an image after merging to main (the image need to be build from image fennec:develop)
-    - name: Build and push
-      id: docker_build
-      uses: docker/build-push-action@v2
-      with:
-        push: true
-        tags: blancahot/fennec:${{ github.run_number }},blancahot/fennec:latest,blancahot/fennec:main
-        context: ${{ github.workspace }}/build-workspace/
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+    steps:
+      - uses: actions/checkout@v2
+        # Build an image after merging to main (the image need to be build from image fennec:develop)
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: blancahot/fennec:${{ github.run_number }},blancahot/fennec:latest,blancahot/fennec:main
+          context: ${{ github.workspace }}/build-workspace/
 
