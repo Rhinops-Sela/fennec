@@ -19,7 +19,7 @@ class CoreDNS():
             line_to_add = f'{self.anchor_str}  rewrite name {dns_record.source} {dns_record.target}\n'
             if not line_to_add in config_map:
                 config_map = config_map.replace(self.anchor_str, line_to_add, 1)
-        output_file = os.path.join(self.execution.working_folder,'config_map-execute.json')
+        output_file = os.path.join(self.execution.working_folder,'config-map-execute.json')
         Helper.to_json_file(Helper.json_to_object(config_map),output_file)
         self.execution.run_command(
             f"kubectl apply -f {output_file} -n {self.namespace}")
@@ -27,19 +27,31 @@ class CoreDNS():
     def delete_records(self, dns_records: str, delimiter=";", inner_delimiter="="):
         dns_records = self.__init_dns_recotds(
             dns_records, delimiter, inner_delimiter)
-        consfig_map = self.get_current_config()
-        new_config = [str]
-        for config_line in consfig_map.splitlines():
-            delete_line = False
-            for dns_record in dns_records:
-                if f"{dns_record.source} {dns_record.target}" in config_line:
-                    print(
-                        f"deleting dns record: source: {dns_record.source} target: {dns_record.target}")
-                    delete_line = True
-            if not delete_line:
-                new_config.append(config_line)
+        config_map = self.get_current_config()
+        for dns_record in dns_records:
+            line_to_remove = f'  rewrite name {dns_record.source} {dns_record.target}\n'
+            config_map = config_map.replace(line_to_remove, '')
+        output_file = os.path.join(self.execution.working_folder,'config-map-execute.json')
+        Helper.to_json_file(Helper.json_to_object(config_map),output_file)
+        self.execution.run_command(
+            f"kubectl apply -f {output_file} -n {self.namespace}")        
 
-        self.apply_changes(new_config)
+    # def delete_records(self, dns_records: str, delimiter=";", inner_delimiter="="):
+    #     dns_records = self.__init_dns_recotds(
+    #         dns_records, delimiter, inner_delimiter)
+    #     consfig_map = self.get_current_config()
+    #     new_config = [str]
+    #     for config_line in consfig_map.splitlines():
+    #         delete_line = False
+    #         for dns_record in dns_records:
+    #             if f"{dns_record.source} {dns_record.target}" in config_line:
+    #                 print(
+    #                     f"deleting dns record: source: {dns_record.source} target: {dns_record.target}")
+    #                 delete_line = True
+    #         if not delete_line:
+    #             new_config.append(config_line)
+
+    #     self.apply_changes(new_config)
 
     def __init_dns_recotds(self, dns_records_str: str, delimiter: str, inner_delimiter: str):
         try:
