@@ -3,7 +3,7 @@ import sys
 from fennec_core_dns.dns_record import DNSRecord
 import os
 from fennec_execution.execution import Execution
-
+from fennec_helpers.helper import Helper
 
 class CoreDNS():
     def __init__(self, working_folder: str):
@@ -14,17 +14,15 @@ class CoreDNS():
     def add_records(self, dns_records: str, delimiter=";", inner_delimiter="="):
         dns_records = self.__init_dns_recotds(
             dns_records, delimiter, inner_delimiter)
-        consfig_map = self.get_current_config()
-        new_config = [str]
-        for config_line in consfig_map.splitlines():
-            if self.anchor_str in config_line:
-                for dns_record in dns_records:
-                    new_config.append(
-                        f"        rewrite name {dns_record.source} {dns_record.target}")
-                new_config.append(self.anchor_str)
-            else:
-                new_config.append(config_line)
-        self.apply_changes(new_config)
+        config_map = self.get_current_config()
+        for dns_record in dns_records:
+            line_to_add = f'{self.anchor_str}  rewrite name {dns_record.source} {dns_record.target}\n'
+            if not line_to_add in config_map:
+                config_map = config_map.replace(self.anchor_str, line_to_add, 1)
+        output_file = os.path.join(self.execution.working_folder,'config_map-execute.json')
+        Helper.to_json_file(Helper.json_to_object(config_map),output_file)
+        self.execution.run_command(
+            f"kubectl apply -f {output_file} -n {self.namespace}")
 
     def delete_records(self, dns_records: str, delimiter=";", inner_delimiter="="):
         dns_records = self.__init_dns_recotds(
@@ -81,6 +79,6 @@ class CoreDNS():
             f"kubectl delete pods -l k8s-app=kube-dns -n {self.namespace }", show_output=False)
 
     def get_current_config(self) -> str:
-        command = f"kubectl get configmaps coredns -o yaml -n {self.namespace}"
+        command = f"kubectl get configmaps coredns -o json -n {self.namespace}"
         config_map = self.execution.run_command(command, show_output=False)
         return config_map.log
