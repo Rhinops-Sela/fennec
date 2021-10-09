@@ -9,6 +9,14 @@
     ]
   },
   {
+    "name": "AWS",
+    "description": "Simulte AWS services for debug",
+    "displayName": "AWS - Services",
+    "pages": [
+      "dynamo-page"
+    ]
+  },
+  {
     "name": "monitoring",
     "description": "Configuration & Parameters for monitoring the cluster",
     "displayName": "Monitoring",
