@@ -1,0 +1,36 @@
+{
+  "name": "sqs",
+  "executer": "python",
+  "displayName": "SQS",
+  "image": "assets/component_logos/sqs.png",
+  "description": "SQS configuration & parameters",
+  "inputs": [
+    {
+      "template": "spot",
+      "group_enabler_master": "use_spot",
+      "value": true
+    },
+    {
+      "template": "spot-on-demand-base-capacity",
+      "sub_group": "use_spot",
+      "value": "0"
+    },
+    {
+      "template": "spot-on-demand-cpacity",
+      "sub_group": "use_spot",
+      "value": "0"
+    },
+    {
+      "template": "spot-allocation",
+      "sub_group": "use_spot"
+    },
+    {
+      "template": "namespace"
+    },
+    {
+      "template": "dns-entry",
+      "displayName": "SNS Dns Record",
+      "serverValue": "SNS_DNS_RECORD"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "apiVersion": "eksctl.io/v1alpha5",
+  "kind": "ClusterConfig",
+  "nodeGroups": [
+    {
+      "name": "sns",
+      "minSize": 1,
+      "maxSize": 100,
+      "desiredCapacity": 1,
+      "volumeSize": 50,
+      "volumeType": "gp2",
+      "privateNetworking": true,
+      "iam": {
+        "withAddonPolicies": {
+          "autoScaler": true
+        }
+      },
+      "labels": {
+        "role": "sns"
+      },
+      "instancesDistribution": {
+        "instanceTypes": [
+          "t3.large",
+          "t2.large"
+        ]
+      },
+      "taints": {
+        "sns": "true:NoSchedule"
+      },
+      "tags": {
+        "k8s.io/cluster-autoscaler/node-template/label/role": "sns",
+        "k8s.io/cluster-autoscaler/node-template/taint/sns": "true:NoSchedule"
+      }
+    }
+  ],
+  "metadata": {
+    "name": "fennec",
+    "region": "eu-west-2"
+  }
+}

@@ -12,9 +12,9 @@
     "debug": 0
   },
   "NAMESPACE": {
-    "debug": "dynamodb"
+    "debug": "sns"
   },
   "SQS_DNS_RECORD":{
-    "debug": "dynamodb.fennec.io"
+    "debug": "sns.fennec.io"
   }
 }

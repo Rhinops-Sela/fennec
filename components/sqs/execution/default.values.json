@@ -12,9 +12,9 @@
     "debug": 0
   },
   "NAMESPACE": {
-    "debug": "redis"
+    "debug": "sqs"
   },
   "SQS_DNS_RECORD":{
-    "debug": "redis.fennec.io"
+    "debug": "sqs.fennec.io"
   }
 }

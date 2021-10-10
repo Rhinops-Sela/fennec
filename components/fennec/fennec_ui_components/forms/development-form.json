@@ -14,7 +14,8 @@
     "displayName": "AWS - Services",
     "pages": [
       "dynamodb-page",
-      "sqs-page"
+      "sqs-page",
+      "sns-page"
     ]
   },
   {
