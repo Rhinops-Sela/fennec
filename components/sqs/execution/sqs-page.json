@@ -1,9 +1,9 @@
 {
-  "name": "redis",
+  "name": "sqs",
   "executer": "python",
-  "displayName": "Redis",
+  "displayName": "SQS",
   "image": "assets/component_logos/redis.png",
-  "description": "Redis configuration & parameters",
+  "description": "SQS configuration & parameters",
   "inputs": [
     {
       "template": "spot",
