@@ -25,7 +25,7 @@ jobs:
 
       #Publish artifacts-components
       - name: Archive production artifacts
-        if: contains(steps.changed-files-for-components.outputs.any_changed == 'true')
+        if: steps.changed-files-for-components.outputs.any_changed == 'true'
         uses: actions/upload-artifact@v2
         with:
           name: components
@@ -43,13 +43,13 @@ jobs:
           path: ./webclient
       
       - name: Install Node.js & npm install & build
-        if: contains(steps.changed-files-for-webclient.outputs.any_changed == 'true')
+        if: steps.changed-files-for-webclient.outputs.any_changed == 'true'
         uses: actions/setup-node@v2  
         with:
           node-version: '12.x'
           
       - name: npm install & build
-        if: contains(steps.changed-files-for-webclient.outputs.any_changed == 'true')
+        if: steps.changed-files-for-webclient.outputs.any_changed == 'true'
         run: |
           npm install
           npm install -g @angular/cli
@@ -58,7 +58,7 @@ jobs:
       
       #Publish artifacts-webclient
       - name: Archive production artifacts
-        if: contains(steps.changed-files-for-webclient.outputs.any_changed == 'true')
+        if: steps.changed-files-for-webclient.outputs.any_changed == 'true'
         uses: actions/upload-artifact@v2
         with:
           name: wizard
