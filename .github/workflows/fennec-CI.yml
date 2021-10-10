@@ -124,6 +124,7 @@ jobs:
           path: ./backend/node_modules
 
   Download_artifacts_build_and_push_image:
+    needs: [build-components,build-backend,build-webclient]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
