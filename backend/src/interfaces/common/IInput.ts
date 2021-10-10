@@ -4,7 +4,7 @@ export interface IInput {
   tooltip: string;
   displayName: string;
   regexValidation?: string;
-  allowEmpty?: string
+  allowEmpty?: boolean
   errorMessage?: string;
   options?: string[];
   value?: any;

@@ -38,13 +38,26 @@ export class FormService {
         form.removeControl(input.id);
       } else {
         try {
+          let formControl = new FormControl(input.value || '');
           if (!form.controls[input.id]) {
-            const formControl = input.regexValidation
-              ? new FormControl(input.value || '', [
+            if (input.regexValidation) {
+              if (input.allowEmpty) {
+                formControl = new FormControl(input.value || '', [
+                  Validators.pattern(input.regexValidation),
+                ]);
+              } else {
+                formControl = new FormControl(input.value || '', [
                   Validators.pattern(input.regexValidation),
                   Validators.required,
-                ])
-              : new FormControl(input.value || '');
+                ]);
+              }
+            }
+            // const formControl = input.regexValidation
+            //   ? new FormControl(input.value || '', [
+            //       Validators.pattern(input.regexValidation),
+            //       Validators.required,
+            //     ])
+            //   : new FormControl(input.value || '');
             form.addControl(input.id, formControl);
           }
         } catch (error) {
