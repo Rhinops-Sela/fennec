@@ -16,6 +16,9 @@ class CoreDNS():
             dns_records, delimiter, inner_delimiter)
         config_map = self.get_current_config()
         for dns_record in dns_records:
+            if not dns_record.source or not dns_record.target:
+                print(f'Skipping dns record, source: {dns_record.source}; target: {dns_record.target}')
+                continue
             line_to_add = f'{self.anchor_str}  rewrite name {dns_record.source} {dns_record.target}\n'
             if not line_to_add in config_map:
                 config_map = config_map.replace(self.anchor_str, line_to_add, 1)
