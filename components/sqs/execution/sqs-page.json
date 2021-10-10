@@ -2,7 +2,7 @@
   "name": "sqs",
   "executer": "python",
   "displayName": "SQS",
-  "image": "assets/component_logos/redis.png",
+  "image": "assets/component_logos/sqs.png",
   "description": "SQS configuration & parameters",
   "inputs": [
     {
