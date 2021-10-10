@@ -3,7 +3,7 @@
   "kind": "ClusterConfig",
   "nodeGroups": [
     {
-      "name": "monitoring",
+      "name": "dynamodb",
       "minSize": 1,
       "maxSize": 100,
       "desiredCapacity": 1,
@@ -16,7 +16,7 @@
         }
       },
       "labels": {
-        "role": "monitoring"
+        "role": "dynamodb"
       },
       "instancesDistribution": {
         "instanceTypes": [
@@ -25,11 +25,11 @@
         ]
       },
       "taints": {
-        "monitoring": "true:NoSchedule"
+        "dynamodb": "true:NoSchedule"
       },
       "tags": {
-        "k8s.io/cluster-autoscaler/node-template/label/role": "monitoring",
-        "k8s.io/cluster-autoscaler/node-template/taint/monitoring": "true:NoSchedule"
+        "k8s.io/cluster-autoscaler/node-template/label/role": "dynamodb",
+        "k8s.io/cluster-autoscaler/node-template/taint/dynamodb": "true:NoSchedule"
       }
     }
   ],

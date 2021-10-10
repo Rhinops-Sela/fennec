@@ -2,11 +2,11 @@ extraEnvVars:
   - name: DEFAULT_REGION
     value: "eu-west-2"
   - name: SERVICES
-    value: "sqs"
+    value: "dynamodb"
 nodeSelector: 
-  role: "sqs"
+  role: "dynamodb"
 tolerations: 
-  - key: "sqs"
+  - key: "dynamodb"
     operator: "Equal"
     value: "true"
 service:

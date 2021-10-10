@@ -33,7 +33,7 @@
       "minSize": 1,
       "maxSize": 200,
       "desiredCapacity": 1,
-      "volumeSize": 100,
+      "volumeSize": 50,
       "volumeType": "gp2",
       "privateNetworking": true,
       "iam": {

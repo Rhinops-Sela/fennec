@@ -18,7 +18,7 @@
         ]
       },
       "minSize": 1,
-      "maxSize": 4,
+      "maxSize": 100,
       "desiredCapacity": 1,
       "volumeSize": 10,
       "volumeType": "gp2",

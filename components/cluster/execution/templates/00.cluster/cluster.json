@@ -59,9 +59,9 @@
         "k8s.io/cluster-autoscaler/enabled": "true"
       },
       "minSize": 0,
-      "maxSize": 8,
+      "maxSize": 100,
       "desiredCapacity": 1,
-      "volumeSize": 100,
+      "volumeSize": 50,
       "volumeType": "gp2",
       "privateNetworking": true,
       "iam": {
