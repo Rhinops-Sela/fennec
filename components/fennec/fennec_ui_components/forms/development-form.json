@@ -4,8 +4,7 @@
     "description": "EKS cluster configuration",
     "displayName": "Cluster",
     "pages": [
-      "cluster-page",
-      "nodegroup-page"
+      "cluster-page"
     ]
   },
   {
