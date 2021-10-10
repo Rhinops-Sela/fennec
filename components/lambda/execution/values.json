@@ -7,6 +7,22 @@
     {
       "name": "SERVICES",
       "value": "lambda"
+    },
+    {
+      "name": "PORT_WEB_UI",
+      "value": "8080"
+    },
+    {
+      "name": "LAMBDA_EXECUTOR",
+      "value": "docker"
+    },
+    {
+      "name": "LAMBDA_REMOTE_DOCKER",
+      "value": true
+    },
+    {
+      "name": "LAMBDA_REMOVE_CONTAINERS",
+      "value": true
     }
   ],
   "nodeSelector": {
