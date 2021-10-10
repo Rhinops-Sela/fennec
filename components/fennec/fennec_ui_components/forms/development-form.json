@@ -15,7 +15,8 @@
     "pages": [
       "dynamodb-page",
       "sqs-page",
-      "sns-page"
+      "sns-page",
+      "lambda-page"
     ]
   },
   {
