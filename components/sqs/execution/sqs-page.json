@@ -1,0 +1,33 @@
+{
+  "name": "redis",
+  "executer": "python",
+  "displayName": "Redis",
+  "image": "assets/component_logos/redis.png",
+  "description": "Redis configuration & parameters",
+  "inputs": [
+    {
+      "template": "spot",
+      "group_enabler_master": "use_spot"
+    },
+    {
+      "template": "spot-on-demand-base-capacity",
+      "sub_group": "use_spot"
+    },
+    {
+      "template": "spot-on-demand-cpacity",
+      "sub_group": "use_spot"
+    },
+    {
+      "template": "spot-allocation",
+      "sub_group": "use_spot"
+    },
+    {
+      "template": "namespace"
+    },
+    {
+      "template": "dns-entry",
+      "displayName": "SQS Dns Record",
+      "serverValue": "SQS_DNS_RECORD"
+    }
+  ]
+}
