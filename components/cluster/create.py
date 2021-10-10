@@ -2,6 +2,7 @@ import os
 from fennec_cluster.cluster import Cluster
 from fennec_core_dns.core_dns import CoreDNS
 from fennec_executers.helm_executer import Helm
+from fennec_execution import execution
 from fennec_helpers.helper import Helper
 
 
@@ -15,7 +16,6 @@ values_file_path = os.path.join(
     cluster.execution.templates_folder, "05.cert-manager", "cert-manager_values.yaml")
 cert_manater_chart.install_chart(release_name="jetstack",  chart_url="https://charts.jetstack.io",
                                  additional_values=[f"--values {values_file_path}"])
-
 cluster.install_folder(folder='05.cert-manager/kubectl', namespace="cert-manager")
 
 # Install HPA

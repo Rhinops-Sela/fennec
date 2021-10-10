@@ -1,0 +1,29 @@
+{
+  "extraEnvVars": [
+    {
+      "name": "DEFAULT_REGION",
+      "value": "eu-west-2"
+    },
+    {
+      "name": "SERVICES",
+      "value": "sns"
+    }
+  ],
+  "nodeSelector": {
+    "role": "sns"
+  },
+  "tolerations": [
+    {
+      "key": "sns",
+      "operator": "Equal",
+      "value": "true"
+    }
+  ],
+  "service": {
+    "type": "ClusterIP",
+    "edgeService": {
+      "name": "edge",
+      "targetPort": 4566
+    }
+  }
+}

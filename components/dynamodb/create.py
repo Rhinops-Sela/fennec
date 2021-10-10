@@ -20,7 +20,7 @@ values_file_path = os.path.join(
     execution.execution_folder, "values.json")
 
 values_file_object = Helper.file_to_object(values_file_path)
-
+values_file_object['extraEnvVars'][0]['value'] = helm_chart.execution.cluster_region
 execution_file = os.path.join(
     os.path.dirname(__file__), "dynamodb-execute.values.json")
 Helper.to_json_file(values_file_object, execution_file)    
