@@ -7,6 +7,25 @@
   "description": "Kafka configuration & parameters",
   "inputs": [
     {
+      "template": "spot",
+      "group_enabler_master": "use_spot",
+      "value": true
+    },
+    {
+      "template": "spot-on-demand-base-capacity",
+      "sub_group": "use_spot",
+      "value": "0"
+    },
+    {
+      "template": "spot-on-demand-cpacity",
+      "sub_group": "use_spot",
+      "value": "0"
+    },
+    {
+      "template": "spot-allocation",
+      "sub_group": "use_spot"
+    },
+    {
       "template": "namespace"
     },
     {
@@ -25,22 +44,6 @@
       "tooltip": "Url to used for access to the Kafka",
       "displayName": "Kafka DNS Record",
       "serverValue": "KAFKA_DNS_RECORD"
-    },
-    {
-      "template": "spot",
-      "group_enabler_master": "use_spot"
-    },
-    {
-      "template": "spot-on-demand-base-capacity",
-      "sub_group": "use_spot"
-    },
-    {
-      "template": "spot-on-demand-cpacity",
-      "sub_group": "use_spot"
-    },
-    {
-      "template": "spot-allocation",
-      "sub_group": "use_spot"
     },
     {
       "controlType": "checkbox",
