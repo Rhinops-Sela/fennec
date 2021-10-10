@@ -5,7 +5,8 @@ from fennec_helpers import Helper
 class Helm(Kubectl):
     def __init__(self, working_folder: str, namespace: str = "NAMESPACE", chart_name: str = "") -> None:
         Kubectl.__init__(self, working_folder)
-        self.namespace_name = self.execution.local_parameters[namespace] if namespace in self.execution.local_parameters else namespace
+        self.namespace_name = self.execution.local_parameters[
+            namespace] if namespace in self.execution.local_parameters else namespace
         self.chart_name = chart_name if chart_name else self.namespace_name
 
     @property
@@ -22,9 +23,10 @@ class Helm(Kubectl):
             f"chart: {self.chart_name} in namespace: {self.namespace_name} not installed")
         return False
 
-    def install_chart(self, release_name: str, chart_url: str = "", additional_values=[], timeout = 300):
+    def install_chart(self, release_name: str, chart_url: str = "", additional_values=[], timeout=300):
         verb = "upgrade --install"
-        self.execution.run_command("helm repo add stable https://charts.helm.sh/stable")
+        self.execution.run_command(
+            "helm repo add stable https://charts.helm.sh/stable")
         if chart_url:
             self.execution.run_command(
                 f"helm repo add {release_name} {chart_url}")
@@ -34,11 +36,12 @@ class Helm(Kubectl):
         print("Installing Chart")
         self.execution.run_command(install_command)
 
-    def uninstall_chart(self):
+    def uninstall_chart(self, delete_namespace=False):
         if self.installed:
             print("uninstalling...")
             uninstall_command = f"helm uninstall {self.chart_name} -n {self.namespace_name}"
             self.execution.run_command(uninstall_command)
-            self.delete_namespace(self.namespace_name, force=False)
+            if delete_namespace:
+                self.delete_namespace(self.namespace_name, force=False)
         else:
             print(f"skipping...")
