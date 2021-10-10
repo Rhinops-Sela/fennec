@@ -1,7 +1,7 @@
 {
   "name": "dynamodb",
   "executer": "python",
-  "displayName": "SQS",
+  "displayName": "Dynamodb",
   "image": "assets/component_logos/dynamo.png",
   "description": "Dynamodb configuration & parameters",
   "inputs": [

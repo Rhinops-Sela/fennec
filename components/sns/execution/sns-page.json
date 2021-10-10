@@ -1,7 +1,7 @@
 {
   "name": "sns",
   "executer": "python",
-  "displayName": "SQS",
+  "displayName": "SNS",
   "image": "assets/component_logos/sns.png",
   "description": "SNS configuration & parameters",
   "inputs": [
