@@ -10,31 +10,38 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:  
-  build:
+  build-components:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0 
       
-      - name: create workspace
-        run: |
-          pwd
-          mkdir -p "$GITHUB_WORKSPACE/build-workspace"
-
-      # Build components with condition
       - name: Run changed-files with defaults on the components
         id: changed-files-for-components
         uses: tj-actions/changed-files@v10
         with:
           path: ./components
+            
+      #Publish artifacts-components
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: components
+          path: ${{ github.workspace }}
 
       - name: Copy components folder to build-workspace
-        #if: steps.changed-files-for-components.outputs.any_changed == 'true'
+        if: steps.changed-files-for-components.outputs.any_changed == 'true'
         run: |
           cp -r components ${{ github.workspace }}/build-workspace/components
-
-        # Build webclient with condition
+      
+  build-webclient:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 
+      # Build webclient with condition
       - name: Run changed-files with defaults on the webclient
         id: changed-files-for-webclient
         uses: tj-actions/changed-files@v10
@@ -55,10 +62,25 @@ jobs:
           ng build --prod
         working-directory: ./webclient
 
-      - name: copy webclient/dist/wizard to build-workspace
-        #if: steps.changed-files-for-webclient.outputs.any_changed == 'true'
-        run: |
-          cp -r webclient/dist/wizard ${{ github.workspace }}/build-workspace/webclient/wizard
+      # - name: copy webclient/dist/wizard to build-workspace
+      #   #if: steps.changed-files-for-webclient.outputs.any_changed == 'true'
+      #   run: |
+      #     cp -r webclient/dist/wizard ${{ github.workspace }}/build-workspace/webclient/wizard
+
+      #Publish artifacts-webclient
+      - name: Archive production artifacts
+        if: steps.changed-files-for-webclient.outputs.any_changed == 'true'
+        uses: actions/upload-artifact@v2
+        with:
+          name: wizard
+          path: ./webclient/dist/wizard
+
+  build-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  
 
       # Build backend with condition
       - name: Run changed-files with defaults on the backend
@@ -80,12 +102,58 @@ jobs:
           npm run build
         working-directory: ./backend
       
-      - name: copy backend folder to build-workspace
-        #if: steps.changed-files-for-backend.outputs.any_changed == 'true'
-        run: |
-          cp -r backend/node_modules ${{ github.workspace }}/build-workspace/backend/node_modules
-          cp -r backend/dist ${{ github.workspace }}/build-workspace/backend/dist
+      # - name: copy backend folder to build-workspace
+      #   #if: steps.changed-files-for-backend.outputs.any_changed == 'true'
+      #   run: |
+      #     cp -r backend/node_modules ${{ github.workspace }}/build-workspace/backend/node_modules
+      #     cp -r backend/dist ${{ github.workspace }}/build-workspace/backend/dist
 
+      #Publish artifacts-backend
+      - name: Publish dist
+        if: steps.changed-files-for-backend.outputs.any_changed == 'true'
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: ./backend/dist
+          
+      - name: Publish node_modules
+        if: steps.changed-files-for-backend.outputs.any_changed == 'true'
+        uses: actions/upload-artifact@v2
+        with:
+          name: node_modules
+          path: ./backend/node_modules
+
+  Download_artifacts_build_and_push_image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 
+       
+      - name: download artifacts-components
+        uses: actions/download-artifact@v2
+        with:
+          name: components
+          path: ${{ github.workspace }}/build-workspace/components
+          
+      - name: download artifacts-backend
+        uses: actions/download-artifact@v2
+        with:
+          name: dist
+          path: ${{ github.workspace }}/build-workspace/backend/dist
+      
+      - name: download artifacts-backend
+        uses: actions/download-artifact@v2
+        with:
+          name: node_modules
+          path: ${{ github.workspace }}/build-workspace/backend/node_modules
+               
+      - name: download artifacts-webclient
+        uses: actions/download-artifact@v2
+        with:
+          name: wizard
+          path: ${{ github.workspace }}/build-workspace/webclient/wizard
+      
       - name: Copy nginx.conf to build workspace
         run: |
           cp devops/metadata/nginx.conf ${{ github.workspace }}/build-workspace/nginx.conf
@@ -95,8 +163,6 @@ jobs:
           cp devops/metadata/Dockerfile ${{ github.workspace }}/build-workspace/Dockerfile
           cd ${{ github.workspace }}/build-workspace
           ls
-
-      #Build and push docker image
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
       
@@ -105,9 +171,9 @@ jobs:
         with:
           username: blancahot
           password: ${{ secrets.DOCKER_PASSWORD }}
-
+          
       - name: Build and push
-        if: contains('refs/heads/develop', github.ref) 
+        if: contains('refs/heads/develop', github.ref)
         id: docker_build_develop
         uses: docker/build-push-action@v2
         with:
@@ -116,121 +182,13 @@ jobs:
           context: ${{ github.workspace }}/build-workspace/
           
       - name: Build and push
-        if: "!contains('refs/heads/develop', github.ref)" 
+        if: "!contains('refs/heads/develop', github.ref)"
         id: docker_build
         uses: docker/build-push-action@v2
         with:
           push: true
           tags: blancahot/fennec:${{ github.run_number }},blancahot/fennec:latest
           context: ${{ github.workspace }}/build-workspace/
-
-
-
-
-
-
-
-
-
-
-
-
-      # #Publish artifacts-backend
-      # - name: Publish dist
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: dist
-      #     path: ./backend/dist
-          
-      # - name: Publish node_modules
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: node_modules
-      #     path: ./backend/node_modules
-    
-  # build-devops:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #     # Publish artifacts-devops
-  #   - name: Archive production artifacts
-  #     uses: actions/upload-artifact@v2
-  #     with:
-  #       name: metadata
-  #       path: ./devops/metadata/
-
-  # Download_artifacts:
-  #   needs: [build-components,build-devops,build-backend,build-webclient]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-      
-     
-      # - name: download artifacts-devops
-      #   uses: actions/download-artifact@v2
-      #   with:
-      #     name: metadata
-      #     path: ${{ github.workspace }}/build-workspace/devops
-      
-      # - name: download artifacts-components
-      #   uses: actions/download-artifact@v2
-      #   with:
-      #     name: components
-      #     path: ${{ github.workspace }}/build-workspace/components
-          
-      # - name: download artifacts-backend
-      #   uses: actions/download-artifact@v2
-      #   with:
-      #     name: dist
-      #     path: ${{ github.workspace }}/build-workspace/backend/dist
-      
-      # - name: download artifacts-backend
-      #   uses: actions/download-artifact@v2
-      #   with:
-      #     name: node_modules
-      #     path: ${{ github.workspace }}/build-workspace/backend/node_modules
-               
-      # - name: download artifacts-webclient
-      #   uses: actions/download-artifact@v2
-      #   with:
-      #     name: wizard
-      #     path: ${{ github.workspace }}/build-workspace/webclient/wizard
-      
-      # - name: Copy nginx.conf to build workspace
-      #   run: |
-      #     cp ${{ github.workspace }}/build-workspace/devops/nginx.conf ${{ github.workspace }}/build-workspace/nginx.conf
-      
-      # - name: Copy Dockerfile to build workspace
-      #   run: |
-      #     cp ${{ github.workspace }}/build-workspace/devops/Dockerfile ${{ github.workspace }}/build-workspace/Dockerfile
-      #     cd ${{ github.workspace }}/build-workspace
-      #     ls
-      # - name: Set up Docker Buildx
-      #   uses: docker/setup-buildx-action@v1
-      
-      # - name: Login to DockerHub
-      #   uses: docker/login-action@v1 
-      #   with:
-      #     username: blancahot
-      #     password: ${{ secrets.DOCKER_PASSWORD }}
-          
-      # - name: Build and push
-      #   if: contains('refs/heads/develop', github.ref)
-      #   id: docker_build_develop
-      #   uses: docker/build-push-action@v2
-      #   with:
-      #     push: true
-      #     tags: blancahot/fennec:${{ github.run_number }},blancahot/fennec:latest,blancahot/fennec:develop
-      #     context: ${{ github.workspace }}/build-workspace/
-          
-      # - name: Build and push
-      #   if: "!contains('refs/heads/develop', github.ref)"
-      #   id: docker_build
-      #   uses: docker/build-push-action@v2
-      #   with:
-      #     push: true
-      #     tags: blancahot/fennec:${{ github.run_number }},blancahot/fennec:latest
-      #     context: ${{ github.workspace }}/build-workspace/
 
 
       
