@@ -11,13 +11,13 @@ class Cluster(Kubectl):
     def name(self):
         return self.execution.global_parameters['CLUSTER_NAME']
 
-    @property
-    def admin_arn(self):
-        return os.environ['ADMIN_ARN'] or self.execution.local_parameters['ADMIN_ARN']
+    # @property
+    # def admin_arn(self):
+    #     return os.environ['ADMIN_ARN'] or self.execution.local_parameters['ADMIN_ARN']
         
-    @property
-    def username(self):
-        return self.admin_arn.split('/')[1]
+    # @property
+    # def username(self):
+    #     return self.admin_arn.split('/')[1]
 
 
     @property
@@ -45,13 +45,13 @@ class Cluster(Kubectl):
         else:    
             print(
                 f"Cluster {self.name} already exists in region {self.execution.cluster_region}")
-        print(f'Adding user {self.admin_arn} as cluster admin')       
-        command = f'eksctl get iamidentitymapping --cluster {self.name} --arn {self.admin_arn} --region {self.region}'
-        self.execution.run_command(command, kubeconfig=False)
-        command = f'eksctl create iamidentitymapping --cluster {self.name} --arn {self.admin_arn} --group system:masters --username {self.username} --region {self.region}'
-        self.execution.run_command(command, kubeconfig=False)
-        self.execution.create_kubernetes_client()
-        CoreDNS(self.working_folder).reset()
+        # print(f'Adding user {self.admin_arn} as cluster admin')       
+        # command = f'eksctl get iamidentitymapping --cluster {self.name} --arn {self.admin_arn} --region {self.region}'
+        # self.execution.run_command(command, kubeconfig=False)
+        # command = f'eksctl create iamidentitymapping --cluster {self.name} --arn {self.admin_arn} --group system:masters --username {self.username} --region {self.region}'
+        # self.execution.run_command(command, kubeconfig=False)
+        # self.execution.create_kubernetes_client()
+        # CoreDNS(self.working_folder).reset()
 
     def delete(self):
         if not self.check_if_cluster_exists():
