@@ -1,7 +1,0 @@
-{
-  "controlType": "text",
-  "tooltip": "Username",
-  "displayName": "Username",
-  "serverValue": "${USERNAME}",
-  "regexValidation": ".*"
-}

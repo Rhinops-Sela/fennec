@@ -11,9 +11,6 @@
     "debug": "eu-west-2",
     "global": true
   },
-  "CREATE_CLUSTER": {
-    "debug": true
-  },
   "ADMIN_ARN": {
     "debug": "arn:aws:iam::027065296145:user/iliag"
   },
@@ -31,7 +28,7 @@
   },
   "CLUSTER_DASHBOARD_URL": {
     "debug": "dashboard.fennec.io",
-    "default": ""
+    "default": "dashboard.fennec.io"
   },
   "INSTALL_INGRESS_CONTROLER": {
     "debug": true,

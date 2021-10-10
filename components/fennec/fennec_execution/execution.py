@@ -85,7 +85,7 @@ class Execution:
         # if not self.debug:
         #     os.environ['AWS_ACCESS_KEY_ID'] = f'{self.global_parameters["AWS_ACCESS_KEY_ID"]}'
         #     os.environ['AWS_SECRET_ACCESS_KEY'] = f'{self.global_parameters["AWS_SECRET_ACCESS_KEY"]}'
-        os.environ['AWS_REGION'] = self.cluster_region
+        os.environ['AWS_REGION'] = os.environ['AWS_DEFAULT_REGION']
         
 
     def create_kubernetes_client(self):
