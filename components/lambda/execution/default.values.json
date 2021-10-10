@@ -1,0 +1,20 @@
+{
+  "USE_SPOT": {
+    "debug": true
+  },
+  "ALLOCATION_STRATEGY": {
+    "debug": "lowest-price"
+  },
+  "ON_DEMEND_BASE_CAPACITY": {
+    "debug": 0
+  },
+  "ON_DEMEND_ABOVE_BASE_PERCENTAGE": {
+    "debug": 0
+  },
+  "NAMESPACE": {
+    "debug": "lambda"
+  },
+  "SQS_DNS_RECORD":{
+    "debug": "lambda.fennec.io"
+  }
+}

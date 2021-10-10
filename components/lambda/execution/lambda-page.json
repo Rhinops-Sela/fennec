@@ -1,0 +1,36 @@
+{
+  "name": "lambda",
+  "executer": "python",
+  "displayName": "Lambda",
+  "image": "assets/component_logos/lambda.png",
+  "description": "Lambda configuration & parameters",
+  "inputs": [
+    {
+      "template": "spot",
+      "group_enabler_master": "use_spot",
+      "value": true
+    },
+    {
+      "template": "spot-on-demand-base-capacity",
+      "sub_group": "use_spot",
+      "value": "0"
+    },
+    {
+      "template": "spot-on-demand-cpacity",
+      "sub_group": "use_spot",
+      "value": "0"
+    },
+    {
+      "template": "spot-allocation",
+      "sub_group": "use_spot"
+    },
+    {
+      "template": "namespace"
+    },
+    {
+      "template": "dns-entry",
+      "displayName": "Lambda Dns Record",
+      "serverValue": "LAMBDA_DNS_RECORD"
+    }
+  ]
+}
