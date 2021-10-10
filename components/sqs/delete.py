@@ -8,4 +8,4 @@ redis_url = execution.local_parameters['SQS_DNS_RECORD']
 namespace = execution.local_parameters['NAMESPACE']
 helm_chart = Helm(os.path.dirname(__file__), namespace=namespace, chart_name="sqs")
 helm_chart.uninstall_chart()
-helm_chart.delete_namespace(namespace)
+#helm_chart.delete_namespace(namespace)
