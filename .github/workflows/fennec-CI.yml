@@ -32,7 +32,7 @@ jobs:
       - name: Copy components folder to build-workspace
         #if: steps.changed-files-for-components.outputs.any_changed == 'true'
         run: |
-          cp ${{ github.repository }}/components ${{ github.workspace }}/build-workspace/components
+          cp components/ ${{ github.workspace }}/build-workspace/components
 
         # Build webclient with condition
       - name: Run changed-files with defaults on the webclient
@@ -58,7 +58,7 @@ jobs:
       - name: copy webclient/dist/wizard to build-workspace
         #if: steps.changed-files-for-webclient.outputs.any_changed == 'true'
         run: |
-          cp ${{ github.repository }}/webclient/dist/wizard ${{ github.workspace }}/build-workspace/webclient/wizard
+          cp webclient/dist/wizard ${{ github.workspace }}/build-workspace/webclient/wizard
 
       # Build backend with condition
       - name: Run changed-files with defaults on the backend
@@ -83,16 +83,16 @@ jobs:
       - name: copy backend folder to build-workspace
         #if: steps.changed-files-for-backend.outputs.any_changed == 'true'
         run: |
-          cp ${{ github.repository }}/backend/node_modules ${{ github.workspace }}/build-workspace/backend/node_modules
-          cp ${{ github.repository }}/backend/dist ${{ github.workspace }}/build-workspace/backend/dist
+          cp backend/node_modules ${{ github.workspace }}/build-workspace/backend/node_modules
+          cp backend/dist ${{ github.workspace }}/build-workspace/backend/dist
 
       - name: Copy nginx.conf to build workspace
         run: |
-          cp ${{ github.repository }}/devops/metadata/nginx.conf ${{ github.workspace }}/build-workspace/nginx.conf
+          cp devops/metadata/nginx.conf ${{ github.workspace }}/build-workspace/nginx.conf
       
       - name: Copy Dockerfile to build workspace
         run: |
-          cp ${{ github.repository }}/devops/metadata/Dockerfile ${{ github.workspace }}/build-workspace/Dockerfile
+          cp devops/metadata/Dockerfile ${{ github.workspace }}/build-workspace/Dockerfile
           cd ${{ github.workspace }}/build-workspace
           ls
 
