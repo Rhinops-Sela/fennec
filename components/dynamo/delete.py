@@ -24,7 +24,7 @@ kubectl.uninstall_folder(os.path.join(
     kubectl.execution.templates_folder, "admin"), "dynamodb")
 
 core_dns = CoreDNS(os.path.dirname(__file__))
-admin_record  = f"{core_dns.execution.local_parameters['ADMIN_DNS_RECORD']}=dynamodb-local-admin.{core_dns.execution.local_parameters['NAMESPACE']}.svc.cluster.local"
-dynamo_record  = f"{core_dns.execution.local_parameters['DYNAMO_DNS_RECORD']}=dynamodb-local.{core_dns.execution.local_parameters['NAMESPACE']}.svc.cluster.local"
+admin_record  = f"{core_dns.execution.get_local_parameter('ADMIN_DNS_RECORD')}=dynamodb-local-admin.{core_dns.execution.get_local_parameter('NAMESPACE')}.svc.cluster.local"
+dynamo_record  = f"{core_dns.execution.get_local_parameter('DYNAMO_DNS_RECORD')}=dynamodb-local.{core_dns.execution.get_local_parameter('NAMESPACE')}.svc.cluster.local"
 dns_records = f"{admin_record};{dynamo_record}"
 core_dns.delete_records(dns_records=dns_records)

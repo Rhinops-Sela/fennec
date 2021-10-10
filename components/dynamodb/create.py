@@ -7,9 +7,10 @@ from fennec_nodegorup.nodegroup import Nodegroup
 from fennec_executers.kubectl_executer import Kubectl
 
 execution = Execution(os.path.dirname(__file__))
-dynamodb_url = execution.local_parameters['DYNAMO_DNS_RECORD']
-dynamodb_admin_url = execution.local_parameters['DYNAMO_ADMIN_DNS_RECORD']
-namespace = execution.local_parameters['NAMESPACE']
+dynamodb_url = execution.get_local_parameter('DYNAMO_DNS_RECORD')
+dynamodb_url = execution.get_local_parameter('DYNAMO_DNS_RECORD')
+dynamodb_admin_url = execution.get_local_parameter('DYNAMO_ADMIN_DNS_RECORD')
+namespace = execution.get_local_parameter('NAMESPACE')
 template_path = os.path.join(
     execution.templates_folder, "dynamodb-ng-template.json")
 nodegroup = Nodegroup(os.path.dirname(__file__), template_path)
@@ -31,8 +32,8 @@ helm_chart.install_chart(release_name="localstack-charts",
 dynamodb_record = f"{dynamodb_url}=dynamodb-localstack.{namespace}.svc.cluster.local"                                 
 
 kubectl = Kubectl(os.path.dirname(__file__))
-kubectl.install_folder("admin", namespace=nodegroup.execution.local_parameters['NAMESPACE'])
-admin_record  = f"{dynamodb_admin_url}=dynamodb-local-admin.{nodegroup.execution.local_parameters['NAMESPACE']}.svc.cluster.local"
+kubectl.install_folder("admin", namespace=nodegroup.execution.get_local_parameter('NAMESPACE'))
+admin_record  = f"{dynamodb_admin_url}=dynamodb-local-admin.{nodegroup.execution.get_local_parameter('NAMESPACE')}.svc.cluster.local"
 
 
 core_dns = CoreDNS(os.path.dirname(__file__))

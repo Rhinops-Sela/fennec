@@ -6,8 +6,8 @@ from fennec_helpers.helper import Helper
 from fennec_nodegorup.nodegroup import Nodegroup
 
 execution = Execution(os.path.dirname(__file__))
-lambda_url = execution.local_parameters['LAMBDA_DNS_RECORD']
-namespace = execution.local_parameters['NAMESPACE']
+lambda_url = execution.get_local_parameter('LAMBDA_DNS_RECORD')
+namespace = execution.get_local_parameter('NAMESPACE')
 template_path = os.path.join(
     execution.templates_folder, "lambda-ng-template.json")
 nodegroup = Nodegroup(os.path.dirname(__file__), template_path)

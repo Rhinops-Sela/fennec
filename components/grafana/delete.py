@@ -7,5 +7,5 @@ execution = Execution(os.path.dirname(__file__))
 grafana_chart = Helm(os.path.dirname(__file__), "monitoring", "grafana")
 grafana_chart.uninstall_chart()
 core_dns = CoreDNS(os.path.dirname(__file__))
-grafana_url = execution.local_parameters['GRAFANA_DNS_RECORD']
+grafana_url = execution.get_local_parameter('GRAFANA_DNS_RECORD')
 core_dns.delete_records(f"{grafana_url}=grafana.monitoring.svc.cluster.local")

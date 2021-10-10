@@ -86,7 +86,11 @@ class Execution:
         #     os.environ['AWS_ACCESS_KEY_ID'] = f'{self.global_parameters["AWS_ACCESS_KEY_ID"]}'
         #     os.environ['AWS_SECRET_ACCESS_KEY'] = f'{self.global_parameters["AWS_SECRET_ACCESS_KEY"]}'
         os.environ['AWS_REGION'] = os.environ['AWS_DEFAULT_REGION']
-        
+
+    def get_local_parameter(self,parameter_name:str):
+        if parameter_name in self.local_parameters:
+            return self.local_parameters[parameter_name]
+        return "" 
 
     def create_kubernetes_client(self):
         self.__kube_config_file = os.path.join(self.working_folder, '.kube')

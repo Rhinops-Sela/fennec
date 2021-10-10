@@ -13,7 +13,7 @@ class Nodegroup():
         self.template = Helper.file_to_object(self.template_path)
         self.nodegroup = self.template['nodeGroups'][0]
         if "NODEGROUP_NAME" in self.execution.local_parameters:
-            self.nodegroup['name'] = self.execution.local_parameters["NODEGROUP_NAME"]
+            self.nodegroup['name'] = self.execution.get_local_parameter("NODEGROUP_NAME")
         self.template['metadata']['name'] = self.execution.cluster_name
         self.template['metadata']['region'] = self.execution.cluster_region
         self.__add_instance_types__()
@@ -28,7 +28,7 @@ class Nodegroup():
         self.__set_min_scale()
         self.__set_max_scale()
 
-        if "USE_SPOT" in self.execution.local_parameters and self.execution.local_parameters['USE_SPOT']:
+        if "USE_SPOT" in self.execution.local_parameters and self.execution.get_local_parameter('USE_SPOT'):
             self.__set_spot_properties__()
         self.execution.run_command(
             f"eksctl create nodegroup -f {self.__create_execution_file__()}", kubeconfig=False)
@@ -47,7 +47,7 @@ class Nodegroup():
     def __add_instance_types__(self):
         if not "INSTANCE_TYPES" in self.execution.local_parameters:
             return
-        instance_types = self.execution.local_parameters['INSTANCE_TYPES']
+        instance_types = self.execution.get_local_parameter('INSTANCE_TYPES')
         if not instance_types:
             return
         for instance_type in instance_types.split(','):
@@ -55,9 +55,9 @@ class Nodegroup():
                 instance_type)
 
     def __add_taints__(self):
-        if not "TAINTS" in self.execution.local_parameters or self.execution.local_parameters['TAINTS'] == "":
+        if not "TAINTS" in self.execution.local_parameters or self.execution.get_local_parameter('TAINTS') == "":
             return
-        taints = self.execution.local_parameters['TAINTS']
+        taints = self.execution.get_local_parameter('TAINTS')
         if not taints:
             return
         modified_nodegroup = Nodegroup.add_properties(
@@ -68,9 +68,9 @@ class Nodegroup():
         self.nodegroup = modified_nodegroup
 
     def __add_node_role(self):
-        if not "NODE_ROLE" in self.execution.local_parameters or self.execution.local_parameters['NODE_ROLE'] == "":
+        if not "NODE_ROLE" in self.execution.local_parameters or self.execution.get_local_parameter('NODE_ROLE') == "":
             return
-        labels = f"role={self.execution.local_parameters['NODE_ROLE']}"
+        labels = f"role={self.execution.get_local_parameter('NODE_ROLE')}"
         if not labels:
             return
         modified_nodegroup = Nodegroup.add_properties(
@@ -80,9 +80,9 @@ class Nodegroup():
         self.nodegroup = modified_nodegroup
 
     def __add_labels__(self):
-        if not "LABELS" in self.execution.local_parameters or self.execution.local_parameters['LABELS'] == "":
+        if not "LABELS" in self.execution.local_parameters or self.execution.get_local_parameter('LABELS') == "":
             return
-        labels = self.execution.local_parameters['LABELS']
+        labels = self.execution.get_local_parameter('LABELS')
         modified_nodegroup = Nodegroup.add_properties(
             "labels", labels, self.nodegroup)
         self.nodegroup = modified_nodegroup
@@ -90,7 +90,7 @@ class Nodegroup():
     def __set_volume_size(self):
         if not "NODE_VOLUME_SIZE" in self.execution.local_parameters:
             return
-        volume_size = self.execution.local_parameters['NODE_VOLUME_SIZE']
+        volume_size = self.execution.get_local_parameter('NODE_VOLUME_SIZE')
         if not volume_size:
             return
         self.nodegroup["volumeSize"] = volume_size
@@ -98,7 +98,7 @@ class Nodegroup():
     def __set_initial_scale(self):
         if not "DESIRED" in self.execution.local_parameters:
             return
-        desired = self.execution.local_parameters['DESIRED']
+        desired = self.execution.get_local_parameter('DESIRED')
         if not desired:
             return
         self.nodegroup["desiredCapacity"] = desired
@@ -106,7 +106,7 @@ class Nodegroup():
     def __set_min_scale(self):
         if not "MIN" in self.execution.local_parameters:
             return
-        min_scale = self.execution.local_parameters['MIN']
+        min_scale = self.execution.get_local_parameter('MIN')
         if not min_scale:
             return
         self.nodegroup["minSize"] = min_scale
@@ -114,14 +114,14 @@ class Nodegroup():
     def __set_max_scale(self):
         if not "MAX" in self.execution.local_parameters:
             return
-        max_scale = self.execution.local_parameters['MAX']
+        max_scale = self.execution.get_local_parameter('MAX')
         if not max_scale:
             return 
         self.nodegroup["maxSize"] = max_scale
 
     def add_tags(self, tags_custom: str = ""):
         tags = tags_custom if tags_custom else (
-            "TAGS" in self.execution.local_parameters and self.execution.local_parameters['TAGS'])
+            "TAGS" in self.execution.local_parameters and self.execution.get_local_parameter('TAGS'))
         if not tags:
             return
         modified_nodegroup = Nodegroup.add_properties(
@@ -129,8 +129,8 @@ class Nodegroup():
         self.nodegroup = modified_nodegroup
 
     def __set_spot_properties__(self):
-        spot_allocation_strategy = self.execution.local_parameters['ALLOCATION_STRATEGY']
-        on_demand_base_capacity = self.execution.local_parameters['ON_DEMEND_BASE_CAPACITY']
+        spot_allocation_strategy = self.execution.get_local_parameter('ALLOCATION_STRATEGY')
+        on_demand_base_capacity = self.execution.get_local_parameter('ON_DEMEND_BASE_CAPACITY')
         on_demand_percentage_above_base_capacity = self.execution.local_parameters[
             'ON_DEMEND_ABOVE_BASE_PERCENTAGE']
         instances_distribution = self.nodegroup['instancesDistribution']

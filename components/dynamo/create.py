@@ -16,11 +16,11 @@ ui_deployment_template_output = os.path.join(
     nodegroup.execution.templates_folder, "admin", "01.deployment-execute.json")
 
 kubectl = Kubectl(os.path.dirname(__file__))
-kubectl.install_folder("dynamodb", namespace=nodegroup.execution.local_parameters['NAMESPACE'])
-kubectl.install_folder("admin", namespace=nodegroup.execution.local_parameters['NAMESPACE'])
+kubectl.install_folder("dynamodb", namespace=nodegroup.execution.get_local_parameter('NAMESPACE'))
+kubectl.install_folder("admin", namespace=nodegroup.execution.get_local_parameter('NAMESPACE'))
 
 core_dns = CoreDNS(os.path.dirname(__file__))
-admin_record  = f"{nodegroup.execution.local_parameters['ADMIN_DNS_RECORD']}=dynamodb-local-admin.{nodegroup.execution.local_parameters['NAMESPACE']}.svc.cluster.local"
-dynamo_record  = f"{nodegroup.execution.local_parameters['DYNAMO_DNS_RECORD']}=dynamodb-local.{nodegroup.execution.local_parameters['NAMESPACE']}.svc.cluster.local"
+admin_record  = f"{nodegroup.execution.get_local_parameter('ADMIN_DNS_RECORD')}=dynamodb-local-admin.{nodegroup.execution.get_local_parameter('NAMESPACE')}.svc.cluster.local"
+dynamo_record  = f"{nodegroup.execution.get_local_parameter('DYNAMO_DNS_RECORD')}=dynamodb-local.{nodegroup.execution.get_local_parameter('NAMESPACE')}.svc.cluster.local"
 dns_records = f"{admin_record};{dynamo_record}"
 core_dns.add_records(dns_records=dns_records)

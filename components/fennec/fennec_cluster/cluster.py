@@ -13,7 +13,7 @@ class Cluster(Kubectl):
 
     # @property
     # def admin_arn(self):
-    #     return os.environ['ADMIN_ARN'] or self.execution.local_parameters['ADMIN_ARN']
+    #     return os.environ['ADMIN_ARN'] or self.execution.get_local_parameter('ADMIN_ARN')
         
     # @property
     # def username(self):

@@ -6,8 +6,8 @@ from fennec_helpers.helper import Helper
 from fennec_nodegorup.nodegroup import Nodegroup
 
 execution = Execution(os.path.dirname(__file__))
-prometheus_url = execution.local_parameters['PROMETHEUS_DNS_RECORD']
-alertmanager_url = execution.local_parameters['ALERTMANAGER_DNS_RECORD']
+prometheus_url = execution.get_local_parameter('PROMETHEUS_DNS_RECORD')
+alertmanager_url = execution.get_local_parameter('ALERTMANAGER_DNS_RECORD')
 template_path = os.path.join(
     execution.templates_folder, "monitoring-ng-template.json")
 nodegroup = Nodegroup(os.path.dirname(__file__), template_path)
@@ -16,17 +16,17 @@ nodegroup.create()
 values_file_path = os.path.join(
     execution.execution_folder, "values.json")
 values_file_object = Helper.file_to_object(values_file_path)
-if execution.local_parameters['EMAIL_NOTIFER'] == True:
+if execution.get_local_parameter('EMAIL_NOTIFER') == True:
     values_file_object['alertmanagerFiles']['alertmanager.yml']['receivers'].append({
         "name": "email-alert",
         "email_configs": [
             {
-                "to":  execution.local_parameters["TO"],
-                "from":  execution.local_parameters["FROM"],
-                "smarthost":  f'{execution.local_parameters["SMTP_SERVER"]}:587',
-                "auth_username":  execution.local_parameters["USERNAME"],
-                "auth_identity":  execution.local_parameters["FROM"],
-                "auth_password":  execution.local_parameters["PASSWORD"]
+                "to":  execution.get_local_parameter("TO"),
+                "from":  execution.get_local_parameter("FROM"),
+                "smarthost":  f'{execution.get_local_parameter("SMTP_SERVER")}:587',
+                "auth_username":  execution.get_local_parameter("USERNAME"),
+                "auth_identity":  execution.get_local_parameter("FROM"),
+                "auth_password":  execution.get_local_parameter("PASSWORD")
             }
         ]
     })
@@ -36,12 +36,12 @@ if execution.local_parameters['EMAIL_NOTIFER'] == True:
         },
         "continue": True}
     values_file_object['alertmanagerFiles']['alertmanager.yml']['route']['receiver'] = "email-alert"    
-if execution.local_parameters['SLACK_NOTIFER'] == True:
+if execution.get_local_parameter('SLACK_NOTIFER') == True:
     values_file_object['alertmanagerFiles']['alertmanager.yml']['receivers'].append({
         "name": "slack-alert",
         "slack_configs": [
             {
-                "api_url": execution.local_parameters["SLACK_URL"],
+                "api_url": execution.get_local_parameter("SLACK_URL"),
                 "send_resolved": True,
                 "channel": "#alerts",
                 "text": "{{ range .Alerts }}<!channel> {{ .Annotations.summary }}\n{{ .Annotations.description }}\n{{ end }}"
@@ -58,12 +58,12 @@ if execution.local_parameters['SLACK_NOTIFER'] == True:
     })
     values_file_object['alertmanagerFiles']['alertmanager.yml']['route']['receiver'] = "slack-alert"
 
-if execution.local_parameters['WEBHOOK_NOTIFER'] == True:
+if execution.get_local_parameter('WEBHOOK_NOTIFER') == True:
     values_file_object['alertmanagerFiles']['alertmanager.yml']['receivers'].append({
         "name": "webhooks-alert",
         "webhook_configs": [
             {
-                "url": execution.local_parameters["WEBHOOK_URL"]
+                "url": execution.get_local_parameter("WEBHOOK_URL")
             }
         ]
     })

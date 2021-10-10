@@ -5,7 +5,7 @@ from fennec_execution.execution import Execution
 from fennec_nodegorup.nodegroup import Nodegroup
 
 execution = Execution(os.path.dirname(__file__))
-grafana_url = execution.local_parameters['GRAFANA_DNS_RECORD']
+grafana_url = execution.get_local_parameter('GRAFANA_DNS_RECORD')
 template_path = os.path.join(
     execution.templates_folder, "monitoring-ng-template.json")
 nodegroup = Nodegroup(os.path.dirname(__file__), template_path)

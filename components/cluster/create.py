@@ -19,7 +19,7 @@ cert_manater_chart.install_chart(release_name="jetstack",  chart_url="https://ch
 cluster.install_folder(folder='05.cert-manager/kubectl', namespace="cert-manager")
 
 # Install HPA
-install_HPA = cluster.execution.local_parameters['INSTALL_CLUSTER_HPA']
+install_HPA = cluster.execution.get_local_parameter('INSTALL_CLUSTER_HPA')
 if install_HPA:
     hpa_instsllation = os.path.join(
         cluster.execution.templates_folder, "03.hpa", "hpa.yaml")
@@ -27,7 +27,7 @@ if install_HPA:
     cluster.install_file(hpa_instsllation, "horizontal-pod-scaler")
 
 # Install Cluster auto scaler
-install_cluster_autoscaler = cluster.execution.local_parameters['INSTALL_CLUSTER_AUTOSCALER']
+install_cluster_autoscaler = cluster.execution.get_local_parameter('INSTALL_CLUSTER_AUTOSCALER')
 if install_cluster_autoscaler:
     cluster_auto_scaler_chart = Helm(
         os.path.dirname(__file__), "cluster-autoscaler")
@@ -41,7 +41,7 @@ if install_cluster_autoscaler:
                                                 "--version 7.0.0"
                                             ])
 # Install Nginx Controller
-install_ingress_controller = cluster.execution.local_parameters['INSTALL_INGRESS_CONTROLER']
+install_ingress_controller = cluster.execution.get_local_parameter('INSTALL_INGRESS_CONTROLER')
 if install_ingress_controller:
     cluster.install_folder(folder="06.nginx")
     """ cluster.install_folder(deployment_folder)
@@ -53,13 +53,13 @@ if install_ingress_controller:
  """
 
 # Install Cluster dashboard
-install_cluster_dashboard = cluster.execution.local_parameters['INSTALL_CLUSTER_DASHBOARD']
+install_cluster_dashboard = cluster.execution.get_local_parameter('INSTALL_CLUSTER_DASHBOARD')
 if install_cluster_dashboard:
     values_file_path = os.path.join(
         cluster.execution.templates_folder, "07.dashboard", "ingress.yaml")
     values_file_path_execution = os.path.join(
         cluster.execution.templates_folder, "07.dashboard", "ingress-execute.yaml")
-    user_url = cluster.execution.local_parameters['CLUSTER_DASHBOARD_URL']
+    user_url = cluster.execution.get_local_parameter('CLUSTER_DASHBOARD_URL')
     values_to_replace = {'CLUSTER_DASHBOARD_URL': f'{user_url}'}
     Helper.replace_in_file(
         values_file_path, values_file_path_execution, values_to_replace, 100)
@@ -74,9 +74,9 @@ if install_cluster_dashboard:
     core_dns.add_records(f"{user_url}={ingress_address}")
 
 # Install Cluster dashboard
-# install_cluster_dashboard = cluster.execution.local_parameters['INSTALL_CLUSTER_DASHBOARD']
+# install_cluster_dashboard = cluster.execution.get_local_parameter('INSTALL_CLUSTER_DASHBOARD')
 # if install_cluster_dashboard:
-#     user_url = cluster.execution.local_parameters['CLUSTER_DASHBOARD_URL']
+#     user_url = cluster.execution.get_local_parameter('CLUSTER_DASHBOARD_URL')
 #     deployment_folder = os.path.join(
 #         cluster.execution.templates_folder, "06.dashboard")
 #     cluster.install_folder(deployment_folder)

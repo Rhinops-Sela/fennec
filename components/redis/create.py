@@ -6,9 +6,9 @@ from fennec_helpers.helper import Helper
 from fennec_nodegorup.nodegroup import Nodegroup
 
 execution = Execution(os.path.dirname(__file__))
-redis_url = execution.local_parameters['REDIS_DNS_RECORD']
-redis_admin_url = execution.local_parameters['REDIS_ADMIN_DNS_RECORD']
-namespace = execution.local_parameters['NAMESPACE']
+redis_url = execution.get_local_parameter('REDIS_DNS_RECORD')
+redis_admin_url = execution.get_local_parameter('REDIS_ADMIN_DNS_RECORD')
+namespace = execution.get_local_parameter('NAMESPACE')
 template_path = os.path.join(
     execution.templates_folder, "redis-ng-template.json")
 nodegroup = Nodegroup(os.path.dirname(__file__), template_path)
@@ -19,12 +19,12 @@ values_file_path = os.path.join(
     execution.execution_folder, "values.json")
 
 values_file_object = Helper.file_to_object(values_file_path)
-# values_file_object['master']['extraFlags'] = str(execution.local_parameters['EXTRA_FLAGS']).split(',')
-# values_file_object['cluster']['slaveCount'] = execution.local_parameters['NUMBER_SLAVES']
+# values_file_object['master']['extraFlags'] = str(execution.get_local_parameter('EXTRA_FLAGS']).split(',')
+# values_file_object['cluster']['slaveCount'] = execution.get_local_parameter('NUMBER_SLAVES']
 
-# if execution.local_parameters['DISABLED_COMMANDS']:
-#     values_file_object['master']['disableCommands'] = execution.local_parameters['DISABLED_COMMANDS'].split(',')
-#     values_file_object['slave']['disableCommands'] = execution.local_parameters['DISABLED_COMMANDS'].split(',')
+# if execution.get_local_parameter('DISABLED_COMMANDS']:
+#     values_file_object['master']['disableCommands'] = execution.get_local_parameter('DISABLED_COMMANDS'].split(',')
+#     values_file_object['slave']['disableCommands'] = execution.get_local_parameter('DISABLED_COMMANDS'].split(',')
 
 execution_file = os.path.join(
     os.path.dirname(__file__), "redis-execute.values.json")
