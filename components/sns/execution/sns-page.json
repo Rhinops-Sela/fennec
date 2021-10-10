@@ -1,9 +1,9 @@
 {
-  "name": "sqs",
+  "name": "sns",
   "executer": "python",
   "displayName": "SQS",
-  "image": "assets/component_logos/sqs.png",
-  "description": "SQS configuration & parameters",
+  "image": "assets/component_logos/sns.png",
+  "description": "SNS configuration & parameters",
   "inputs": [
     {
       "template": "spot",
