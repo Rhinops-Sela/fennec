@@ -30,10 +30,10 @@ jobs:
           name: components
           path: ${{ github.workspace }}
 
-      - name: Copy components folder to build-workspace
-        if: steps.changed-files-for-components.outputs.any_changed == 'true'
-        run: |
-          cp -r components ${{ github.workspace }}/build-workspace/components
+      # - name: Copy components folder to build-workspace
+      #   if: steps.changed-files-for-components.outputs.any_changed == 'true'
+      #   run: |
+      #     cp -r components ${{ github.workspace }}/build-workspace/components
       
   build-webclient:
     runs-on: ubuntu-latest
@@ -130,31 +130,35 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0 
-       
+      
       - name: download artifacts-components
-        uses: actions/download-artifact@v2
+        uses: dawidd6/action-download-artifact@v2
         with:
+          workflow: fennec-CI.yml
           name: components
           path: ${{ github.workspace }}/build-workspace/components
           
       - name: download artifacts-backend
-        uses: actions/download-artifact@v2
+        uses: dawidd6/action-download-artifact@v2
         with:
+          workflow: fennec-CI.yml
+          name: node_mudules
+          path: ${{ github.workspace }}/build-workspace/backend/node_mudules
+          
+      - name: download artifacts-backend
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: fennec-CI.yml
           name: dist
           path: ${{ github.workspace }}/build-workspace/backend/dist
-      
-      - name: download artifacts-backend
-        uses: actions/download-artifact@v2
-        with:
-          name: node_modules
-          path: ${{ github.workspace }}/build-workspace/backend/node_modules
-               
+          
       - name: download artifacts-webclient
-        uses: actions/download-artifact@v2
+        uses: dawidd6/action-download-artifact@v2
         with:
+          workflow: fennec-CI.yml
           name: wizard
           path: ${{ github.workspace }}/build-workspace/webclient/wizard
-      
+
       - name: Copy nginx.conf to build workspace
         run: |
           cp devops/metadata/nginx.conf ${{ github.workspace }}/build-workspace/nginx.conf
