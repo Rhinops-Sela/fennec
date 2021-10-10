@@ -12,12 +12,13 @@ class Cluster(Kubectl):
         return self.execution.global_parameters['CLUSTER_NAME']
 
     @property
-    def username(self):
-        return self.execution.local_parameters['ADMIN_ARN'].split('/')[1]
-
-    @property
     def admin_arn(self):
-        return self.execution.local_parameters['ADMIN_ARN']
+        return os.environ['ADMIN_ARN'] or self.execution.local_parameters['ADMIN_ARN']
+        
+    @property
+    def username(self):
+        return self.admin_arn.split('/')[1]
+
 
     @property
     def region(self):
