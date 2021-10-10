@@ -7,29 +7,34 @@
   "description": "ES configuration & parameters",
   "inputs": [
     {
-      "template": "namespace"
-    },
-    {
-      "template": "master-nodes"
-    },
-    {
-      "template": "replicas"
-    },
-    {
       "template": "spot",
-      "group_enabler_master": "use_spot"
+      "group_enabler_master": "use_spot",
+      "value": true
     },
     {
       "template": "spot-on-demand-base-capacity",
-      "sub_group": "use_spot"
+      "sub_group": "use_spot",
+      "value": "0"
     },
     {
       "template": "spot-on-demand-cpacity",
-      "sub_group": "use_spot"
+      "sub_group": "use_spot",
+      "value": "0"
     },
     {
       "template": "spot-allocation",
       "sub_group": "use_spot"
+    },
+    {
+      "template": "namespace"
+    },
+    {
+      "template": "master-nodes",
+      "value": "1"
+    },
+    {
+      "template": "replicas",
+      "value": "1"
     },
     {
       "template": "dns-entry",
@@ -43,7 +48,7 @@
       "tooltip": "Install Kibana",
       "displayName": "Install Kibana?",
       "serverValue": "INSTALL_KIBANA",
-      "value": false
+      "value": true
     },
     {
       "template": "dns-entry",
