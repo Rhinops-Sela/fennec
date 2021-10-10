@@ -27,4 +27,4 @@ helm_chart.install_chart(release_name="localstack-charts",
                                   chart_url="https://localstack.github.io/helm-charts",
                                   additional_values=[f"--values {execution_file}"])
 core_dns = CoreDNS(os.path.dirname(__file__))
-core_dns.add_records(f"{sqs_url}=redis-headless.{namespace}.svc.cluster.local")
+core_dns.add_records(f"{sqs_url}=sqs-localstack.{namespace}.svc.cluster.local")
