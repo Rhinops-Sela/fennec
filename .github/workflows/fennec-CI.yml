@@ -16,44 +16,44 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0 
+        # with:
+        #   fetch-depth: 0 
 
-      - name: Run changed-files with defaults on the components
-        id: changed-files-for-components
-        uses: tj-actions/changed-files@v10
-        with:
-          path: ./components
+      # - name: Run changed-files with defaults on the components
+      #   id: changed-files-for-components
+      #   uses: tj-actions/changed-files@v10
+      #   with:
+      #     path: ./components
 
       #Publish artifacts-components
       - name: Archive production artifacts
-        if: steps.changed-files-for-components.outputs.any_changed == 'true'
+        # if: steps.changed-files-for-components.outputs.any_changed == 'true'
         uses: actions/upload-artifact@v2
         with:
           name: components
-          path: ./components
+          path: ${{ github.workspace }}
   
   build-webclient:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0 
+        # with:
+        #   fetch-depth: 0 
 
-      - name: Run changed-files with defaults on the webclient
-        id: changed-files-for-webclient
-        uses: tj-actions/changed-files@v10
-        with:
-          path: ./webclient
+      # - name: Run changed-files with defaults on the webclient
+      #   id: changed-files-for-webclient
+      #   uses: tj-actions/changed-files@v10
+      #   with:
+      #     path: ./webclient
       
       - name: Install Node.js & npm install & build
-        if: steps.changed-files-for-webclient.outputs.any_changed == 'true'
+        # if: steps.changed-files-for-webclient.outputs.any_changed == 'true'
         uses: actions/setup-node@v2  
         with:
           node-version: '12.x'
           
       - name: npm install & build
-        if: steps.changed-files-for-webclient.outputs.any_changed == 'true'
+        # if: steps.changed-files-for-webclient.outputs.any_changed == 'true'
         run: |
           npm install
           npm install -g @angular/cli
@@ -62,127 +62,127 @@ jobs:
       
       #Publish artifacts-webclient
       - name: Archive production artifacts
-        if: steps.changed-files-for-webclient.outputs.any_changed == 'true'
+        # if: steps.changed-files-for-webclient.outputs.any_changed == 'true'
         uses: actions/upload-artifact@v2
         with:
           name: wizard
           path: ./webclient/dist/wizard
   
-  # build-backend:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2      
-  #     - name: Install Node.js 
-  #       uses: actions/setup-node@v2 
-  #       with:
-  #         node-version: '12.x'
+  build-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2      
+      - name: Install Node.js 
+        uses: actions/setup-node@v2 
+        with:
+          node-version: '12.x'
           
-  #     - name: npm install & build & run
-  #       run: |
-  #         npm install
-  #         npm run build
-  #       working-directory: ./backend
+      - name: npm install & build & run
+        run: |
+          npm install
+          npm run build
+        working-directory: ./backend
       
-  #     #Publish artifacts-backend
-  #     - name: Publish dist
-  #       uses: actions/upload-artifact@v2
-  #       with:
-  #         name: dist
-  #         path: ./backend/dist
+      #Publish artifacts-backend
+      - name: Publish dist
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: ./backend/dist
           
-  #     - name: Publish node_modules
-  #       uses: actions/upload-artifact@v2
-  #       with:
-  #         name: node_modules
-  #         path: ./backend/node_modules
+      - name: Publish node_modules
+        uses: actions/upload-artifact@v2
+        with:
+          name: node_modules
+          path: ./backend/node_modules
     
-  # build-devops:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #     # Publish artifacts-devops
-  #   - name: Archive production artifacts
-  #     uses: actions/upload-artifact@v2
-  #     with:
-  #       name: metadata
-  #       path: ./devops/metadata/
+  build-devops:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      # Publish artifacts-devops
+    - name: Archive production artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: metadata
+        path: ./devops/metadata/
 
-  # Download_artifacts:
-  #   needs: [build-components,build-devops,build-backend,build-webclient]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
+  Download_artifacts:
+    needs: [build-components,build-devops,build-backend,build-webclient]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
       
-  #     - name: create workspace
-  #       run: |
-  #         pwd
-  #         mkdir -p "$GITHUB_WORKSPACE/build-workspace"
+      - name: create workspace
+        run: |
+          pwd
+          mkdir -p "$GITHUB_WORKSPACE/build-workspace"
           
-  #     - name: download artifacts-devops
-  #       uses: actions/download-artifact@v2
-  #       with:
-  #         name: metadata
-  #         path: ${{ github.workspace }}/build-workspace/devops
+      - name: download artifacts-devops
+        uses: actions/download-artifact@v2
+        with:
+          name: metadata
+          path: ${{ github.workspace }}/build-workspace/devops
       
-  #     - name: download artifacts-components
-  #       uses: actions/download-artifact@v2
-  #       with:
-  #         name: components
-  #         path: ${{ github.workspace }}/build-workspace/components
+      - name: download artifacts-components
+        uses: actions/download-artifact@v2
+        with:
+          name: components
+          path: ${{ github.workspace }}/build-workspace/components
           
-  #     - name: download artifacts-backend
-  #       uses: actions/download-artifact@v2
-  #       with:
-  #         name: dist
-  #         path: ${{ github.workspace }}/build-workspace/backend/dist
+      - name: download artifacts-backend
+        uses: actions/download-artifact@v2
+        with:
+          name: dist
+          path: ${{ github.workspace }}/build-workspace/backend/dist
       
-  #     - name: download artifacts-backend
-  #       uses: actions/download-artifact@v2
-  #       with:
-  #         name: node_modules
-  #         path: ${{ github.workspace }}/build-workspace/backend/node_modules
+      - name: download artifacts-backend
+        uses: actions/download-artifact@v2
+        with:
+          name: node_modules
+          path: ${{ github.workspace }}/build-workspace/backend/node_modules
                
-  #     - name: download artifacts-webclient
-  #       uses: actions/download-artifact@v2
-  #       with:
-  #         name: wizard
-  #         path: ${{ github.workspace }}/build-workspace/webclient/wizard
+      - name: download artifacts-webclient
+        uses: actions/download-artifact@v2
+        with:
+          name: wizard
+          path: ${{ github.workspace }}/build-workspace/webclient/wizard
       
-  #     - name: Copy nginx.conf to build workspace
-  #       run: |
-  #         cp ${{ github.workspace }}/build-workspace/devops/nginx.conf ${{ github.workspace }}/build-workspace/nginx.conf
+      - name: Copy nginx.conf to build workspace
+        run: |
+          cp ${{ github.workspace }}/build-workspace/devops/nginx.conf ${{ github.workspace }}/build-workspace/nginx.conf
       
-  #     - name: Copy Dockerfile to build workspace
-  #       run: |
-  #         cp ${{ github.workspace }}/build-workspace/devops/Dockerfile ${{ github.workspace }}/build-workspace/Dockerfile
-  #         cd ${{ github.workspace }}/build-workspace
-  #         ls
-  #     - name: Set up Docker Buildx
-  #       uses: docker/setup-buildx-action@v1
+      - name: Copy Dockerfile to build workspace
+        run: |
+          cp ${{ github.workspace }}/build-workspace/devops/Dockerfile ${{ github.workspace }}/build-workspace/Dockerfile
+          cd ${{ github.workspace }}/build-workspace
+          ls
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
       
-  #     - name: Login to DockerHub
-  #       uses: docker/login-action@v1 
-  #       with:
-  #         username: blancahot
-  #         password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Login to DockerHub
+        uses: docker/login-action@v1 
+        with:
+          username: blancahot
+          password: ${{ secrets.DOCKER_PASSWORD }}
           
-  #     - name: Build and push
-  #       if: contains('refs/heads/develop', github.ref)
-  #       id: docker_build_develop
-  #       uses: docker/build-push-action@v2
-  #       with:
-  #         push: true
-  #         tags: blancahot/fennec:${{ github.run_number }},blancahot/fennec:latest,blancahot/fennec:develop
-  #         context: ${{ github.workspace }}/build-workspace/
+      - name: Build and push
+        if: contains('refs/heads/develop', github.ref)
+        id: docker_build_develop
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: blancahot/fennec:${{ github.run_number }},blancahot/fennec:latest,blancahot/fennec:develop
+          context: ${{ github.workspace }}/build-workspace/
           
-  #     - name: Build and push
-  #       if: "!contains('refs/heads/develop', github.ref)"
-  #       id: docker_build
-  #       uses: docker/build-push-action@v2
-  #       with:
-  #         push: true
-  #         tags: blancahot/fennec:${{ github.run_number }},blancahot/fennec:latest
-  #         context: ${{ github.workspace }}/build-workspace/
+      - name: Build and push
+        if: "!contains('refs/heads/develop', github.ref)"
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: blancahot/fennec:${{ github.run_number }},blancahot/fennec:latest
+          context: ${{ github.workspace }}/build-workspace/
 
 
       
