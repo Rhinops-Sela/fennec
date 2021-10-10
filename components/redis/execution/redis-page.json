@@ -25,21 +25,6 @@
       "template": "namespace"
     },
     {
-      "template": "slave-nodes"
-    },
-    {
-      "controlType": "multi-select",
-      "displayName": "Extra ARGS?",
-      "options": ["--maxmemory-policy allkeys-lru"],
-      "serverValue": "EXTRA_FLAGS"
-    },
-    {
-      "controlType": "text",
-      "tooltip": "Disabled commands (,) seperated i.e. FLUSHDB,FLUSHALL",
-      "displayName": "Disabled Commands",
-      "serverValue": "DISABLED_COMMANDS"
-    },
-    {
       "template": "dns-entry",
       "displayName": "Redis DNS Record",
       "serverValue": "REDIS_DNS_RECORD"
