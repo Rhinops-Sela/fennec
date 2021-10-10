@@ -16,6 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 
 
       - name: Run changed-files with defaults on the components
         id: changed-files-for-components
@@ -35,6 +37,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 
 
       - name: Run changed-files with defaults on the webclient
         id: changed-files-for-webclient
