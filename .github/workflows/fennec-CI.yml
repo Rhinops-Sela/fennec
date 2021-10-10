@@ -134,28 +134,28 @@ jobs:
       
       - name: download artifacts-components
         uses: actions/download-artifact@v2
-        id: download
+        id: download-components
         with:
           name: components
           path: ${{ github.workspace }}/build-workspace/components
           
       - name: download artifacts-backend
         uses: actions/download-artifact@v2
-        id: download
+        id: download-backend-dist
         with:
           name: dist
           path: ${{ github.workspace }}/build-workspace/backend/dist
       
       - name: download artifacts-backend
         uses: actions/download-artifact@v2
-        id: download
+        id: download-backend-node
         with:
           name: node_modules
           path: ${{ github.workspace }}/build-workspace/backend/node_modules
                
       - name: download artifacts-webclient
         uses: actions/download-artifact@v2
-        id: download
+        id: download-webclient
         with:
           name: wizard
           path: ${{ github.workspace }}/build-workspace/webclient/wizard
