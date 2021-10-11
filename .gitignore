@@ -1,2 +1,3 @@
 .kube
 **/working_folder_*
+*_secret*
