@@ -2,159 +2,166 @@ name: fennec-CI
 
 on:
   push:
-    # Sequence of patterns matched against refs/heads
-    branches:
-      - develop
-      
-  pull_request:
-    branches:
-      - main
+    paths:
+      - 'components/**'
+      - 'webclient/**'
+      - 'backend/**'
+      - 'devops/metadata/**'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
-jobs:
+jobs:  
   build-components:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        # with:
-        #   fetch-depth: 0 
-
-      # - name: Run changed-files with defaults on the components
-      #   id: changed-files-for-components
-      #   uses: tj-actions/changed-files@v10
-      #   with:
-      #     path: ./components
-
+        with:
+          fetch-depth: 0
+      
+      - name: Run changed-files with defaults on the components
+        id: changed-files-for-components
+        uses: tj-actions/changed-files@v10
+        with:
+          files: |
+            components
+            
       #Publish artifacts-components
       - name: Archive production artifacts
-        # if: steps.changed-files-for-components.outputs.any_changed == 'true'
+        if: steps.changed-files-for-components.outputs.any_changed == 'true'
         uses: actions/upload-artifact@v2
         with:
           name: components
           path: ${{ github.workspace }}
-  
+      
   build-webclient:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        # with:
-        #   fetch-depth: 0 
+        with:
+          fetch-depth: 0
 
-      # - name: Run changed-files with defaults on the webclient
-      #   id: changed-files-for-webclient
-      #   uses: tj-actions/changed-files@v10
-      #   with:
-      #     path: ./webclient
+      # Build webclient with condition
+      - name: Run changed-files with defaults on the webclient
+        id: changed-files-for-webclient
+        uses: tj-actions/changed-files@v10
+        with:
+          files: |
+            webclient
       
       - name: Install Node.js & npm install & build
-        # if: steps.changed-files-for-webclient.outputs.any_changed == 'true'
+        if: steps.changed-files-for-webclient.outputs.any_changed == 'true'
         uses: actions/setup-node@v2  
         with:
           node-version: '12.x'
           
       - name: npm install & build
-        # if: steps.changed-files-for-webclient.outputs.any_changed == 'true'
+        if: steps.changed-files-for-webclient.outputs.any_changed == 'true'
         run: |
           npm install
           npm install -g @angular/cli
           ng build --prod
         working-directory: ./webclient
-      
+
+
       #Publish artifacts-webclient
       - name: Archive production artifacts
-        # if: steps.changed-files-for-webclient.outputs.any_changed == 'true'
+        if: steps.changed-files-for-webclient.outputs.any_changed == 'true'
         uses: actions/upload-artifact@v2
         with:
           name: wizard
           path: ./webclient/dist/wizard
-  
+
   build-backend:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2      
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      # Build backend with condition
+      - name: Run changed-files with defaults on the backend
+        id: changed-files-for-backend
+        uses: tj-actions/changed-files@v10
+        with:
+          files: |
+            backend
+
       - name: Install Node.js 
+        if: steps.changed-files-for-backend.outputs.any_changed == 'true'
         uses: actions/setup-node@v2 
         with:
           node-version: '12.x'
           
       - name: npm install & build & run
+        if: steps.changed-files-for-backend.outputs.any_changed == 'true'
         run: |
           npm install
           npm run build
         working-directory: ./backend
-      
+
       #Publish artifacts-backend
       - name: Publish dist
+        if: steps.changed-files-for-backend.outputs.any_changed == 'true'
         uses: actions/upload-artifact@v2
         with:
           name: dist
           path: ./backend/dist
           
       - name: Publish node_modules
+        if: steps.changed-files-for-backend.outputs.any_changed == 'true'
         uses: actions/upload-artifact@v2
         with:
           name: node_modules
           path: ./backend/node_modules
-    
-  build-devops:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-      # Publish artifacts-devops
-    - name: Archive production artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: metadata
-        path: ./devops/metadata/
 
-  Download_artifacts:
-    needs: [build-components,build-devops,build-backend,build-webclient]
+  download-artifacts-build-and-push-image:
+    needs: [build-components,build-backend,build-webclient]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      
-      - name: create workspace
-        run: |
-          pwd
-          mkdir -p "$GITHUB_WORKSPACE/build-workspace"
-          
-      - name: download artifacts-devops
-        uses: actions/download-artifact@v2
-        with:
-          name: metadata
-          path: ${{ github.workspace }}/build-workspace/devops
-      
+
       - name: download artifacts-components
-        uses: actions/download-artifact@v2
+        uses: dawidd6/action-download-artifact@v2
         with:
+          workflow: fennec-CI.yml
           name: components
           path: ${{ github.workspace }}/build-workspace/components
+          check_artifacts:  true
+
           
       - name: download artifacts-backend
-        uses: actions/download-artifact@v2
+        uses: dawidd6/action-download-artifact@v2
         with:
+          workflow: fennec-CI.yml
+          name: node_modules
+          path: ${{ github.workspace }}/build-workspace/backend/node_mudules
+          check_artifacts:  true
+
+          
+      - name: download artifacts-backend
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: fennec-CI.yml
           name: dist
           path: ${{ github.workspace }}/build-workspace/backend/dist
-      
-      - name: download artifacts-backend
-        uses: actions/download-artifact@v2
-        with:
-          name: node_modules
-          path: ${{ github.workspace }}/build-workspace/backend/node_modules
-               
+          check_artifacts:  true
+
+          
       - name: download artifacts-webclient
-        uses: actions/download-artifact@v2
+        uses: dawidd6/action-download-artifact@v2
         with:
+          workflow: fennec-CI.yml
           name: wizard
           path: ${{ github.workspace }}/build-workspace/webclient/wizard
-      
+          check_artifacts:  true
+
+
       - name: Copy nginx.conf to build workspace
         run: |
-          cp ${{ github.workspace }}/build-workspace/devops/nginx.conf ${{ github.workspace }}/build-workspace/nginx.conf
+          cp devops/metadata/nginx.conf ${{ github.workspace }}/build-workspace/nginx.conf
       
       - name: Copy Dockerfile to build workspace
         run: |
-          cp ${{ github.workspace }}/build-workspace/devops/Dockerfile ${{ github.workspace }}/build-workspace/Dockerfile
+          cp devops/metadata/Dockerfile ${{ github.workspace }}/build-workspace/Dockerfile
           cd ${{ github.workspace }}/build-workspace
           ls
       - name: Set up Docker Buildx
@@ -183,7 +190,3 @@ jobs:
           push: true
           tags: blancahot/fennec:${{ github.run_number }},blancahot/fennec:latest
           context: ${{ github.workspace }}/build-workspace/
-
-
-      
-
