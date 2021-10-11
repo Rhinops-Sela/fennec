@@ -15,13 +15,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          fetch-depth: 0 
+          fetch-depth: 0
       
       - name: Run changed-files with defaults on the components
         id: changed-files-for-components
         uses: tj-actions/changed-files@v10
         with:
-          path: ./components
+          files: |
+            components
             
       #Publish artifacts-components
       - name: Archive production artifacts
@@ -41,13 +42,15 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          fetch-depth: 0 
+          fetch-depth: 0
+
       # Build webclient with condition
       - name: Run changed-files with defaults on the webclient
         id: changed-files-for-webclient
         uses: tj-actions/changed-files@v10
         with:
-          path: ./webclient
+          files: |
+            webclient
       
       - name: Install Node.js & npm install & build
         #if: steps.changed-files-for-webclient.outputs.any_changed == 'true'
@@ -81,15 +84,15 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          fetch-depth: 0  
+          fetch-depth: 0
 
       # Build backend with condition
       - name: Run changed-files with defaults on the backend
         id: changed-files-for-backend
         uses: tj-actions/changed-files@v10
         with:
-          path: ./backend
-
+          files: |
+            backend
       - name: Install Node.js 
         #if: steps.changed-files-for-backend.outputs.any_changed == 'true'
         uses: actions/setup-node@v2 
@@ -124,70 +127,47 @@ jobs:
           name: node_modules
           path: ./backend/node_modules
 
-  Download_artifacts_build_and_push_image:
+  download-artifacts-build-and-push-image:
     needs: [build-components,build-backend,build-webclient]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0 
-      
+
       - name: download artifacts-components
-        uses: actions/download-artifact@v2
-        id: download-components
+        uses: dawidd6/action-download-artifact@v2
         with:
+          workflow: fennec-CI.yml
           name: components
           path: ${{ github.workspace }}/build-workspace/components
+          check_artifacts:  true
+
           
       - name: download artifacts-backend
-        uses: actions/download-artifact@v2
-        id: download-backend-dist
+        uses: dawidd6/action-download-artifact@v2
         with:
+          workflow: fennec-CI.yml
+          name: node_modules
+          path: ${{ github.workspace }}/build-workspace/backend/node_mudules
+          check_artifacts:  true
+
+          
+      - name: download artifacts-backend
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: fennec-CI.yml
           name: dist
           path: ${{ github.workspace }}/build-workspace/backend/dist
-      
-      - name: download artifacts-backend
-        uses: actions/download-artifact@v2
-        id: download-backend-node
-        with:
-          name: node_modules
-          path: ${{ github.workspace }}/build-workspace/backend/node_modules
-               
+          check_artifacts:  true
+
+          
       - name: download artifacts-webclient
-        uses: actions/download-artifact@v2
-        id: download-webclient
+        uses: dawidd6/action-download-artifact@v2
         with:
+          workflow: fennec-CI.yml
           name: wizard
           path: ${{ github.workspace }}/build-workspace/webclient/wizard
+          check_artifacts:  true
 
-
-      # - name: download artifacts-components
-      #   uses: dawidd6/action-download-artifact@v2
-      #   with:
-      #     workflow: fennec-CI.yml
-      #     name: components
-      #     path: ${{ github.workspace }}/build-workspace/components
-          
-      # - name: download artifacts-backend
-      #   uses: dawidd6/action-download-artifact@v2
-      #   with:
-      #     workflow: fennec-CI.yml
-      #     name: node_mudules
-      #     path: ${{ github.workspace }}/build-workspace/backend/node_mudules
-          
-      # - name: download artifacts-backend
-      #   uses: dawidd6/action-download-artifact@v2
-      #   with:
-      #     workflow: fennec-CI.yml
-      #     name: dist
-      #     path: ${{ github.workspace }}/build-workspace/backend/dist
-          
-      # - name: download artifacts-webclient
-      #   uses: dawidd6/action-download-artifact@v2
-      #   with:
-      #     workflow: fennec-CI.yml
-      #     name: wizard
-      #     path: ${{ github.workspace }}/build-workspace/webclient/wizard
 
       - name: Copy nginx.conf to build workspace
         run: |
