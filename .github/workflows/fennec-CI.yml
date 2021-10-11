@@ -26,7 +26,7 @@ jobs:
             
       #Publish artifacts-components
       - name: Archive production artifacts
-        if: steps.changed-files-for-components.outputs.any_changed == 'true'
+        #if: steps.changed-files-for-components.outputs.any_changed == 'true'
         uses: actions/upload-artifact@v2
         with:
           name: components
@@ -48,13 +48,13 @@ jobs:
             webclient
       
       - name: Install Node.js & npm install & build
-        if: steps.changed-files-for-webclient.outputs.any_changed == 'true'
+        #if: steps.changed-files-for-webclient.outputs.any_changed == 'true'
         uses: actions/setup-node@v2  
         with:
           node-version: '12.x'
           
       - name: npm install & build
-        if: steps.changed-files-for-webclient.outputs.any_changed == 'true'
+        #if: steps.changed-files-for-webclient.outputs.any_changed == 'true'
         run: |
           npm install
           npm install -g @angular/cli
@@ -64,7 +64,7 @@ jobs:
 
       #Publish artifacts-webclient
       - name: Archive production artifacts
-        if: steps.changed-files-for-webclient.outputs.any_changed == 'true'
+        #if: steps.changed-files-for-webclient.outputs.any_changed == 'true'
         uses: actions/upload-artifact@v2
         with:
           name: wizard
@@ -86,13 +86,13 @@ jobs:
             backend
 
       - name: Install Node.js 
-        if: steps.changed-files-for-backend.outputs.any_changed == 'true'
+        #if: steps.changed-files-for-backend.outputs.any_changed == 'true'
         uses: actions/setup-node@v2 
         with:
           node-version: '12.x'
           
       - name: npm install & build & run
-        if: steps.changed-files-for-backend.outputs.any_changed == 'true'
+        #if: steps.changed-files-for-backend.outputs.any_changed == 'true'
         run: |
           npm install
           npm run build
@@ -100,14 +100,14 @@ jobs:
 
       #Publish artifacts-backend
       - name: Publish dist
-        if: steps.changed-files-for-backend.outputs.any_changed == 'true'
+        #if: steps.changed-files-for-backend.outputs.any_changed == 'true'
         uses: actions/upload-artifact@v2
         with:
           name: dist
           path: ./backend/dist
           
       - name: Publish node_modules
-        if: steps.changed-files-for-backend.outputs.any_changed == 'true'
+        #if: steps.changed-files-for-backend.outputs.any_changed == 'true'
         uses: actions/upload-artifact@v2
         with:
           name: node_modules
@@ -125,7 +125,7 @@ jobs:
           workflow: fennec-CI.yml
           name: components
           path: ${{ github.workspace }}/build-workspace/components
-          check_artifacts:  true
+          check_artifacts:  false
 
           
       - name: download artifacts-backend
@@ -134,7 +134,7 @@ jobs:
           workflow: fennec-CI.yml
           name: node_modules
           path: ${{ github.workspace }}/build-workspace/backend/node_mudules
-          check_artifacts:  true
+          check_artifacts:  false
 
           
       - name: download artifacts-backend
@@ -143,7 +143,7 @@ jobs:
           workflow: fennec-CI.yml
           name: dist
           path: ${{ github.workspace }}/build-workspace/backend/dist
-          check_artifacts:  true
+          check_artifacts:  false
 
           
       - name: download artifacts-webclient
@@ -152,7 +152,7 @@ jobs:
           workflow: fennec-CI.yml
           name: wizard
           path: ${{ github.workspace }}/build-workspace/webclient/wizard
-          check_artifacts:  true
+          check_artifacts:  false
 
 
       - name: Copy nginx.conf to build workspace
