@@ -11,6 +11,9 @@
     "debug": "eu-west-2",
     "global": true
   },
+  "USERS":{
+    "debug":"fennec-vpn"
+  },
   "ADMIN_ARN": {
     "debug": "arn:aws:iam::027065296145:user/iliag"
   },
