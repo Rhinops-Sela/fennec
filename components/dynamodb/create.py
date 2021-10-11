@@ -59,4 +59,5 @@ if dns_records:
 connection_info += f'\nadmin - dynamodb-local-admin.{namespace}.svc.cluster.local'
 if dynamodb_admin_url:
     connection_info += f'\nadmin - {dynamodb_admin_url}'
+Helper.wirte_connection_info(connection_info, execution.output_folder)
 

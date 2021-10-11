@@ -32,3 +32,4 @@ core_dns.add_records(f"{sqs_url}=sqs-localstack.{namespace}.svc.cluster.local")
 connection_info = f'sqs: \naws --endpoint-url=http://sqs-localstack.{namespace}.svc.cluster.local:4566 sqs create-queue --queue-name fennec'
 if sqs_url:
     connection_info += f'\naws --endpoint-url={sqs_url}:4566 sqs create-queue --queue-name fennec'
+Helper.wirte_connection_info(connection_info, execution.output_folder)

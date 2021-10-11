@@ -3,10 +3,6 @@ import os
 import shutil
 import sys
 from pathlib import Path
-
-from fennec_execution.execution import Execution
-
-
 class Helper:
 
     @staticmethod
@@ -66,9 +62,10 @@ class Helper:
         return file_content
 
     @staticmethod
-    def wirte_connection_info(command:str, output_file:str):
-        f = open(output_file, "a")
-        f.write(command)
+    def wirte_connection_info(connection_info:str, output_folder:str):
+        output_file = os.path.join(output_folder, "connection_info.info")
+        f = open(output_file, "a+")
+        f.write(connection_info)
         f.close()
 
     @staticmethod
