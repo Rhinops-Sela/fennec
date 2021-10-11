@@ -125,7 +125,7 @@ jobs:
           workflow: fennec-CI.yml
           name: components
           path: ${{ github.workspace }}/build-workspace/components
-          workflow status: in_progress
+          workflow_conclusion:: in_progress
           check_artifacts:  true
 
           
@@ -135,7 +135,7 @@ jobs:
           workflow: fennec-CI.yml
           name: node_modules
           path: ${{ github.workspace }}/build-workspace/backend/node_mudules
-          workflow status: in_progress
+          workflow_conclusion: in_progress
           check_artifacts:  true
 
           
@@ -145,7 +145,7 @@ jobs:
           workflow: fennec-CI.yml
           name: dist
           path: ${{ github.workspace }}/build-workspace/backend/dist
-          workflow status: in_progress
+          workflow_conclusion: in_progress
           check_artifacts:  true
 
           
@@ -155,7 +155,7 @@ jobs:
           workflow: fennec-CI.yml
           name: wizard
           path: ${{ github.workspace }}/build-workspace/webclient/wizard
-          workflow status: in_progress
+          workflow_conclusion: in_progress
           check_artifacts:  true
 
 
