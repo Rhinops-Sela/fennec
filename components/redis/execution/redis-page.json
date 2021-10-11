@@ -28,6 +28,10 @@
       "template": "namespace"
     },
     {
+      "template": "replicas",
+      "value": "1"
+    },
+    {
       "template": "dns-entry",
       "displayName": "Redis DNS Record",
       "serverValue": "REDIS_DNS_RECORD"

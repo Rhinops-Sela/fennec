@@ -26,6 +26,6 @@ Helper.to_json_file(values_file_object, execution_file)
 helm_chart.install_chart(release_name="localstack-charts",
                                   chart_url="https://localstack.github.io/helm-charts",
                                   deployment_name="sqs",
-                                  additional_values=[f"--values {execution_file}"])
+                                  additional_values=[f"--values {execution_file} --set replica.replicaCount={execution.get_local_parameter('REPLICAS')}"])
 core_dns = CoreDNS(os.path.dirname(__file__))
 core_dns.add_records(f"{sqs_url}=sqs-localstack.{namespace}.svc.cluster.local")

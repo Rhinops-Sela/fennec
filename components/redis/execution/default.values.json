@@ -23,6 +23,9 @@
   "DISABLED_COMMANDS":{
     "debug": "FLUSHDB"
   },
+  "REPLICAS": {
+    "debug": "1"
+  },
   "REDIS_DNS_RECORD":{
     "debug": "redis.fennec.io"
   },
