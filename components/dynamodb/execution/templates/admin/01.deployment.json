@@ -33,6 +33,10 @@
                      {
                         "name": "DYNAMO_ENDPOINT",
                         "value": "dynamodb-localstack:4566"
+                     },
+                     {
+                        "name": "AWS_REGION",
+                        "value": "eu-west-2"
                      }
                   ],
                   "ports": [
