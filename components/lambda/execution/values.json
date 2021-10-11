@@ -18,11 +18,11 @@
     },
     {
       "name": "LAMBDA_REMOTE_DOCKER",
-      "value": true
+      "value": "true"
     },
     {
       "name": "LAMBDA_REMOVE_CONTAINERS",
-      "value": true
+      "value": "true"
     }
   ],
   "nodeSelector": {
