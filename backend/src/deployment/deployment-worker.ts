@@ -170,7 +170,8 @@ export class DeploymentExecuter {
             deployPage.page.name == "cluster" &&
             !deployPage.executionData.createMode
           ) {
-            continue;
+            const exitCode = 0;
+            this.sendFinalMessage(exitCode, deployPage);
           }
           deployPage.executionData.progress.totalPages = deployPages.length;
           const exitCode = await this.executeScript(deployPage);
