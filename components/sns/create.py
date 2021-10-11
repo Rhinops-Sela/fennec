@@ -29,3 +29,8 @@ helm_chart.install_chart(release_name="localstack-charts",
                                   additional_values=[f"--values {execution_file}"])
 core_dns = CoreDNS(os.path.dirname(__file__))
 core_dns.add_records(f"{sns_url}=sns-localstack.{namespace}.svc.cluster.local")
+connection_info = f'sns: \naws --endpoint-url=http://sns-localstack.{namespace}.svc.cluster.local:4566 sns list-topics'
+if execution.get_local_parameter('SNS_DNS_RECORD'):
+    connection_info += f'\naws --endpoint-url={execution.get_local_parameter("SNS_DNS_RECORD")}:4566 sns list-topics'
+Helper.wirte_connection_info(connection_info, execution)
+execution.output_folder

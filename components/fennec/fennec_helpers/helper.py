@@ -4,6 +4,8 @@ import shutil
 import sys
 from pathlib import Path
 
+from fennec_execution.execution import Execution
+
 
 class Helper:
 
@@ -62,6 +64,12 @@ class Helper:
         if source_file == output_file:
             os.rename(output_file + "_temp", output_file)
         return file_content
+
+    @staticmethod
+    def wirte_connection_info(command:str, output_file:str):
+        f = open(output_file, "a")
+        f.write(command)
+        f.close()
 
     @staticmethod
     def set_permissions(command: str, permission):
