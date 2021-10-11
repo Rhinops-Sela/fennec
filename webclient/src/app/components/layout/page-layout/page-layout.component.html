@@ -15,7 +15,6 @@
           </div>
         </div>
         <div class="button-row">
-          <div class="row-spacer"></div>
           <div>
             <button class="form-button" submit color="primary" [disabled]="!form.valid" mat-stroked-button disabled>
               Save
@@ -29,6 +28,11 @@
           <div>
             <button class="form-button" type="button" color="primary" (click)="onReset()" mat-stroked-button>
               Reset
+            </button>
+          </div>
+          <div>
+            <button class="form-button" type="button" color="primary" [disabled]="!form.valid" (click)="onDelete()" mat-stroked-button>
+              Delete
             </button>
           </div>
         </div>
