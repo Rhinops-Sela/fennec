@@ -39,7 +39,7 @@ core_dns.add_records(f"{redis_url}=redis-headless.{namespace}.svc.cluster.local;
 ui_foler = os.path.join(execution.execution_folder, 'ui')
 admin_deployment = os.path.join(ui_foler, 'deployment.json')
 admin_file_object = Helper.file_to_object(admin_deployment)
-admin_file_object['spec']['template']['spec']['containers'][0]['env'][0]['value'] = redis_url
+admin_file_object['spec']['template']['spec']['containers'][0]['env'][0]['value'] = f'redis-master.{namespace}.svc.cluster.local'
 execution_file = os.path.join(
     os.path.dirname(__file__), "redis-admin-execute.values.json")
 Helper.to_json_file(admin_file_object, execution_file)   
