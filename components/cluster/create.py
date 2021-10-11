@@ -84,7 +84,7 @@ nodegroup.create()
 vpn_working_folder = os.path.join(cluster.execution.templates_folder,"08.openvpn")
 openvpn_chart = Helm(os.path.dirname(__file__), "openvpn")
 values_file_path = os.path.join(
-    cluster.execution.execution_folder,"08.openvpn", "values.yaml")
+    cluster.execution.templates_folder,"08.openvpn", "values.yaml")
 openvpn_chart.create_namespace("openvpn")
 openvpn_chart.install_file(file=os.path.join(vpn_working_folder,"prerequisites", "openvpn-pv-claim.yaml"), namespace="openvpn")
 openvpn_chart.install_chart(release_name="stable",
