@@ -39,7 +39,8 @@
     "type": "ClusterIP",
     "edgeService": {
       "name": "edge",
-      "targetPort": 4566
+      "targetPort": 4566,
+      "port": 80
     }
   }
 }
