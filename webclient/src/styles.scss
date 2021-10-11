@@ -213,9 +213,12 @@ body {
 }
 
 .form-row {
+  margin-top: 2vh;
+  margin-bottom: 2vh;
   display: flex;
-  margin: 5vh;
-  width: 15vw;
+  align-items: center;
+  justify-content:left;
+  font-size: medium;
 }
 
 .error-scnackbar {
