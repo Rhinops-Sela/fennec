@@ -4,10 +4,10 @@ from fennec_core_dns.core_dns import CoreDNS
 from fennec_executers.helm_executer import Helm
 from fennec_execution import execution
 from fennec_helpers.helper import Helper
-
+from fennec_nodegorup.nodegroup import Nodegroup
 
 cluster = Cluster(os.path.dirname(__file__))
-if not cluster.check_if_cluster_exists(): 
+if not cluster.check_if_cluster_exists():
     cluster.create()
 
 # Install cert-manager
@@ -16,7 +16,8 @@ values_file_path = os.path.join(
     cluster.execution.templates_folder, "05.cert-manager", "cert-manager_values.yaml")
 cert_manater_chart.install_chart(release_name="jetstack",  chart_url="https://charts.jetstack.io",
                                  additional_values=[f"--values {values_file_path}"])
-cluster.install_folder(folder='05.cert-manager/kubectl', namespace="cert-manager")
+cluster.install_folder(folder='05.cert-manager/kubectl',
+                       namespace="cert-manager")
 
 # Install HPA
 install_HPA = cluster.execution.get_local_parameter('INSTALL_CLUSTER_HPA')
@@ -27,7 +28,8 @@ if install_HPA:
     cluster.install_file(hpa_instsllation, "horizontal-pod-scaler")
 
 # Install Cluster auto scaler
-install_cluster_autoscaler = cluster.execution.get_local_parameter('INSTALL_CLUSTER_AUTOSCALER')
+install_cluster_autoscaler = cluster.execution.get_local_parameter(
+    'INSTALL_CLUSTER_AUTOSCALER')
 if install_cluster_autoscaler:
     cluster_auto_scaler_chart = Helm(
         os.path.dirname(__file__), "cluster-autoscaler")
@@ -41,7 +43,8 @@ if install_cluster_autoscaler:
                                                 "--version 7.0.0"
                                             ])
 # Install Nginx Controller
-install_ingress_controller = cluster.execution.get_local_parameter('INSTALL_INGRESS_CONTROLER')
+install_ingress_controller = cluster.execution.get_local_parameter(
+    'INSTALL_INGRESS_CONTROLER')
 if install_ingress_controller:
     cluster.install_folder(folder="06.nginx")
     """ cluster.install_folder(deployment_folder)
@@ -53,7 +56,8 @@ if install_ingress_controller:
  """
 
 # Install Cluster dashboard
-install_cluster_dashboard = cluster.execution.get_local_parameter('INSTALL_CLUSTER_DASHBOARD')
+install_cluster_dashboard = cluster.execution.get_local_parameter(
+    'INSTALL_CLUSTER_DASHBOARD')
 if install_cluster_dashboard:
     values_file_path = os.path.join(
         cluster.execution.templates_folder, "07.dashboard", "ingress.yaml")
@@ -72,6 +76,23 @@ if install_cluster_dashboard:
         'kubernetes-dashboard-ingress', 'kubernetes-dashboard')
     core_dns = CoreDNS(os.path.dirname(__file__))
     core_dns.add_records(f"{user_url}={ingress_address}")
+
+template_path = os.path.join(
+    cluster.execution.templates_folder, "08.openvpn", "vpn-ng-template.json")
+nodegroup = Nodegroup(os.path.dirname(__file__), template_path)
+nodegroup.create()
+vpn_working_folder = os.path.join(cluster.execution.templates_folder,"08.openvpn")
+openvpn_chart = Helm(os.path.dirname(__file__), "openvpn")
+values_file_path = os.path.join(
+    cluster.execution.execution_folder,"08.openvpn", "values.yaml")
+openvpn_chart.create_namespace("openvpn")
+openvpn_chart.install_file(file=os.path.join(vpn_working_folder,"prerequisites", "openvpn-pv-claim.yaml"), namespace="openvpn")
+openvpn_chart.install_chart(release_name="stable",
+                            additional_values=[f"--values {values_file_path}"], timeout=600)
+keygen_script_path = os.path.join(vpn_working_folder,"keygen", "generate-client-key.sh")
+cluster.execution.run_command(
+    f'{keygen_script_path} "{cluster.execution.local_parameters["USERS"]}" openvpn openvpn {cluster.execution.output_folder} 2>&1')
+
 
 # Install Cluster dashboard
 # install_cluster_dashboard = cluster.execution.get_local_parameter('INSTALL_CLUSTER_DASHBOARD')

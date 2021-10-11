@@ -34,8 +34,7 @@
     "description": "Networking configuration for the cluster",
     "displayName": "Networking",
     "pages": [
-      "coredns-page",
-      "openvpn-page"
+      "coredns-page"
     ]
   },
   {

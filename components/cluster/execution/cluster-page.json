@@ -55,6 +55,14 @@
       "displayName": "Install Pod horizontal autoscaling (HPA)?",
       "serverValue": "INSTALL_CLUSTER_HPA",
       "value": true
+    },
+    {
+      "controlType": "textarea",
+      "tooltip": "Please provide comma (,) separated list of users",
+      "displayName": "List of VPN users",
+      "serverValue": "USERS",
+      "regexValidation": ".*",
+      "value": "fennec-vpn"
     }
   ]
 }
