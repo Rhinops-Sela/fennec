@@ -22,7 +22,8 @@ jobs:
         id: changed-files-for-components
         uses: tj-actions/changed-files@v10
         with:
-          path: components
+          files: |
+            components
             
       #Publish artifacts-components
       - name: Archive production artifacts
@@ -50,7 +51,8 @@ jobs:
         id: changed-files-for-webclient
         uses: tj-actions/changed-files@v10
         with:
-          path: webclient
+          files: |
+            webclient
       
       - name: Install Node.js & npm install & build
         if: steps.changed-files-for-webclient.outputs.any_changed == 'true'
@@ -92,7 +94,8 @@ jobs:
         id: changed-files-for-backend
         uses: tj-actions/changed-files@v10
         with:
-          path: backend
+          files: |
+            backend
 
       - name: Install Node.js 
         if: steps.changed-files-for-backend.outputs.any_changed == 'true'
@@ -133,35 +136,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      
-      # - name: download artifacts-components
-      #   uses: actions/download-artifact@v2
-      #   id: download-components
-      #   with:
-      #     name: components
-      #     path: ${{ github.workspace }}/build-workspace/components
-          
-      # - name: download artifacts-backend
-      #   uses: actions/download-artifact@v2
-      #   id: download-backend-dist
-      #   with:
-      #     name: dist
-      #     path: ${{ github.workspace }}/build-workspace/backend/dist
-      
-      # - name: download artifacts-backend
-      #   uses: actions/download-artifact@v2
-      #   id: download-backend-node
-      #   with:
-      #     name: node_modules
-      #     path: ${{ github.workspace }}/build-workspace/backend/node_modules
-               
-      # - name: download artifacts-webclient
-      #   uses: actions/download-artifact@v2
-      #   id: download-webclient
-      #   with:
-      #     name: wizard
-      #     path: ${{ github.workspace }}/build-workspace/webclient/wizard
-
 
       - name: download artifacts-components
         uses: dawidd6/action-download-artifact@v2
