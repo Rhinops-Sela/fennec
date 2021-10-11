@@ -165,13 +165,13 @@ export class DeploymentExecuter {
         ) == -1
       ) {
         try {
+          deployPage.executionData.progress.totalPages = deployPages.length;
           if (
             deployPages.length > 1 &&
             deployPage.page.name == "cluster" &&
             !deployPage.executionData.createMode
           ) {
-            const exitCode = 0;
-            this.sendFinalMessage(exitCode, deployPage);
+            this.sendFinalMessage(0, deployPage);
             continue;
           }
           deployPage.executionData.progress.totalPages = deployPages.length;
