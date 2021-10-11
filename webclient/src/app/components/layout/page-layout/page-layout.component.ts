@@ -9,6 +9,10 @@ import { ConfirmDialogComponent } from '../../dialogs/confirm-dialog/confirm-dia
 import { MatDialog } from '@angular/material/dialog';
 import { IInput } from 'src/app/interfaces/common/IInput';
 import { group } from 'console';
+import { IDomain } from 'src/app/interfaces/common/IDomain';
+import { DeploymentProgressModalComponent } from '../../dialogs/deplopyment-progress-modal/deployment-progress-modal.component';
+import { DeploymentService } from 'src/app/services/deployment/deployment.service';
+import { FileSelectionDialogComponent } from '../../dialogs/file-selection-dialog/file-selection-dialog.component';
 @Component({
   selector: 'app-page-component',
   templateUrl: './page-layout.component.html',
@@ -22,7 +26,8 @@ export class PageLayoutComponent implements OnInit {
     public formService: FormService,
     private globalService: GlobalService,
     private router: Router,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private deploymentService: DeploymentService,
   ) {}
 
   ngOnInit(): void {
@@ -62,6 +67,42 @@ export class PageLayoutComponent implements OnInit {
 
   onCancel() {
     this.router.navigate(['pages']);
+  }
+
+  onDelete() {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        header: 'Delete Component?',
+        content: 'Are you sure you wish to delete the component?',
+        confrimButtonText: 'Delete',
+      },
+    });
+    dialogRef.afterClosed().subscribe((result) =>  {
+      if (result) {
+        this.globalService.savePage(this.page, this.form);
+        this.globalService.getModifiedList(this.page.name).then(domainList => {
+          
+          this.openProgressDialog(domainList,true)
+        })
+        
+        
+      }
+    });
+  }
+
+  private openProgressDialog(domainsToInstall: IDomain[], deleteMode: boolean) {
+    const dialogRef = this.dialog.open(DeploymentProgressModalComponent, {
+      data: { domains: domainsToInstall, deleteMode: deleteMode },
+      disableClose: true,
+    });
+    const deploymentService = this.deploymentService;
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log(result);
+      deploymentService.closeSocket();
+      this.form.reset();
+      this.globalService.resetPage(this.page);
+      this.globalService.export()
+    });
   }
 
   onReset() {

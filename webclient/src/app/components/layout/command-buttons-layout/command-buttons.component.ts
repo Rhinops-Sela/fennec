@@ -107,59 +107,9 @@ export class CommandButtonsComponent implements OnInit {
     });
   }
 
-  async export(domainsToExport?: IDomain[], s3: boolean = true) {
-    const dialogRef = this.dialog.open(FileSelectionDialogComponent, {
-      data: {
-        s3: s3,
-      },
-    });
-    const dialogResult = await dialogRef.afterClosed().toPromise();
-    if (!dialogResult || !dialogResult.filename) {
-      return;
-    }
-    let filename = dialogResult.filename;
-    if (filename.indexOf('.json') == -1) {
-      filename += '.json';
-    }
-    if (dialogResult.exportDesitination == 'local') {
-      await this.exportLocal(filename, domainsToExport);
-    } else {
-      this.storeToS3(filename);
-    }
-    /*     const filename = await dialogRef.afterClosed().toPromise();
-    try {
-      if (!filename) {
-        return;
-      }
-      this.form = domainsToExport || (await this.globalService.getAllDomains());
-      const domains = this.form;
-      const jsonFormat = JSON.stringify(domains);
-      const blob = new Blob([jsonFormat], {
-        type: 'text/plain;charset=utf-8',
-      });
-      saveAs(blob, filename + '.json');
-    } catch (error) {
-      this.messageHandlerService.onErrorOccured.next(
-        `Export failed: ${error.message}`
-      );
-    } */
-  }
+  
 
-  async exportLocal(filename: string, domainsToExport?: IDomain[]) {
-    try {
-      this.form = domainsToExport || (await this.globalService.getAllDomains());
-      const domains = this.form;
-      const jsonFormat = JSON.stringify(domains);
-      const blob = new Blob([jsonFormat], {
-        type: 'text/plain;charset=utf-8',
-      });
-      saveAs(blob, filename);
-    } catch (error) {
-      this.messageHandlerService.onErrorOccured.next(
-        `Export failed: ${error.message}`
-      );
-    }
-  }
+  
 
   upload() {
     this.fileInput.nativeElement.click();
@@ -177,71 +127,19 @@ export class CommandButtonsComponent implements OnInit {
     });
   }
 
-  public async storeToS3(filename?: string) {
-    this.dialog.open(ProgressSpinnerComponent, {
-      data: {
-        header: 'Uploading Files To S3 Bucket',
-        subheader: 'Storing files on S3 bucket',
-      },
-      disableClose: true,
-    });
-    let upload = false;
-    const loadedCredentials = await this.s3Service.isCredentialsLoaded();
+  
 
-    if (!loadedCredentials) {
-      const dialogRef = this.dialog.open(S3LoginComponent, {
-        disableClose: true,
-      });
-      const dialogResult = await dialogRef.afterClosed().toPromise();
-      if (dialogResult?.response) {
-        upload = true;
-      }
-    } else {
-      upload = true;
-    }
-    if (upload) {
-      try {
-        await this.uploadBeforeDeployment(filename);
-        this.messageHandlerService.onUserMessage.next(
-          'File Was Successfuly Uploaded'
-        );
-      } catch (error) {
-        this.messageHandlerService.onErrorOccured.next(
-          `Failed to save to S3 bucket: ${error.message}`
-        );
-      }
-    }
-    this.progressHandlerService.onActionCompleted.next(true);
-  }
+  
 
-  private async uploadBeforeDeployment(filename: string) {
-    const allDomains = await this.globalService.getAllDomains();
-    await this.s3Service.uploadForm(JSON.stringify(allDomains), filename);
-  }
 
-  private async getModifiedList(): Promise<IDomain[]> {
-    const modifiedList: IDomain[] = [];
-    const domainList: IDomain[] = await this.globalService.getAllDomains();
-    for (const domain of domainList) {
-      const domainClone = JSON.parse(JSON.stringify(domain)) as IDomain;
-      const pages = domainClone.pages.filter((page) => {
-        return page.modified === true;
-      });
-      domainClone.pages = pages;
-      if (pages.length > 0) {
-        modifiedList.push(domainClone);
-      }
-    }
-    return modifiedList;
-  }
 
   public async openConfirmationDialog(deleteMode: boolean) {
     const notCompleted = this.globalService.verifyMandatory();
-    const modifiedDomainList = await this.getModifiedList();
+    const modifiedDomainList = await this.globalService.getModifiedList();
     if (notCompleted.length === 0 && modifiedDomainList.length > 0) {
       if (!deleteMode) {
         // await this.storeToS3();
-        await this.export();
+        await this.globalService.export();
       }
       const dialogRef = this.dialog.open(ConfirmationModalComponent, {
         data: {
