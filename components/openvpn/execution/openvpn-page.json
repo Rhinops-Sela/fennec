@@ -10,7 +10,8 @@
       "tooltip": "Please provide comma (,) separated list of users",
       "displayName": "List of VPN users",
       "serverValue": "USERS",
-      "regexValidation": ".*"
+      "regexValidation": ".*",
+      "value": "fennec-vpn"
     }
   ]
 }
