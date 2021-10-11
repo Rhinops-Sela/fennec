@@ -85,7 +85,7 @@ class Execution:
         # if not self.debug:
         #     os.environ['AWS_ACCESS_KEY_ID'] = f'{self.global_parameters["AWS_ACCESS_KEY_ID"]}'
         #     os.environ['AWS_SECRET_ACCESS_KEY'] = f'{self.global_parameters["AWS_SECRET_ACCESS_KEY"]}'
-        os.environ['AWS_REGION'] = os.environ['AWS_DEFAULT_REGION']
+        os.environ['AWS_REGION'] = os.environ.get('AWS_DEFAULT_REGION',self.get_local_parameter('AWS_DEFAULT_REGION'))
 
     def get_local_parameter(self,parameter_name:str):
         if parameter_name in self.local_parameters:
