@@ -14,15 +14,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-#         with:
-#           fetch-depth: 0
+        with:
+          fetch-depth: 0
+
       
-#       - name: Run changed-files with defaults on the components
-#         id: changed-files-for-components
-#         uses: tj-actions/changed-files@v10
-#         with:
-#           files: |
-#             components
+      - name: Run changed-files with defaults on the components
+        id: changed-files-for-components
+        uses: tj-actions/changed-files@v10
+        with:
+          path: components
             
       #Publish artifacts-components
       - name: Archive production artifacts
@@ -31,21 +31,25 @@ jobs:
         with:
           name: components
           path: ${{ github.workspace }}
+
+      # - name: Copy components folder to build-workspace
+      #   if: steps.changed-files-for-components.outputs.any_changed == 'true'
+      #   run: |
+      #     cp -r components ${{ github.workspace }}/build-workspace/components
       
   build-webclient:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-#         with:
-#           fetch-depth: 0
+        with:
+          fetch-depth: 0 
 
-#       # Build webclient with condition
-#       - name: Run changed-files with defaults on the webclient
-#         id: changed-files-for-webclient
-#         uses: tj-actions/changed-files@v10
-#         with:
-#           files: |
-#             webclient
+      # Build webclient with condition
+      - name: Run changed-files with defaults on the webclient
+        id: changed-files-for-webclient
+        uses: tj-actions/changed-files@v10
+        with:
+          path: webclient
       
       - name: Install Node.js & npm install & build
         #if: steps.changed-files-for-webclient.outputs.any_changed == 'true'
@@ -61,6 +65,10 @@ jobs:
           ng build --prod
         working-directory: ./webclient
 
+      # - name: copy webclient/dist/wizard to build-workspace
+      #   #if: steps.changed-files-for-webclient.outputs.any_changed == 'true'
+      #   run: |
+      #     cp -r webclient/dist/wizard ${{ github.workspace }}/build-workspace/webclient/wizard
 
       #Publish artifacts-webclient
       - name: Archive production artifacts
@@ -74,16 +82,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-#         with:
-#           fetch-depth: 0
+        with:
+          fetch-depth: 0
 
-#       # Build backend with condition
-#       - name: Run changed-files with defaults on the backend
-#         id: changed-files-for-backend
-#         uses: tj-actions/changed-files@v10
-#         with:
-#           files: |
-#             backend
+
+      # Build backend with condition
+      - name: Run changed-files with defaults on the backend
+        id: changed-files-for-backend
+        uses: tj-actions/changed-files@v10
+        with:
+          path: backend
 
       - name: Install Node.js 
         #if: steps.changed-files-for-backend.outputs.any_changed == 'true'
@@ -97,6 +105,12 @@ jobs:
           npm install
           npm run build
         working-directory: ./backend
+      
+      # - name: copy backend folder to build-workspace
+      #   #if: steps.changed-files-for-backend.outputs.any_changed == 'true'
+      #   run: |
+      #     cp -r backend/node_modules ${{ github.workspace }}/build-workspace/backend/node_modules
+      #     cp -r backend/dist ${{ github.workspace }}/build-workspace/backend/dist
 
       #Publish artifacts-backend
       - name: Publish dist
@@ -118,6 +132,35 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      
+      # - name: download artifacts-components
+      #   uses: actions/download-artifact@v2
+      #   id: download-components
+      #   with:
+      #     name: components
+      #     path: ${{ github.workspace }}/build-workspace/components
+          
+      # - name: download artifacts-backend
+      #   uses: actions/download-artifact@v2
+      #   id: download-backend-dist
+      #   with:
+      #     name: dist
+      #     path: ${{ github.workspace }}/build-workspace/backend/dist
+      
+      # - name: download artifacts-backend
+      #   uses: actions/download-artifact@v2
+      #   id: download-backend-node
+      #   with:
+      #     name: node_modules
+      #     path: ${{ github.workspace }}/build-workspace/backend/node_modules
+               
+      # - name: download artifacts-webclient
+      #   uses: actions/download-artifact@v2
+      #   id: download-webclient
+      #   with:
+      #     name: wizard
+      #     path: ${{ github.workspace }}/build-workspace/webclient/wizard
+
 
       - name: download artifacts-components
         uses: dawidd6/action-download-artifact@v2
@@ -125,7 +168,7 @@ jobs:
           workflow: fennec-CI.yml
           name: components
           path: ${{ github.workspace }}/build-workspace/components
-#           check_artifacts:  true
+          check_artifacts:  true
 
           
       - name: download artifacts-backend
@@ -134,7 +177,7 @@ jobs:
           workflow: fennec-CI.yml
           name: node_modules
           path: ${{ github.workspace }}/build-workspace/backend/node_mudules
-#           check_artifacts:  true
+          check_artifacts:  true
 
           
       - name: download artifacts-backend
@@ -143,7 +186,7 @@ jobs:
           workflow: fennec-CI.yml
           name: dist
           path: ${{ github.workspace }}/build-workspace/backend/dist
-#           check_artifacts:  true
+          check_artifacts:  true
 
           
       - name: download artifacts-webclient
@@ -152,7 +195,8 @@ jobs:
           workflow: fennec-CI.yml
           name: wizard
           path: ${{ github.workspace }}/build-workspace/webclient/wizard
-#           check_artifacts:  true
+          check_artifacts:  true
+
 
       - name: Copy nginx.conf to build workspace
         run: |
