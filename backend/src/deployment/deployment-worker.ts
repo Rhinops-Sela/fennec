@@ -172,6 +172,7 @@ export class DeploymentExecuter {
           ) {
             const exitCode = 0;
             this.sendFinalMessage(exitCode, deployPage);
+            continue;
           }
           deployPage.executionData.progress.totalPages = deployPages.length;
           const exitCode = await this.executeScript(deployPage);
