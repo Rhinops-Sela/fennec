@@ -13,7 +13,7 @@ template_path = os.path.join(
 nodegroup = Nodegroup(os.path.dirname(__file__), template_path)
 nodegroup.create()
 
-helm_chart = Helm(os.path.dirname(__file__), namespace=namespace, chart_name="sns")
+helm_chart = Helm(os.path.dirname(__file__), namespace=namespace, chart_name="localstack")
 values_file_path = os.path.join(
     execution.execution_folder, "values.json")
 
@@ -25,6 +25,7 @@ Helper.to_json_file(values_file_object, execution_file)
 
 helm_chart.install_chart(release_name="localstack-charts",
                                   chart_url="https://localstack.github.io/helm-charts",
+                                  deployment_name="sns",
                                   additional_values=[f"--values {execution_file}"])
 core_dns = CoreDNS(os.path.dirname(__file__))
 core_dns.add_records(f"{sns_url}=sns-localstack.{namespace}.svc.cluster.local")
