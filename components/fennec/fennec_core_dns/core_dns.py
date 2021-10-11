@@ -9,7 +9,8 @@ class CoreDNS():
     def __init__(self, working_folder: str):
         self.execution = Execution(working_folder)
         self.namespace = "kube-system"
-        self.anchor_str = "        rewrite name fennec.io fennec.io"
+        self.anchor_str_no_newline = "        rewrite name fennec.io fennec.io"
+        self.anchor_str_with_newline = "    rewrite name fennec.io fennec.io"
 
     def add_records(self, dns_records: str, delimiter=";", inner_delimiter="="):
         dns_records = self.__init_dns_recotds(
@@ -19,9 +20,12 @@ class CoreDNS():
             if not dns_record.source or not dns_record.target:
                 print(f'Skipping dns record, source: {dns_record.source}; target: {dns_record.target}')
                 continue
-            line_to_add = f'{self.anchor_str}  rewrite name {dns_record.source} {dns_record.target}\n'
+            anchor_str = self.anchor_str_with_newline
+            if self.anchor_str_no_newline in config_map:
+                anchor_str = self.anchor_str_no_newline
+            line_to_add = f'{anchor_str}\n  rewrite name {dns_record.source} {dns_record.target}\n'
             if not line_to_add in config_map:
-                config_map = config_map.replace(self.anchor_str, line_to_add, 1)
+                config_map = config_map.replace(anchor_str, line_to_add, 1)
         output_file = os.path.join(self.execution.working_folder,'config-map-execute.json')
         Helper.to_json_file(Helper.json_to_object(config_map),output_file)
         self.execution.run_command(
