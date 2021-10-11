@@ -51,7 +51,7 @@ class Cluster(Kubectl):
         # command = f'eksctl create iamidentitymapping --cluster {self.name} --arn {self.admin_arn} --group system:masters --username {self.username} --region {self.region}'
         # self.execution.run_command(command, kubeconfig=False)
         # self.execution.create_kubernetes_client()
-        # CoreDNS(self.working_folder).reset()
+        CoreDNS(self.working_folder).reset()
 
     def delete(self):
         if not self.check_if_cluster_exists():
