@@ -16,14 +16,13 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-          path: components
       
       - name: Run changed-files with defaults on the components
         id: changed-files-for-components
         uses: tj-actions/changed-files@v10
         with:
           files: |
-            components/**
+            components
             
       #Publish artifacts-components
       - name: Archive production artifacts
@@ -44,7 +43,6 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-          # path: webclient
 
       # Build webclient with condition
       - name: Run changed-files with defaults on the webclient
@@ -87,7 +85,6 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-          path: backend
 
       # Build backend with condition
       - name: Run changed-files with defaults on the backend
@@ -95,7 +92,7 @@ jobs:
         uses: tj-actions/changed-files@v10
         with:
           files: |
-            'backend/**'
+            backend
 
       - name: Install Node.js 
         if: steps.changed-files-for-backend.outputs.any_changed == 'true'
@@ -108,7 +105,7 @@ jobs:
         run: |
           npm install
           npm run build
-        #working-directory: ./backend
+        working-directory: ./backend
       
       # - name: copy backend folder to build-workspace
       #   #if: steps.changed-files-for-backend.outputs.any_changed == 'true'
