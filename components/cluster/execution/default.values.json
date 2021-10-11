@@ -11,6 +11,9 @@
     "debug": "eu-west-2",
     "global": true
   },
+  "AWS_DEFAULT_REGION":{
+    "debug":"eu-west-2"
+  },
   "USERS":{
     "debug":"fennec-vpn"
   },
