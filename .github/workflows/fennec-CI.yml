@@ -17,12 +17,12 @@ jobs:
 #         with:
 #           fetch-depth: 0
       
-      - name: Run changed-files with defaults on the components
-        id: changed-files-for-components
-        uses: tj-actions/changed-files@v10
-        with:
-          files: |
-            components
+#       - name: Run changed-files with defaults on the components
+#         id: changed-files-for-components
+#         uses: tj-actions/changed-files@v10
+#         with:
+#           files: |
+#             components
             
       #Publish artifacts-components
       - name: Archive production artifacts
@@ -39,13 +39,13 @@ jobs:
 #         with:
 #           fetch-depth: 0
 
-      # Build webclient with condition
-      - name: Run changed-files with defaults on the webclient
-        id: changed-files-for-webclient
-        uses: tj-actions/changed-files@v10
-        with:
-          files: |
-            webclient
+#       # Build webclient with condition
+#       - name: Run changed-files with defaults on the webclient
+#         id: changed-files-for-webclient
+#         uses: tj-actions/changed-files@v10
+#         with:
+#           files: |
+#             webclient
       
       - name: Install Node.js & npm install & build
         #if: steps.changed-files-for-webclient.outputs.any_changed == 'true'
@@ -77,13 +77,13 @@ jobs:
 #         with:
 #           fetch-depth: 0
 
-      # Build backend with condition
-      - name: Run changed-files with defaults on the backend
-        id: changed-files-for-backend
-        uses: tj-actions/changed-files@v10
-        with:
-          files: |
-            backend
+#       # Build backend with condition
+#       - name: Run changed-files with defaults on the backend
+#         id: changed-files-for-backend
+#         uses: tj-actions/changed-files@v10
+#         with:
+#           files: |
+#             backend
 
       - name: Install Node.js 
         #if: steps.changed-files-for-backend.outputs.any_changed == 'true'
