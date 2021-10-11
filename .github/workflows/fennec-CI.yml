@@ -125,7 +125,7 @@ jobs:
           workflow: fennec-CI.yml
           name: components
           path: ${{ github.workspace }}/build-workspace/components
-          workflow_conclusion:: in_progress
+          workflow_conclusion: in_progress
           check_artifacts:  true
 
           
