@@ -5,9 +5,8 @@ from fennec_execution.execution import Execution
 
 execution = Execution(os.path.dirname(__file__))
 kafka_url = execution.get_local_parameter('KAFKA_DNS_RECORD')
-
 namespace = execution.get_local_parameter('NAMESPACE')
-core_dns = CoreDNS(os.path.join(os.getcwd(), "core-dns"))
+core_dns = CoreDNS(os.path.dirname(__file__))
 core_dns.delete_records(f"{kafka_url}=kafka.{namespace}.svc.cluster.local")
-kafka_chart = Helm(os.path.dirname(__file__), "kafka")
+kafka_chart = Helm(os.path.dirname(__file__), namespace=namespace, chart_name="kafka")
 kafka_chart.uninstall_chart()

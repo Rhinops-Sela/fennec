@@ -51,7 +51,10 @@ class Kubectl():
         result = self.execution.run_command(command, show_output=False).log
         return Helper.json_to_object(result) if output == "json" else result
 
-    def uninstall_folder(self, folder: str, namespace: str):
+    def uninstall_folder(self, folder: str, base_folder:str="", namespace: str = ""):
+        if base_folder == '':
+            base_folder = self.execution.templates_folder
+        folder=os.path.join(base_folder,folder)
         self.__execute_folder(folder, namespace, False)
 
     def install_folder(self, folder: str, base_folder:str="", namespace: str = ""):
