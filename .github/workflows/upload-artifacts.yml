@@ -1,0 +1,125 @@
+name: upload-artifacts
+
+on:
+  push:
+    paths:
+      - 'components/**'
+      - 'webclient/**'
+      - 'backend/**'
+      - 'devops/metadata/**'
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:  
+  build-components:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      
+      - name: Run changed-files with defaults on the components
+        id: changed-files-for-components
+        uses: tj-actions/changed-files@v10
+        with:
+          files: |
+            components
+            
+      #Publish artifacts-components
+      - name: Archive production artifacts
+        if: steps.changed-files-for-components.outputs.any_changed == 'true'
+        uses: actions/upload-artifact@v2
+        with:
+          name: components
+          path: ${{ github.workspace }}
+      
+  build-webclient:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      # Build webclient with condition
+      - name: Run changed-files with defaults on the webclient
+        id: changed-files-for-webclient
+        uses: tj-actions/changed-files@v10
+        with:
+          files: |
+            webclient
+      
+      - name: Install Node.js & npm install & build
+        if: steps.changed-files-for-webclient.outputs.any_changed == 'true'
+        uses: actions/setup-node@v2  
+        with:
+          node-version: '12.x'
+          
+      - name: npm install & build
+        if: steps.changed-files-for-webclient.outputs.any_changed == 'true'
+        run: |
+          npm install
+          npm install -g @angular/cli
+          ng build --prod
+        working-directory: ./webclient
+
+      #Publish artifacts-webclient
+      - name: Archive production artifacts
+        if: steps.changed-files-for-webclient.outputs.any_changed == 'true'
+        uses: actions/upload-artifact@v2
+        with:
+          name: wizard
+          path: ./webclient/dist/wizard
+
+  build-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      # Build backend with condition
+      - name: Run changed-files with defaults on the backend
+        id: changed-files-for-backend
+        uses: tj-actions/changed-files@v10
+        with:
+          files: |
+            backend
+
+      - name: Install Node.js 
+        if: steps.changed-files-for-backend.outputs.any_changed == 'true'
+        uses: actions/setup-node@v2 
+        with:
+          node-version: '12.x'
+          
+      - name: npm install & build & run
+        if: steps.changed-files-for-backend.outputs.any_changed == 'true'
+        run: |
+          npm install
+          npm run build
+        working-directory: ./backend
+
+      #Publish artifacts-backend
+      - name: Publish dist
+        if: steps.changed-files-for-backend.outputs.any_changed == 'true'
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: ./backend/dist
+          
+      - name: Publish node_modules
+        if: steps.changed-files-for-backend.outputs.any_changed == 'true'
+        uses: actions/upload-artifact@v2
+        with:
+          name: node_modules
+          path: ./backend/node_modules
+  
+  activate-download-workflow:
+    needs: ['build-components','build-webclient','build-backend']
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Invoke download-workflow 
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: download-artifact-build-and-push-image
+          token: ${{ secrets.PERSONAL_TOKEN }}
+
