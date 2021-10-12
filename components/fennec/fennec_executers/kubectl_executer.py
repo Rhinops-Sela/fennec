@@ -78,7 +78,8 @@ class Kubectl():
         self.execution.run_command(command)
 
     def __execute_folder(self, folder: str, namespace: str, install: bool):
-        self.create_namespace(namespace)
+        if install:
+            self.create_namespace(namespace)
         files_execute = dict()
         verb = "apply" if install else "delete"
         for path in Path(folder).rglob('*.*'):

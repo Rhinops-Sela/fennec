@@ -10,7 +10,7 @@ namespace = execution.get_local_parameter('NAMESPACE')
 helm_chart = Helm(os.path.dirname(__file__), namespace=namespace, chart_name="dynamodb")
 helm_chart.uninstall_chart()
 
-helm_chart.uninstall_folder(base_folder=execution.execution_folder ,folder='admin', namespace=namespace)
+helm_chart.uninstall_folder(base_folder=execution.templates_folder ,folder='admin', namespace=namespace)
 core_dns = CoreDNS(os.path.dirname(__file__))
 dynamodb_record = f"{dynamodb_url}=dynamodb-localstack.{namespace}.svc.cluster.local"
 admin_record = f"{dynamodb_admin_url}=dynamodb-local-admin.{execution.get_local_parameter('NAMESPACE')}.svc.cluster.local"
