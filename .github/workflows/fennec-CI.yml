@@ -134,41 +134,68 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      # - name: download artifacts-components
+      #   uses: dawidd6/action-download-artifact@v2
+      #   with:
+      #     workflow: fennec-CI.yml
+      #     name: components
+      #     path: ${{ github.workspace }}/build-workspace/components
+      #     check_artifacts:  true
+
+          
+      # - name: download artifacts-backend
+      #   uses: dawidd6/action-download-artifact@v2
+      #   with:
+      #     workflow: fennec-CI.yml
+      #     name: node_modules
+      #     path: ${{ github.workspace }}/build-workspace/backend/node_mudules
+      #     check_artifacts:  true
+
+          
+      # - name: download artifacts-backend
+      #   uses: dawidd6/action-download-artifact@v2
+      #   with:
+      #     workflow: fennec-CI.yml
+      #     name: dist
+      #     path: ${{ github.workspace }}/build-workspace/backend/dist
+      #     check_artifacts:  true
+
+          
+      # - name: download artifacts-webclient
+      #   uses: dawidd6/action-download-artifact@v2
+      #   with:
+      #     workflow: fennec-CI.yml
+      #     name: wizard
+      #     path: ${{ github.workspace }}/build-workspace/webclient/wizard
+      #     check_artifacts:  true
+
       - name: download artifacts-components
-        uses: dawidd6/action-download-artifact@v2
+        uses: actions/download-artifact@v2
+        id: download-components
         with:
-          workflow: fennec-CI.yml
           name: components
           path: ${{ github.workspace }}/build-workspace/components
-          check_artifacts:  true
-
           
       - name: download artifacts-backend
-        uses: dawidd6/action-download-artifact@v2
+        uses: actions/download-artifact@v2
+        id: download-backend-dist
         with:
-          workflow: fennec-CI.yml
-          name: node_modules
-          path: ${{ github.workspace }}/build-workspace/backend/node_mudules
-          check_artifacts:  true
-
-          
-      - name: download artifacts-backend
-        uses: dawidd6/action-download-artifact@v2
-        with:
-          workflow: fennec-CI.yml
           name: dist
           path: ${{ github.workspace }}/build-workspace/backend/dist
-          check_artifacts:  true
-
-          
-      - name: download artifacts-webclient
-        uses: dawidd6/action-download-artifact@v2
+      
+      - name: download artifacts-backend
+        uses: actions/download-artifact@v2
+        id: download-backend-node
         with:
-          workflow: fennec-CI.yml
+          name: node_modules
+          path: ${{ github.workspace }}/build-workspace/backend/node_modules
+               
+      - name: download artifacts-webclient
+        uses: actions/download-artifact@v2
+        id: download-webclient
+        with:
           name: wizard
           path: ${{ github.workspace }}/build-workspace/webclient/wizard
-          check_artifacts:  true
-
 
       - name: Copy nginx.conf to build workspace
         run: |
