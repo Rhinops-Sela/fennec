@@ -38,13 +38,13 @@ jobs:
           path: ${{ github.workspace }}/build-workspace/backend/dist
           check_artifacts:  true
   
-      - name: download artifacts-webclient
-        uses: dawidd6/action-download-artifact@v2
-        with:
-          workflow: upload-artifacts.yml
-          name: wizard
-          path: ${{ github.workspace }}/build-workspace/webclient/wizard
-          check_artifacts:  true
+#       - name: download artifacts-webclient
+#         uses: dawidd6/action-download-artifact@v2
+#         with:
+#           workflow: upload-artifacts.yml
+#           name: wizard
+#           path: ${{ github.workspace }}/build-workspace/webclient/wizard
+#           check_artifacts:  true
 
         
       - name: Copy nginx.conf to build workspace
