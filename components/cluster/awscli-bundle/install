@@ -14,6 +14,8 @@ import tempfile
 
 from contextlib import contextmanager
 
+from fennec.fennec_helpers.helper import Helper
+
 PACKAGES_DIR = os.path.join(
     os.path.dirname(os.path.abspath(__file__)), 'packages')
 INSTALL_DIR = os.path.expanduser(os.path.join(
@@ -158,8 +160,8 @@ def _install_setup_deps(pip_script, setup_package_dir):
 
 def create_symlink(real_location, symlink_name):
     if os.path.isfile(symlink_name):
-        print("Symlink already exists: %s" % symlink_name)
-        print("Removing symlink.")
+        Helper.print_log("Symlink already exists: %s" % symlink_name)
+        Helper.print_log("Removing symlink.")
         os.remove(symlink_name)
     symlink_dir_name = os.path.dirname(symlink_name)
     if not os.path.isdir(symlink_dir_name):
@@ -190,7 +192,7 @@ def main():
             "https://aws.amazon.com/blogs/developer/deprecation-of-python-2-6"
             "-and-python-3-3-in-botocore-boto3-and-the-aws-cli/"
         )
-        print(unsupported_python_msg % sys.version_info[:2])
+        Helper.print_log(unsupported_python_msg % sys.version_info[:2])
         sys.exit(1)
 
     opts = parser.parse_args()[0]
@@ -201,9 +203,9 @@ def main():
         real_location = os.path.join(opts.install_dir, bin_path(), 'aws')
         if opts.bin_location and create_symlink(real_location,
                                                 opts.bin_location):
-            print("You can now run: %s --version" % opts.bin_location)
+            Helper.print_log("You can now run: %s --version" % opts.bin_location)
         else:
-            print("You can now run: %s --version" % real_location)
+            Helper.print_log("You can now run: %s --version" % real_location)
     finally:
         shutil.rmtree(working_dir)
 

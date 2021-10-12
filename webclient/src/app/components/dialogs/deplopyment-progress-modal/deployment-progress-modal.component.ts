@@ -17,7 +17,6 @@ import { IDeploymentMessage } from 'src/app/interfaces/common/IDeploymentMessage
 import { IPage } from 'src/app/interfaces/common/IPage';
 import { MessageHandlerService } from 'src/app/services/message-handler/message-handler.service';
 import { ILogLine } from 'src/app/interfaces/common/ILogLine';
-
 @Component({
   selector: 'app-deployment-progress',
   templateUrl: './deployment-progress-modal.component.html',
@@ -85,8 +84,14 @@ export class DeploymentProgressModalComponent implements OnInit, AfterViewInit {
 
   cleanLogLine(logObject: ILogLine){
     let lines = []
-    for (let line of logObject.content.split('\n')){
-      lines.push(line.replace(/'/g, '"'))
+    for (let top_line of logObject.content.split('\n')){
+      for (let line of top_line.split('break_line')){
+        let content = line.replace(/'/g, '').replace(/"/g, '');
+        if (content){
+          lines.push(`${logObject.time} - ${content}`)
+        }
+        
+      }
     }
     return [lines]
   }

@@ -4,6 +4,7 @@ import subprocess
 from collections import namedtuple
 import os, stat
 import fcntl
+from typing import ChainMap
 
 from fennec_helpers.helper import Helper
 
@@ -18,10 +19,6 @@ class Execution:
         self.global_parameters = {}
         self.__load_local_parameters__()
         self.__load_global_parameters__()
-        print(f"local:")
-        print(f"{self.local_parameters}")
-        print(f"global:")
-        print(f"{self.global_parameters}")
         self.set_aws_credentials()
 
     @property
@@ -71,7 +68,7 @@ class Execution:
     def __load_global_parameters__(self):
         for path in Path(self.current_folder).rglob('default.values.json'):
             self.__load_parameters__(path, local=False)
-        print(self.global_parameters)
+       # Helper.print_log(self.global_parameters)
         
         #path = os.path.join(self.current_folder, "global", "execution", "global.values.json")
 
@@ -97,7 +94,6 @@ class Execution:
     def create_kubernetes_client(self):
         self.__kube_config_file = os.path.join(self.working_folder, '.kube')
         command = f'aws eks update-kubeconfig --name {self.cluster_name} --kubeconfig {self.kube_config_file}  --region {self.cluster_region}'
-        print(command)
         if os.path.isfile(self.kube_config_file):
             os.remove(self.kube_config_file)
         self.run_command(command=command, kubeconfig=False)
@@ -136,11 +132,12 @@ class Execution:
 
     def run_command(self, command: str, show_output=True, continue_on_error=False, kubeconfig=True):
         output_str = ""
+        command_origingal = command
         if kubeconfig:
             Helper.set_permissions(self.kube_config_file, stat.S_IRWXU)
             command = f'export KUBECONFIG={self.kube_config_file} && {command}'
         Helper.set_permissions(command, 0o777)
-        print(f'Will execute: {command}')
+        print(command_origingal)
 
         process = subprocess.Popen(
             ['/bin/bash', '-c', f'{command}'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)

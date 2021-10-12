@@ -8,13 +8,13 @@ class Namespace:
 
     def create(self, name: str):
         if self.check_if_exists(name):
-            print(f"namespace: {name} already exsits, skipping")
+            Helper.print_log(f"namespace: {name} already exsits, skipping")
             return
         self.kubectl.create_namespace(name)
 
     def delete(self, name: str, force=True):
         if not self.check_if_exists(name):
-            print(f"namespace: {name} doesn't exsit, skipping")
+            Helper.print_log(f"namespace: {name} doesn't exsit, skipping")
             return
         delete = force
         if not force:
@@ -22,7 +22,7 @@ class Namespace:
         if delete:
             self.kubectl.delete_namespace(name)
         else:
-            print(f"Namespace {name} contains resources, skipp deleting")
+            Helper.print_log(f"Namespace {name} contains resources, skipp deleting")
 
     def verify_empty_before_delete(self, name: str) -> bool:
         objects_in_namespace = self.kubectl.get_all(name)

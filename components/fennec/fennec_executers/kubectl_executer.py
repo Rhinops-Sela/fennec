@@ -31,7 +31,7 @@ class Kubectl():
             else:
                 self.execution.exeport_secret(file_name, token)
         else:
-            print(f"Failed to export secret: {secret_name}")
+            Helper.print_log(f"Failed to export secret: {secret_name}")
 
     def combine_additoinal_values(self, set_values) -> str:
         set_values_str = ""
@@ -91,13 +91,13 @@ class Kubectl():
 
     def create_namespace(self, name: str):
         if self.check_if_exists(name):
-            print(f"namespace: {name} already exsits, skipping")
+            Helper.print_log(f"namespace: {name} already exsits, skipping")
             return
         self.execution.run_command(f"kubectl create namespace {name}")
 
     def delete_namespace(self, name: str, force=True):
         if not self.check_if_exists(name):
-            print(f"namespace: {name} doesn't exsit, skipping")
+            Helper.print_log(f"namespace: {name} doesn't exsit, skipping")
             return
         delete = force
         if not force:
@@ -105,7 +105,7 @@ class Kubectl():
         if delete:
             self.execution.run_command(f"kubectl delete namespace {name}")
         else:
-            print(f"Namespace {name} contains resources, skipp deleting")
+            Helper.print_log(f"Namespace {name} contains resources, skipp deleting")
 
     def verify_empty_before_delete(self, name: str) -> bool:
         objects_in_namespace = self.get_all(name)

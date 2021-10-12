@@ -19,7 +19,7 @@ class CoreDNS():
         config_map = self.get_current_config()
         for dns_record in dns_records:
             if not dns_record.source or not dns_record.target:
-                print(
+                Helper.print_log(
                     f'Skipping dns record, source: {dns_record.source}; target: {dns_record.target}')
                 continue
             anchor_str = self.anchor_str_with_newline
@@ -38,7 +38,7 @@ class CoreDNS():
         config_map = self.get_current_config()
         for dns_record in dns_records:
             if not dns_record.source or not dns_record.target:
-                print(
+                Helper.print_log(
                     f'Skipping dns record, source: {dns_record.source}; target: {dns_record.target}')
                 continue
             line_to_delete = f'rewrite name {dns_record.source} {dns_record.target}\n'
@@ -56,7 +56,7 @@ class CoreDNS():
         config_map = self.get_current_config()
         for dns_record in dns_records:
             if not dns_record.source or not dns_record.target:
-                print(
+                Helper.print_log(
                     f'Skipping dns record, source: {dns_record.source}; target: {dns_record.target}')
                 continue
             anchor_str = self.anchor_str_with_newline
@@ -77,7 +77,7 @@ class CoreDNS():
         config_map = self.get_current_config()
         for dns_record in dns_records:
             if not dns_record.source or not dns_record.target:
-                print(
+                Helper.print_log(
                     f'Skipping dns record, source: {dns_record.source}; target: {dns_record.target}')
                 continue
             anchor_str = self.anchor_str_with_newline
@@ -114,7 +114,7 @@ class CoreDNS():
     #         delete_line = False
     #         for dns_record in dns_records:
     #             if f"{dns_record.source} {dns_record.target}" in config_line:
-    #                 print(
+    #                 Helper.print_log(
     #                     f"deleting dns record: source: {dns_record.source} target: {dns_record.target}")
     #                 delete_line = True
     #         if not delete_line:
@@ -151,7 +151,7 @@ class CoreDNS():
                 if add_new_lines:
                     outF.write('\n')
             except:
-                print("skipping line")
+                Helper.print_log("skipping line")
         outF.close()
 
         self.execution.run_command(

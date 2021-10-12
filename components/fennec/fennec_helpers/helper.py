@@ -7,7 +7,7 @@ class Helper:
 
     @staticmethod
     def exit(exit_code: int, message: str):
-        print(message)
+        Helper.print_log(message)
         sys.exit(exit_code)
 
     @staticmethod
@@ -17,7 +17,7 @@ class Helper:
             converted = Helper.json_to_object(file.read())
             return converted
         except ValueError:
-            print(file_to_convert)
+            Helper.print_log(file_to_convert)
 
     @staticmethod
     def to_json_file(content: any, file_path: str):
@@ -26,7 +26,7 @@ class Helper:
             file.write(json.dumps(content))
             file.close()
         except ValueError:
-            print(file_path)
+            Helper.print_log(file_path)
 
     @staticmethod
     def json_to_object(string_to_convert: str):
@@ -35,7 +35,7 @@ class Helper:
             converted = json.loads(fixed_str)
             return converted
         except ValueError:
-            print(string_to_convert)
+            Helper.print_log(string_to_convert)
 
     @staticmethod
     def copy_file(source: str, target: str):
@@ -60,6 +60,11 @@ class Helper:
         if source_file == output_file:
             os.rename(output_file + "_temp", output_file)
         return file_content
+
+    @staticmethod
+    def print_log(content):{
+        print(f'{content}break_line') 
+    }
 
     @staticmethod
     def wirte_connection_info(connection_info:str, output_folder:str):

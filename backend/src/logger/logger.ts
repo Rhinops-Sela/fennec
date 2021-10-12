@@ -45,7 +45,7 @@ export class Logger {
       if (messageObject.message.severity > +Logger.logLevel) {
         return 0;
       }
-      const linePrefix = `[${messageObject.message.prefix}][${new Date().toLocaleString()}]: `;
+      const linePrefix = `[${messageObject.message.prefix}][${new Date().toLocaleTimeString()}]: `;
       console.log(`${linePrefix}${messageObject.message.content}`);
       if (messageObject.stack && messageObject.stack.length > 2) {
         console.log(`${linePrefix}${messageObject.stack}`);

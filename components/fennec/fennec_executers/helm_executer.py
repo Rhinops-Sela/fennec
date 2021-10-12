@@ -16,10 +16,10 @@ class Helm(Kubectl):
             command, show_output=False).log
         for installed_chart in Helper.json_to_object(installed_charts):
             if installed_chart['name'] == self.chart_name and installed_chart['namespace'] == self.namespace_name:
-                print(
+                Helper.print_log(
                     f"chart: {self.chart_name} in namespace: {self.namespace_name} already installed, upgrading...")
                 return True
-        print(
+        Helper.print_log(
             f"chart: {self.chart_name} in namespace: {self.namespace_name} not installed")
         return False
 
@@ -35,15 +35,15 @@ class Helm(Kubectl):
         self.execution.run_command("helm repo update")
         self.create_namespace(self.namespace_name)
         install_command = f"helm {verb} --wait --debug --timeout {timeout}s {deployment_name} {release_name}/{self.chart_name} -n {self.namespace_name} {self.combine_additoinal_values(additional_values)}"
-        print("Installing Chart")
+        Helper.print_log("Installing Chart")
         self.execution.run_command(install_command)
 
     def uninstall_chart(self, delete_namespace=False):
         if self.installed:
-            print("uninstalling...")
+            Helper.print_log("uninstalling...")
             uninstall_command = f"helm uninstall {self.chart_name} -n {self.namespace_name}"
             self.execution.run_command(uninstall_command)
             if delete_namespace:
                 self.delete_namespace(self.namespace_name, force=False)
         else:
-            print(f"skipping...")
+            Helper.print_log(f"skipping...")

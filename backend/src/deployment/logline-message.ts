@@ -6,6 +6,6 @@ export class LogLine implements ILogLine {
   constructor(content: string) {
     this.content = content;
     this.color = "#f2f3f4";
-    this.time = new Date().toLocaleString();
+    this.time = new Date().toLocaleTimeString('en-GB', { hour12: false });
   }
 }

@@ -43,9 +43,9 @@ class Cluster(Kubectl):
             command = f'eksctl create cluster -f "{self.__replace_cluster_values__()}"'
             self.execution.run_command(command, kubeconfig=False)
         else:    
-            print(
+            Helper.print_log(
                 f"Cluster {self.name} already exists in region {self.execution.cluster_region}")
-        # print(f'Adding user {self.admin_arn} as cluster admin')       
+        # Helper.print_log(f'Adding user {self.admin_arn} as cluster admin')       
         # command = f'eksctl get iamidentitymapping --cluster {self.name} --arn {self.admin_arn} --region {self.region}'
         # self.execution.run_command(command, kubeconfig=False)
         # command = f'eksctl create iamidentitymapping --cluster {self.name} --arn {self.admin_arn} --group system:masters --username {self.username} --region {self.region}'
@@ -55,7 +55,7 @@ class Cluster(Kubectl):
 
     def delete(self):
         if not self.check_if_cluster_exists():
-            print(
+            Helper.print_log(
                 f"Cluster {self.name} doesn't exist in region {self.execution.cluster_region}")
             return
         self.__replace_cluster_values__()
