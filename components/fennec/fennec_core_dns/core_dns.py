@@ -5,6 +5,7 @@ import os
 from fennec_execution.execution import Execution
 from fennec_helpers.helper import Helper
 
+
 class CoreDNS():
     def __init__(self, working_folder: str):
         self.execution = Execution(working_folder)
@@ -18,7 +19,8 @@ class CoreDNS():
         config_map = self.get_current_config()
         for dns_record in dns_records:
             if not dns_record.source or not dns_record.target:
-                print(f'Skipping dns record, source: {dns_record.source}; target: {dns_record.target}')
+                print(
+                    f'Skipping dns record, source: {dns_record.source}; target: {dns_record.target}')
                 continue
             anchor_str = self.anchor_str_with_newline
             if self.anchor_str_no_newline in config_map:
@@ -26,8 +28,67 @@ class CoreDNS():
             line_to_add = f'{anchor_str}\n  rewrite name {dns_record.source} {dns_record.target}\n'
             if not line_to_add in config_map:
                 config_map = config_map.replace(anchor_str, line_to_add, 1)
-        output_file = os.path.join(self.execution.working_folder,'config-map-execute.json')
-        Helper.to_json_file(Helper.json_to_object(config_map),output_file)
+        output_file = os.path.join(
+            self.execution.working_folder, 'config-map-execute.json')
+        Helper.to_json_file(Helper.json_to_object(config_map), output_file)
+        self.execution.run_command(
+            f"kubectl apply -f {output_file} -n {self.namespace}")
+
+    def delete_records(self, dns_records, delimiter=";", inner_delimiter="="):
+        config_map = self.get_current_config()
+        for dns_record in dns_records:
+            if not dns_record.source or not dns_record.target:
+                print(
+                    f'Skipping dns record, source: {dns_record.source}; target: {dns_record.target}')
+                continue
+            line_to_delete = f'rewrite name {dns_record.source} {dns_record.target}\n'
+            if line_to_delete in config_map:
+                config_map = config_map.replace(line_to_delete, '', 1)
+        output_file = os.path.join(
+            self.execution.working_folder, 'config-map-execute.json')
+        Helper.to_json_file(Helper.json_to_object(config_map), output_file)
+        self.execution.run_command(
+            f"kubectl apply -f {output_file} -n {self.namespace}")
+
+    def add_records(self, dns_records: str, delimiter=";", inner_delimiter="="):
+        dns_records = self.__init_dns_recotds(
+            dns_records, delimiter, inner_delimiter)
+        config_map = self.get_current_config()
+        for dns_record in dns_records:
+            if not dns_record.source or not dns_record.target:
+                print(
+                    f'Skipping dns record, source: {dns_record.source}; target: {dns_record.target}')
+                continue
+            anchor_str = self.anchor_str_with_newline
+            if self.anchor_str_no_newline in config_map:
+                anchor_str = self.anchor_str_no_newline
+            line_to_add = f'{anchor_str}\n  rewrite name {dns_record.source} {dns_record.target}\n'
+            if not line_to_add in config_map:
+                config_map = config_map.replace(anchor_str, line_to_add, 1)
+        output_file = os.path.join(
+            self.execution.working_folder, 'config-map-execute.json')
+        Helper.to_json_file(Helper.json_to_object(config_map), output_file)
+        self.execution.run_command(
+            f"kubectl apply -f {output_file} -n {self.namespace}")
+
+    def add_records(self, dns_records: str, delimiter=";", inner_delimiter="="):
+        dns_records = self.__init_dns_recotds(
+            dns_records, delimiter, inner_delimiter)
+        config_map = self.get_current_config()
+        for dns_record in dns_records:
+            if not dns_record.source or not dns_record.target:
+                print(
+                    f'Skipping dns record, source: {dns_record.source}; target: {dns_record.target}')
+                continue
+            anchor_str = self.anchor_str_with_newline
+            if self.anchor_str_no_newline in config_map:
+                anchor_str = self.anchor_str_no_newline
+            line_to_add = f'{anchor_str}\n  rewrite name {dns_record.source} {dns_record.target}\n'
+            if not line_to_add in config_map:
+                config_map = config_map.replace(anchor_str, line_to_add, 1)
+        output_file = os.path.join(
+            self.execution.working_folder, 'config-map-execute.json')
+        Helper.to_json_file(Helper.json_to_object(config_map), output_file)
         self.execution.run_command(
             f"kubectl apply -f {output_file} -n {self.namespace}")
 
@@ -38,10 +99,11 @@ class CoreDNS():
         for dns_record in dns_records:
             line_to_remove = f'  rewrite name {dns_record.source} {dns_record.target}\n'
             config_map = config_map.replace(line_to_remove, '')
-        output_file = os.path.join(self.execution.working_folder,'config-map-execute.json')
-        Helper.to_json_file(Helper.json_to_object(config_map),output_file)
+        output_file = os.path.join(
+            self.execution.working_folder, 'config-map-execute.json')
+        Helper.to_json_file(Helper.json_to_object(config_map), output_file)
         self.execution.run_command(
-            f"kubectl apply -f {output_file} -n {self.namespace}")        
+            f"kubectl apply -f {output_file} -n {self.namespace}")
 
     # def delete_records(self, dns_records: str, delimiter=";", inner_delimiter="="):
     #     dns_records = self.__init_dns_recotds(
