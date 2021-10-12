@@ -119,6 +119,6 @@ jobs:
       - name: Invoke download-workflow 
         uses: benc-uk/workflow-dispatch@v1
         with:
-          workflow: download-artifact-build-and-push-image.yml
+          workflow: download-artifact-build-and-push-image
           token: ${{ secrets.PERSONAL_TOKEN }}
 
