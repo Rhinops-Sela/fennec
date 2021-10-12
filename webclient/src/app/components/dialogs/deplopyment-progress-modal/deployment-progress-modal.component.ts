@@ -16,6 +16,7 @@ import { IDeploymentInfo } from 'src/app/interfaces/client/IDeploymentInfo';
 import { IDeploymentMessage } from 'src/app/interfaces/common/IDeploymentMessage';
 import { IPage } from 'src/app/interfaces/common/IPage';
 import { MessageHandlerService } from 'src/app/services/message-handler/message-handler.service';
+import { ILogLine } from 'src/app/interfaces/common/ILogLine';
 
 @Component({
   selector: 'app-deployment-progress',
@@ -39,6 +40,7 @@ export class DeploymentProgressModalComponent implements OnInit, AfterViewInit {
     private backendService: BackendService,
     private errorHandler: MessageHandlerService,
     @Inject(MAT_DIALOG_DATA) public data: IDeploymentInfo
+    
   ) {}
 
   ngOnInit(): void {
@@ -80,6 +82,15 @@ export class DeploymentProgressModalComponent implements OnInit, AfterViewInit {
     this.deploymentService.sendKillMessage();
     this.cancelPressed = true;
   }
+
+  cleanLogLine(logObject: ILogLine){
+    let lines = []
+    for (let line of logObject.content.split('\n')){
+      lines.push(line.replace(/'/g, '"'))
+    }
+    return [lines]
+  }
+
   initDeployment() {
     this.backendService
       .startDeployment(this.data.domains, this.data.deleteMode)
@@ -145,7 +156,7 @@ export class DeploymentProgressModalComponent implements OnInit, AfterViewInit {
       this.activePage.deploymentIcon = 'done';
     }
     this.activePage.logs = deploymentMessage.logs;
-    // this.displayPage.logs = deploymentMessage.logs;
+    this.displayPage.logs = deploymentMessage.logs;
 
     if (deploymentMessage.progress) {
       let newBufferValue = Math.round(

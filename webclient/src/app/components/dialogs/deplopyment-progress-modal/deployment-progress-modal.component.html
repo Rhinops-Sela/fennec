@@ -21,9 +21,12 @@
   <div class="log-container">
     <h2>{{getPageDisplayName(displayPage)}}</h2>
     <div class="line-container" #scrollfcontainer>
-      <p *ngFor="let logLine of displayPage.logs" [ngStyle]="{'color': logLine.color}" #item>[{{ logLine.time }}] -
-        {{ logLine.content }}
-      </p>
+      <div *ngFor="let logObject of displayPage.logs" #item>
+        {{logObject.time}} 
+        <p *ngFor="let logLine of cleanLogLine(logObject)" [ngStyle]="{'color': logLine.color}" #item>
+{{logLine}}
+        </p>
+      </div>
     </div>
 
   </div>

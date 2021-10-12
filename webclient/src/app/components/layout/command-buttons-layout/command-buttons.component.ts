@@ -107,10 +107,6 @@ export class CommandButtonsComponent implements OnInit {
     });
   }
 
-  
-
-  
-
   upload() {
     this.fileInput.nativeElement.click();
   }
@@ -127,11 +123,9 @@ export class CommandButtonsComponent implements OnInit {
     });
   }
 
-  
-
-  
-
-
+  async export(domainsToExport?: IDomain[], s3: boolean = true) {
+    return await this.globalService.export(domainsToExport, s3);
+  }
 
   public async openConfirmationDialog(deleteMode: boolean) {
     const notCompleted = this.globalService.verifyMandatory();

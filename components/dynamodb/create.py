@@ -32,6 +32,9 @@ helm_chart.install_chart(release_name="localstack-charts",
                          deployment_name="dynamodb",
                          additional_values=[f"--values {execution_file}"])
 dynamodb_record = f"{dynamodb_url}=dynamodb-localstack.{namespace}.svc.cluster.local"
+admin_record = f"{dynamodb_admin_url}=dynamodb-local-admin.{nodegroup.execution.get_local_parameter('NAMESPACE')}.svc.cluster.local"
+dns_records = f"{admin_record};{dynamodb_record}"
+core_dns = CoreDNS(os.path.dirname(__file__))
 
 kubectl = Kubectl(os.path.dirname(__file__))
 values_to_replace = {
@@ -46,11 +49,6 @@ Helper.replace_in_file(
 kubectl.install_file(
     os.path.join(execution.templates_folder, "admin", '02.service.json'), namespace=nodegroup.execution.get_local_parameter('NAMESPACE'))
 
-admin_record = f"{dynamodb_admin_url}=dynamodb-local-admin.{nodegroup.execution.get_local_parameter('NAMESPACE')}.svc.cluster.local"
-
-
-core_dns = CoreDNS(os.path.dirname(__file__))
-dns_records = f"{admin_record};{dynamodb_record}"
 core_dns.add_records(dns_records)
 
 connection_info = f'dynamodb: \naws dynamodb --endpoint-url=http://dynamodb-localstack.{namespace}.svc.cluster.local:4566 list-tables'

@@ -18,8 +18,10 @@ class Execution:
         self.global_parameters = {}
         self.__load_local_parameters__()
         self.__load_global_parameters__()
-        print(f"local: {self.local_parameters}")
-        print(f"global: {self.global_parameters}")
+        print(f"local:")
+        print(f"{self.local_parameters}")
+        print(f"global:")
+        print(f"{self.global_parameters}")
         self.set_aws_credentials()
 
     @property
