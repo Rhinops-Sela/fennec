@@ -15,5 +15,5 @@
 <div mat-dialog-actions>
   <button mat-button submit *ngIf="s3" (click)="confirm()" [disabled]="selectedFileName?.length < 1 || !exportDesitination" cdkFocusInitial>Save</button>
   <button mat-button submit *ngIf="!s3" (click)="confirm()" [disabled]="selectedFileName?.length < 1" cdkFocusInitial>Save</button>
-  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-button (click)="cancel()">Skip</button>
 </div>
