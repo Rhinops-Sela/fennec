@@ -6,10 +6,7 @@ import { Logger } from "../logger/logger";
 import { IPage } from "../interfaces/common/IPage";
 export class FormParser {
   public static async getForm(): Promise<IDomain[]> {
-    const filePath = path.join(
-      path.resolve(process.env.COMPONENTS_ROOT!),
-      process.env.MAIN_TEMPLATE_FORM!
-    );
+    const filePath = path.join(process.env.MAIN_TEMPLATE_FORM!);
     const fileContent = await readFilePromise(filePath);
     const domains = JSON.parse(fileContent) as IDomain[];
     const templateList = await FormParser.loadTemplatesList();
@@ -102,7 +99,6 @@ export class FormParser {
     const readdir = require("recursive-readdir");
     const templates: IInputTemplate[] = [];
     const templatesRoot = path.join(
-      path.resolve(process.env.COMPONENTS_ROOT!),
       process.env.FORM_TEMPLATES_FOLDER!
     );
     const templateFiles = await readdir(templatesRoot);
