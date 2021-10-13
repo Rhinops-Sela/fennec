@@ -3,6 +3,9 @@
     "debug": "",
     "global": true
   },
+  "SKIP_IF_EXISTS": {
+    "debug": true
+  },
   "CLUSTER_NAME": {
     "debug": "fennec",
     "global": true

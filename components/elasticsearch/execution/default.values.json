@@ -1,4 +1,7 @@
 {
+  "SKIP_IF_EXISTS": {
+    "debug": true
+  },
   "NAMESPACE": {
     "debug": "elk"
   },

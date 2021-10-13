@@ -5,6 +5,7 @@
   "image": "assets/component_logos/sqs.png",
   "description": "SQS configuration & parameters",
   "inputs": [
+    { "template": "skip-if-installed" },
     {
       "template": "spot",
       "group_enabler_master": "use_spot",

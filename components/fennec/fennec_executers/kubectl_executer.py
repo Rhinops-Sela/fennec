@@ -75,7 +75,7 @@ class Kubectl():
 
     def __execute_file(self, file: str, namespace: str, verb: str):
         command = f"kubectl {verb} -f {file} -n {namespace}" if namespace else f"kubectl {verb} -f {file}"
-        self.execution.run_command(command)
+        self.execution.run_command(command,show_output=False)
 
     def __execute_folder(self, folder: str, namespace: str, install: bool):
         if install:

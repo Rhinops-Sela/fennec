@@ -1,4 +1,5 @@
 
+from fennec_execution import execution
 from fennec_execution.execution import Execution
 import os
 
@@ -13,12 +14,18 @@ class Nodegroup():
         self.template = Helper.file_to_object(self.template_path)
         self.nodegroup = self.template['nodeGroups'][0]
         if "NODEGROUP_NAME" in self.execution.local_parameters:
-            self.nodegroup['name'] = self.execution.get_local_parameter("NODEGROUP_NAME")
+            self.nodegroup['name'] = self.execution.get_local_parameter(
+                "NODEGROUP_NAME")
         self.template['metadata']['name'] = self.execution.cluster_name
         self.template['metadata']['region'] = self.execution.cluster_region
         self.__add_instance_types__()
 
     def create(self):
+        nodegroups = self.execution.run_command(
+            f'eksctl get nodegroups --cluster {self.execution.cluster_name} --region {self.execution.cluster_region}',show_output=False)
+        if self.execution.get_local_parameter("NODEGROUP_NAME") in nodegroups.log:
+            Helper.print_log("Node group already exists, skipping")
+            return True
         self.add_tags()
         self.__add_node_role()
         self.__add_labels__()
@@ -116,7 +123,7 @@ class Nodegroup():
             return
         max_scale = self.execution.get_local_parameter('MAX')
         if not max_scale:
-            return 
+            return
         self.nodegroup["maxSize"] = max_scale
 
     def add_tags(self, tags_custom: str = ""):
@@ -129,8 +136,10 @@ class Nodegroup():
         self.nodegroup = modified_nodegroup
 
     def __set_spot_properties__(self):
-        spot_allocation_strategy = self.execution.get_local_parameter('ALLOCATION_STRATEGY')
-        on_demand_base_capacity = self.execution.get_local_parameter('ON_DEMEND_BASE_CAPACITY')
+        spot_allocation_strategy = self.execution.get_local_parameter(
+            'ALLOCATION_STRATEGY')
+        on_demand_base_capacity = self.execution.get_local_parameter(
+            'ON_DEMEND_BASE_CAPACITY')
         on_demand_percentage_above_base_capacity = self.execution.local_parameters[
             'ON_DEMEND_ABOVE_BASE_PERCENTAGE']
         instances_distribution = self.nodegroup['instancesDistribution']
@@ -156,5 +165,3 @@ class Nodegroup():
             else:
                 working_object[prop_to_add] = Helper.num(prop_values)
         return working_object
-    
-    

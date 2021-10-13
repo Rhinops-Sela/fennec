@@ -5,6 +5,7 @@
   "image": "assets/component_logos/datadog.png",
   "description": "Datadog configuration & parameters",
   "inputs": [
+    { "template": "skip-if-installed" },
     {
       "template": "password",
       "tooltip": "API Key",

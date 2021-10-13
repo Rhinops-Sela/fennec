@@ -6,6 +6,7 @@
   "image": "assets/component_logos/kafka.png",
   "description": "Kafka configuration & parameters",
   "inputs": [
+    { "template": "skip-if-installed" },
     {
       "template": "spot",
       "group_enabler_master": "use_spot",

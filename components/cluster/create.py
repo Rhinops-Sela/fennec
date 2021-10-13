@@ -7,7 +7,8 @@ from fennec_helpers.helper import Helper
 from fennec_nodegorup.nodegroup import Nodegroup
 
 cluster = Cluster(os.path.dirname(__file__))
-if not cluster.check_if_cluster_exists():
+allow_skip = cluster.execution.get_local_parameter('SKIP_IF_EXISTS')
+if not cluster.check_if_cluster_exists() or not allow_skip:
     cluster.create()
 
 # Install cert-manager
@@ -47,13 +48,6 @@ install_ingress_controller = cluster.execution.get_local_parameter(
     'INSTALL_INGRESS_CONTROLER')
 if install_ingress_controller:
     cluster.install_folder(folder="06.nginx")
-    """ cluster.install_folder(deployment_folder)
-    nginx_chart = Helm(os.path.dirname(__file__), "nginx-ingress", "nginx-ingress-controller")
-    values_file_path = os.path.join(
-        cluster.execution.templates_folder, "06.nginx", "nginx_values.yaml")
-    nginx_chart.install_chart(release_name="bitnami", chart_url="https://charts.bitnami.com/bitnami", additional_values=[
-        f"--values {values_file_path}"])
- """
 
 # Install Cluster dashboard
 install_cluster_dashboard = cluster.execution.get_local_parameter(
@@ -92,18 +86,3 @@ openvpn_chart.install_chart(release_name="stable",
 keygen_script_path = os.path.join(vpn_working_folder,"keygen", "generate-client-key.sh")
 cluster.execution.run_command(
     f'{keygen_script_path} "{cluster.execution.local_parameters["USERS"]}" openvpn openvpn {cluster.execution.output_folder} 2>&1')
-
-
-# Install Cluster dashboard
-# install_cluster_dashboard = cluster.execution.get_local_parameter('INSTALL_CLUSTER_DASHBOARD')
-# if install_cluster_dashboard:
-#     user_url = cluster.execution.get_local_parameter('CLUSTER_DASHBOARD_URL')
-#     deployment_folder = os.path.join(
-#         cluster.execution.templates_folder, "06.dashboard")
-#     cluster.install_folder(deployment_folder)
-#     cluster.export_secret(secret_name="admin-user",
-#                           namespace="kube-system",
-#                           output_file_name="dashboard",
-#                           decode=True)
-#     core_dns = CoreDNS(os.path.dirname(__file__))
-#     core_dns.add_records(f"{user_url}=kubernetes-dashboard.kubernetes-dashboard")

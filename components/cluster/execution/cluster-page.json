@@ -8,6 +8,7 @@
   "image": "assets/component_logos/k8s.png",
   "description": "Please provide cluster information, if cluster doesn't exists it will be created",
   "inputs": [
+    { "template": "skip-if-installed" },
     {
       "template": "cluster-name",
       "value": "fennec"

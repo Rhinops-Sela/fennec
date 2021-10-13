@@ -23,7 +23,10 @@ class Helm(Kubectl):
             f"chart: {self.chart_name} in namespace: {self.namespace_name} not installed")
         return False
 
-    def install_chart(self, release_name: str, chart_url: str = "", additional_values=[], timeout=300, deployment_name = ""):
+    def install_chart(self, release_name: str, chart_url: str = "", additional_values=[], timeout=300, deployment_name = "", allow_skip=True):
+        if self.installed and self.execution.get_local_parameter('SKIP_IF_EXISTS') and allow_skip:
+            Helper.print_log("Chart alredy installed - skipping")
+            return True
         verb = "upgrade --install"
         self.execution.run_command(
             "helm repo add stable https://charts.helm.sh/stable")

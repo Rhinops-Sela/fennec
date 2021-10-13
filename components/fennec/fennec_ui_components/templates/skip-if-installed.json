@@ -1,0 +1,8 @@
+{
+  "controlType": "checkbox",
+  "tooltip": "Skip if already installed",
+  "displayName": "Skip if exists",
+  "serverValue": "SKIP_IF_EXISTS",
+  "defaultValue": true,
+  "value": true
+}

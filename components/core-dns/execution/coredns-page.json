@@ -6,6 +6,7 @@
   "image": "assets/component_logos/dns.png",
   "description": "Set of A / CNAME records to be accessible while connected to VPN",
   "inputs": [
+    { "template": "skip-if-installed" },
     {
       "controlType": "textarea",
       "tooltip": "Please provide a ; separated list of A/CNMAE records (foo.io=foo.namespace.svc.cluster.local;bobo.io=google.com)",

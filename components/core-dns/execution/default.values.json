@@ -1,4 +1,7 @@
 {
+  "SKIP_IF_EXISTS": {
+    "debug": true
+  },
   "DNS_RECORDS": {
     "debug": "gogo.io=google.com;bobo.io=ynet.co.il"
   }

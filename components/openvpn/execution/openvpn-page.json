@@ -5,6 +5,7 @@
   "image": "assets/component_logos/openvpn.png",
   "description": "Please provide a list of users to be able to access the network",
   "inputs": [
+    { "template": "skip-if-installed" },
     {
       "controlType": "textarea",
       "tooltip": "Please provide comma (,) separated list of users",

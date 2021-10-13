@@ -5,6 +5,7 @@
   "image": "assets/component_logos/prometheus.png",
   "description": "Prometheus configuration & parameters",
   "inputs": [
+    { "template": "skip-if-installed" },
     {
       "controlType": "select",
       "displayName": "Default Receiver",
