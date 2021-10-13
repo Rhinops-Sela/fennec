@@ -45,9 +45,7 @@ ui_deployment_template_output = os.path.join(
     kubectl.execution.templates_folder, "admin", "01.deployment-execute.json")
 Helper.replace_in_file(
     ui_deployment_template, ui_deployment_template_output, values_to_replace)
-
-kubectl.install_file(
-    os.path.join(execution.templates_folder, "admin", '02.service.json'), namespace=nodegroup.execution.get_local_parameter('NAMESPACE'))
+kubectl.install_folder("admin", execution.templates_folder, namespace=namespace)
 
 core_dns.add_records(dns_records)
 
