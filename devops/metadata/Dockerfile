@@ -9,6 +9,9 @@ ENV FORM_TEMPLATES_FOLDER=/app/fennec/fennec_ui_components/templates
 ENV AWS_ACCESS_KEY_ID=1
 ENV AWS_SECRET_ACCESS_KEY=1
 ENV AWS_DEFAULT_REGION=eu-west-2
+ENV BACKEND_URL=http://localhost
+ENV SOCKET_URL=http://localhost:9090
+
 
 # add webclient
 COPY nginx.conf /etc/nginx/nginx.conf
@@ -29,6 +32,14 @@ COPY fennec/. /app/.
 RUN cd $FENNEC_ROOT \
   && ls \
   && pip3 install $FENNEC_ROOT/
+
+RUN if echo "http://localhost" | grep -oP '(?<="backendUrl": ")[^"]*' '/usr/share/nginx/html/assets/config.json'; then \
+      sed -i '/backendUrl/c\  \"backendUrl\": \"$BACKEND_URL",' /usr/share/nginx/html/assets/config.json; \
+    fi
+RUN if echo "http://localhost:9090" | grep -oP '(?<="socketUrl": ")[^"]*' '/usr/share/nginx/html/assets/config.json'; then \
+      sed -i '/socketUrl/c\  \"socketUrl\": \"$SOCKET_URL",' /usr/share/nginx/html/assets/config.json; \
+    fi
+RUN echo "cat config.json" && cat /usr/share/nginx/html/assets/config.json
 
 #Exposing node port	
 EXPOSE 3000
