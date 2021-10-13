@@ -219,14 +219,14 @@ jobs:
         id: download-components
         with:
           name: components
-          path: ${{ github.workspace }}/build-workspace/components
+          path: ${{ github.workspace }}/build-workspace/components/components
           
       - name: download artifacts-fennec
         uses: actions/download-artifact@v2
         id: download-fennec
         with:
           name: fennec
-          path: ${{ github.workspace }}/build-workspace/fennec
+          path: ${{ github.workspace }}/build-workspace/fennec/fennec
 
       - name: download artifacts-backend
         uses: actions/download-artifact@v2
