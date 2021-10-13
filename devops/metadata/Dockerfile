@@ -28,7 +28,7 @@ COPY fennec/. /app/.
 #install fennec module
 RUN cd $FENNEC_ROOT \
   && ls \
-  && pip3 install $FENNEC_ROOT
+  && pip3 install $FENNEC_ROOT/
 
 #Exposing node port	
 EXPOSE 3000
