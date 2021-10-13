@@ -251,7 +251,7 @@ export class DeploymentExecuter {
 
   private async copyCommonFolder() {
     await this.copyFolder(
-      [path.resolve(process.env.FENNEC_ROOT!), "fennec"],
+      [path.resolve(process.env.FENNEC_ROOT!)],
       [`${path.resolve(process.env.WORKING_ROOT!)}_${this.timeStamp}`, `fennec`]
     );
   }
