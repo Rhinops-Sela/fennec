@@ -171,7 +171,7 @@ jobs:
           path: ./backend/node_modules
 
   download-artifacts-build-and-push-image:
-    needs: [build-components,build-backend,build-webclient]
+    needs: [build-components,build-backend,build-webclient,build-fennec,build-and-Push-Base-Image]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
