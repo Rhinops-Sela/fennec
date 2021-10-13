@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'components/**'
+      - 'fennec/**'
       - 'webclient/**'
       - 'backend/**'
       - 'devops/metadata/**'
@@ -65,8 +66,29 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: components
-          path: ${{ github.workspace }}
-
+          path: ./components
+    
+  build-fennec:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        # with:
+        #   fetch-depth: 0
+      
+      # - name: Run changed-files with defaults on the fennec
+      #   id: changed-files-for-fennec
+      #   uses: tj-actions/changed-files@v10
+      #   with:
+      #     files: |
+      #       fennec
+            
+      #Publish artifacts-fennec
+      - name: Archive production artifacts
+        #if: steps.changed-files-for-fennec.outputs.any_changed == 'true'
+        uses: actions/upload-artifact@v2
+        with:
+          name: fennec
+          path: ./fennec
       
   build-webclient:
     runs-on: ubuntu-latest
