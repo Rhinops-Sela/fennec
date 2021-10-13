@@ -2,6 +2,7 @@ import os
 from fennec_core_dns.core_dns import CoreDNS
 from fennec_executers.helm_executer import Helm
 from fennec_execution.execution import Execution
+from fennec_helpers.helper import Helper
 
 execution = Execution(os.path.dirname(__file__))
 dynamodb_url = execution.get_local_parameter('DYNAMO_DNS_RECORD')
