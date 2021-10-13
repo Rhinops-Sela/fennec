@@ -2,6 +2,7 @@ FROM blancahot/fennec-base:develop
 
 #ENV
 ENV COMPONENTS_ROOT=/app/components
+ENV FENNEC_ROOT=/app/fennec
 ENV WORKING_ROOT=/app/working_folder
 ENV MAIN_TEMPLATE_FORM=/app/fennec/fennec_ui_components/forms/development-form.json
 ENV FORM_TEMPLATES_FOLDER=/app/fennec/fennec_ui_components/templates
@@ -21,10 +22,13 @@ RUN npm i pm2 -g
 #add components
 COPY components/. /app/.
 
+#add fennec
+COPY fennec/. /app/.
+
 #install fennec module
-RUN cd $COMPONENTS_ROOT \
+RUN cd $FENNEC_ROOT \
   && ls \
-  && pip3 install $COMPONENTS_ROOT/fennec/ 
+  && pip3 install $FENNEC_ROOT/
 
 #Exposing node port	
 EXPOSE 3000
