@@ -67,7 +67,7 @@ class Helper:
     }
 
     @staticmethod
-    def wirte_connection_info(connection_info:str, output_folder:str):
+    def write_connection_info(connection_info:str, output_folder:str):
         output_file = os.path.join(output_folder, "connection_info.info")
         f = open(f'\n{output_file}', "a+")
         f.write(connection_info)
