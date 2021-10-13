@@ -7,13 +7,19 @@
 			"path": "components"
 		},
 		{
-			"path": "fennec"
-		},
-		{
 			"path": "devops"
 		},
 		{
 			"path": "webclient"
+		},
+		{
+			"path": "fennec"
+		},
+		{
+			"path": ".git"
+		},
+		{
+			"path": ".github"
 		}
 	]
 }

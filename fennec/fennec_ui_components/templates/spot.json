@@ -1,7 +1,0 @@
-{
-  "controlType": "checkbox",
-  "tooltip": "Use Spot Instances?",
-  "displayName": "Spot?",
-  "serverValue": "USE_SPOT",
-  "defaultValue": true
-}
