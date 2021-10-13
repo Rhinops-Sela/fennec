@@ -84,7 +84,7 @@ export class DeploymentProgressModalComponent implements OnInit, AfterViewInit {
 
   cleanLogLine(logObject: ILogLine){
     let lines = []
-    for (let top_line of logObject.content.split('\n')){
+    for (let top_line of logObject.content.split('/\r?\n/')){
       for (let line of top_line.split('break_line')){
         let content = line.replace(/'/g, '').replace(/"/g, '');
         if (content){
