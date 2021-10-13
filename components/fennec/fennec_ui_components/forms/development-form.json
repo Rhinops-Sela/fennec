@@ -42,14 +42,7 @@
     "displayName": "Databases",
     "description": "Selection of databases to available in the cluster",
     "pages": [
-      "redis-page"
-    ]
-  },
-  {
-    "name": "elk",
-    "displayName": "ELK",
-    "description": "Selection of ELK components to be available in the cluster",
-    "pages": [
+      "redis-page",
       "elasticsearch-page"
     ]
   },
