@@ -13,7 +13,11 @@
     "resources":{
       "limits": {
         "cpu": 3,
-        "memory": 7
+        "memory": "6Gi"
+      },
+      "requests": {
+        "cpu": 3,
+        "memory": "6Gi"
       }
     }
   },

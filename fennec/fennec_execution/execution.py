@@ -96,7 +96,7 @@ class Execution:
         command = f'aws eks update-kubeconfig --name {self.cluster_name} --kubeconfig {self.kube_config_file}  --region {self.cluster_region}'
         if os.path.isfile(self.kube_config_file):
             os.remove(self.kube_config_file)
-        self.run_command(command=command, kubeconfig=False, show_output=False)
+        self.run_command(command=command, kubeconfig=False)
         Helper.copy_file(self.kube_config_file,
                          os.path.join(self.output_folder, ".kube"))
 
@@ -130,7 +130,7 @@ class Execution:
         except:
             return ''
 
-    def run_command(self, command: str, show_output=True, continue_on_error=False, kubeconfig=True):
+    def run_command(self, command: str, show_output=False, continue_on_error=False, kubeconfig=True):
         output_str = ""
         command_origingal = command
         if kubeconfig:

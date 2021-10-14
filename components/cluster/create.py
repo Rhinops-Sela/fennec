@@ -8,6 +8,7 @@ from fennec_nodegorup.nodegroup import Nodegroup
 
 cluster = Cluster(os.path.dirname(__file__))
 allow_skip = cluster.execution.get_local_parameter('SKIP_IF_EXISTS')
+vpn_working_folder = os.path.join(cluster.execution.templates_folder,"08.openvpn")
 if not cluster.check_if_cluster_exists() or not allow_skip:
     cluster.create()
 
@@ -71,18 +72,17 @@ if not cluster.check_if_cluster_exists() or not allow_skip:
         core_dns = CoreDNS(os.path.dirname(__file__))
         core_dns.add_records(f"{user_url}={ingress_address}")
 
-template_path = os.path.join(
-    cluster.execution.templates_folder, "08.openvpn", "vpn-ng-template.json")
-nodegroup = Nodegroup(os.path.dirname(__file__), template_path)
-nodegroup.create()
-vpn_working_folder = os.path.join(cluster.execution.templates_folder,"08.openvpn")
-openvpn_chart = Helm(os.path.dirname(__file__), "openvpn")
-values_file_path = os.path.join(
-    cluster.execution.templates_folder,"08.openvpn", "values.yaml")
-openvpn_chart.create_namespace("openvpn")
-openvpn_chart.install_file(file=os.path.join(vpn_working_folder,"prerequisites", "openvpn-pv-claim.yaml"), namespace="openvpn")
-openvpn_chart.install_chart(release_name="stable",
-                            additional_values=[f"--values {values_file_path}"], timeout=600)
+        template_path = os.path.join(
+            cluster.execution.templates_folder, "08.openvpn", "vpn-ng-template.json")
+        nodegroup = Nodegroup(os.path.dirname(__file__), template_path)
+        nodegroup.create()
+        openvpn_chart = Helm(os.path.dirname(__file__), "openvpn")
+        values_file_path = os.path.join(
+            cluster.execution.templates_folder,"08.openvpn", "values.yaml")
+        openvpn_chart.create_namespace("openvpn")
+        openvpn_chart.install_file(file=os.path.join(vpn_working_folder,"prerequisites", "openvpn-pv-claim.yaml"), namespace="openvpn")
+        openvpn_chart.install_chart(release_name="stable",
+                                    additional_values=[f"--values {values_file_path}"], timeout=600)
 keygen_script_path = os.path.join(vpn_working_folder,"keygen", "generate-client-key.sh")
 cluster.execution.run_command(
-    f'{keygen_script_path} "{cluster.execution.local_parameters["USERS"]}" openvpn openvpn {cluster.execution.output_folder} 2>&1',show_output=False)
+    f'{keygen_script_path} "{cluster.execution.local_parameters["USERS"]}" openvpn openvpn {cluster.execution.output_folder} 2>&1')

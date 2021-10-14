@@ -157,9 +157,9 @@ class CoreDNS():
         self.execution.run_command(
             f"kubectl apply -f {output_file} -n {self.namespace}")
         self.execution.run_command(
-            f"kubectl delete pods -l k8s-app=kube-dns -n {self.namespace }", show_output=False)
+            f"kubectl delete pods -l k8s-app=kube-dns -n {self.namespace }")
 
     def get_current_config(self) -> str:
         command = f"kubectl get configmaps coredns -o json -n {self.namespace}"
-        config_map = self.execution.run_command(command, show_output=False)
+        config_map = self.execution.run_command(command)
         return config_map.log

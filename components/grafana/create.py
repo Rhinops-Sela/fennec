@@ -21,4 +21,4 @@ core_dns = CoreDNS(os.path.dirname(__file__))
 core_dns.add_records(f"{grafana_url}=grafana.monitoring.svc.cluster.local")
 partial_command = "kubectl get secret --namespace monitoring grafana -o jsonpath='{.data.admin-password}'"
 command = f"{partial_command} | base64 --decode > '{execution.output_folder}/grafana.out'2>&1"
-execution.run_command(command, show_output=False)
+execution.run_command(command)

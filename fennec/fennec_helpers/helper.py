@@ -63,7 +63,7 @@ class Helper:
 
     @staticmethod
     def print_log(content):{
-        print(f'{content}break_line') 
+        print(f'{content}\n') 
     }
 
     @staticmethod

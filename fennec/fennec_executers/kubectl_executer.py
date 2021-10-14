@@ -13,7 +13,7 @@ class Kubectl():
     def export_secret(self, secret_name: str, namespace: str, output_file_name: str, decode=False):
         command = f'kubectl get secret -n {namespace} --kubeconfig {self.execution.kube_config_file} | grep "{secret_name}"'
         all_secrets_str = self.execution.run_command(
-            command, show_output=False, kubeconfig=False).log.split("\n")
+            command, kubeconfig=False).log.split("\n")
         for secret in all_secrets_str:
             if not secret.rstrip(' '):
                 return
@@ -46,7 +46,7 @@ class Kubectl():
         command = f"kubectl get {object_kind} -n {namespace}"
         if output == 'json':
             command += " -o json"
-        result = self.execution.run_command(command, show_output=False).log
+        result = self.execution.run_command(command).log
         return Helper.json_to_object(result) if output == "json" else result
 
     def uninstall_folder(self, folder: str, base_folder:str="", namespace: str = ""):
@@ -73,7 +73,7 @@ class Kubectl():
 
     def __execute_file(self, file: str, namespace: str, verb: str):
         command = f"kubectl {verb} -f {file} -n {namespace}" if namespace else f"kubectl {verb} -f {file}"
-        self.execution.run_command(command,show_output=False)
+        self.execution.run_command(command)
 
     def __execute_folder(self, folder: str, namespace: str, install: bool):
         if install:

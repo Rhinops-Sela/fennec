@@ -15,15 +15,19 @@ class Nodegroup():
         if "NODEGROUP_NAME" in self.execution.local_parameters:
             self.nodegroup['name'] = self.execution.get_local_parameter(
                 "NODEGROUP_NAME")
+        else:
+            self.execution.local_parameters["NODEGROUP_NAME"] = self.nodegroup['name']
+
         self.template['metadata']['name'] = self.execution.cluster_name
         self.template['metadata']['region'] = self.execution.cluster_region
         self.__add_instance_types__()
 
     def create(self):
         nodegroups = self.execution.run_command(
-            f'eksctl get nodegroups --cluster {self.execution.cluster_name} --region {self.execution.cluster_region}',show_output=False)
+            f'eksctl get nodegroups --cluster {self.execution.cluster_name} --region {self.execution.cluster_region}')
         if self.execution.get_local_parameter("NODEGROUP_NAME") in nodegroups.log:
-            Helper.print_log(f'Node group already {self.execution.get_local_parameter("NODEGROUP_NAME")} exists, skipping')
+            Helper.print_log(
+                f'Node group already {self.execution.get_local_parameter("NODEGROUP_NAME")} exists, skipping')
             return True
         self.add_tags()
         self.__add_node_role()
