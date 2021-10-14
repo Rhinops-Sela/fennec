@@ -33,12 +33,8 @@ RUN cd $FENNEC_ROOT \
   && ls \
   && pip3 install $FENNEC_ROOT/
 
-RUN if echo "http://localhost" | grep -oP '(?<="backendUrl": ")[^"]*' '/usr/share/nginx/html/assets/config.json'; then \
-      sed -i '/backendUrl/c\  \"backendUrl\": \"$BACKEND_URL",' /usr/share/nginx/html/assets/config.json; \
-    fi
-RUN if echo "http://localhost:9090" | grep -oP '(?<="socketUrl": ")[^"]*' '/usr/share/nginx/html/assets/config.json'; then \
-      sed -i '/socketUrl/c\  \"socketUrl\": \"$SOCKET_URL",' /usr/share/nginx/html/assets/config.json; \
-    fi
+RUN sed -i '/backendUrl/c\  \"backendUrl\": \"$BACKEND_URL",' /usr/share/nginx/html/assets/config.json
+RUN sed -i '/socketUrl/c\  \"socketUrl\": \"$SOCKET_URL",' /usr/share/nginx/html/assets/config.json
 RUN echo "cat config.json" && cat /usr/share/nginx/html/assets/config.json
 
 #Exposing node port	
