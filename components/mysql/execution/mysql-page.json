@@ -1,0 +1,54 @@
+{
+  "name": "mysql",
+  "executer": "python",
+  "displayName": "MySQL",
+  "image": "assets/component_logos/mysql.png",
+  "description": "MySQL configuration & parameters",
+  "inputs": [
+    { "template": "skip-if-installed" },
+    {
+      "template": "spot",
+      "group_enabler_master": "use_spot",
+      "value": true
+    },
+    {
+      "template": "spot-on-demand-base-capacity",
+      "sub_group": "use_spot",
+      "value": "0"
+    },
+    {
+      "template": "spot-on-demand-cpacity",
+      "sub_group": "use_spot",
+      "value": "0"
+    },
+    {
+      "template": "spot-allocation",
+      "sub_group": "use_spot"
+    },
+    {
+      "template": "namespace"
+    },
+    {
+      "template": "password",
+      "serverValue": "MYSQL_ROOT_PASSWORD",
+      "displayName": "Root Password (default = fennec_root)",
+      "value": "fennec_root"
+    },
+    {
+      "template": "username",
+      "serverValue": "MYSQL_USERNAME",
+      "displayName": "Username",
+      "value": "fennec"
+    },
+    {
+      "template": "password",
+      "serverValue": "MYSQL_PASSWORD",
+      "displayName": "Password (default = fennec)",
+      "value": "fennec"
+    },
+    {
+      "template":"db-name",
+      "serverValue": "MYSQL_DB_NAME"
+    }
+  ]
+}

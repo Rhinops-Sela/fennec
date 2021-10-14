@@ -11,65 +11,65 @@ allow_skip = cluster.execution.get_local_parameter('SKIP_IF_EXISTS')
 if not cluster.check_if_cluster_exists() or not allow_skip:
     cluster.create()
 
-# Install cert-manager
-cert_manater_chart = Helm(os.path.dirname(__file__), "cert-manager")
-values_file_path = os.path.join(
-    cluster.execution.templates_folder, "05.cert-manager", "cert-manager_values.yaml")
-cert_manater_chart.install_chart(release_name="jetstack",  chart_url="https://charts.jetstack.io",
-                                 additional_values=[f"--values {values_file_path}"])
-cluster.install_folder(folder='05.cert-manager/kubectl',
-                       namespace="cert-manager")
-
-# Install HPA
-install_HPA = cluster.execution.get_local_parameter('INSTALL_CLUSTER_HPA')
-if install_HPA:
-    hpa_instsllation = os.path.join(
-        cluster.execution.templates_folder, "03.hpa", "hpa.yaml")
-    cluster.create_namespace("horizontal-pod-scaler")
-    cluster.install_file(hpa_instsllation, "horizontal-pod-scaler")
-
-# Install Cluster auto scaler
-install_cluster_autoscaler = cluster.execution.get_local_parameter(
-    'INSTALL_CLUSTER_AUTOSCALER')
-if install_cluster_autoscaler:
-    cluster_auto_scaler_chart = Helm(
-        os.path.dirname(__file__), "cluster-autoscaler")
+    # Install cert-manager
+    cert_manater_chart = Helm(os.path.dirname(__file__), "cert-manager")
     values_file_path = os.path.join(
-        cluster.execution.templates_folder, "04.cluster-autoscaler", "auto_scaler.yaml")
-    cluster_auto_scaler_chart.install_chart(release_name="stable", chart_url="https://charts.helm.sh/stable",
-                                            additional_values=[
-                                                f"--values {values_file_path}",
-                                                f"--set autoDiscovery.clusterName={cluster.execution.cluster_name}",
-                                                f"--set awsRegion={cluster.execution.cluster_region}",
-                                                "--version 7.0.0"
-                                            ])
-# Install Nginx Controller
-install_ingress_controller = cluster.execution.get_local_parameter(
-    'INSTALL_INGRESS_CONTROLER')
-if install_ingress_controller:
-    cluster.install_folder(folder="06.nginx")
+        cluster.execution.templates_folder, "05.cert-manager", "cert-manager_values.yaml")
+    cert_manater_chart.install_chart(release_name="jetstack",  chart_url="https://charts.jetstack.io",
+                                    additional_values=[f"--values {values_file_path}"])
+    cluster.install_folder(folder='05.cert-manager/kubectl',
+                        namespace="cert-manager")
 
-# Install Cluster dashboard
-install_cluster_dashboard = cluster.execution.get_local_parameter(
-    'INSTALL_CLUSTER_DASHBOARD')
-if install_cluster_dashboard:
-    values_file_path = os.path.join(
-        cluster.execution.templates_folder, "07.dashboard", "ingress.yaml")
-    values_file_path_execution = os.path.join(
-        cluster.execution.templates_folder, "07.dashboard", "ingress-execute.yaml")
-    user_url = cluster.execution.get_local_parameter('CLUSTER_DASHBOARD_URL')
-    values_to_replace = {'CLUSTER_DASHBOARD_URL': f'{user_url}'}
-    Helper.replace_in_file(
-        values_file_path, values_file_path_execution, values_to_replace, 100)
-    cluster.install_folder(folder="07.dashboard")
-    cluster.export_secret(secret_name="admin-user",
-                          namespace="kube-system",
-                          output_file_name="dashboard",
-                          decode=True)
-    ingress_address = cluster.get_ingress_address(
-        'kubernetes-dashboard-ingress', 'kubernetes-dashboard')
-    core_dns = CoreDNS(os.path.dirname(__file__))
-    core_dns.add_records(f"{user_url}={ingress_address}")
+    # Install HPA
+    install_HPA = cluster.execution.get_local_parameter('INSTALL_CLUSTER_HPA')
+    if install_HPA:
+        hpa_instsllation = os.path.join(
+            cluster.execution.templates_folder, "03.hpa", "hpa.yaml")
+        cluster.create_namespace("horizontal-pod-scaler")
+        cluster.install_file(hpa_instsllation, "horizontal-pod-scaler")
+
+    # Install Cluster auto scaler
+    install_cluster_autoscaler = cluster.execution.get_local_parameter(
+        'INSTALL_CLUSTER_AUTOSCALER')
+    if install_cluster_autoscaler:
+        cluster_auto_scaler_chart = Helm(
+            os.path.dirname(__file__), "cluster-autoscaler")
+        values_file_path = os.path.join(
+            cluster.execution.templates_folder, "04.cluster-autoscaler", "auto_scaler.yaml")
+        cluster_auto_scaler_chart.install_chart(release_name="stable", chart_url="https://charts.helm.sh/stable",
+                                                additional_values=[
+                                                    f"--values {values_file_path}",
+                                                    f"--set autoDiscovery.clusterName={cluster.execution.cluster_name}",
+                                                    f"--set awsRegion={cluster.execution.cluster_region}",
+                                                    "--version 7.0.0"
+                                                ])
+    # Install Nginx Controller
+    install_ingress_controller = cluster.execution.get_local_parameter(
+        'INSTALL_INGRESS_CONTROLER')
+    if install_ingress_controller:
+        cluster.install_folder(folder="06.nginx")
+
+    # Install Cluster dashboard
+    install_cluster_dashboard = cluster.execution.get_local_parameter(
+        'INSTALL_CLUSTER_DASHBOARD')
+    if install_cluster_dashboard:
+        values_file_path = os.path.join(
+            cluster.execution.templates_folder, "07.dashboard", "ingress.yaml")
+        values_file_path_execution = os.path.join(
+            cluster.execution.templates_folder, "07.dashboard", "ingress-execute.yaml")
+        user_url = cluster.execution.get_local_parameter('CLUSTER_DASHBOARD_URL')
+        values_to_replace = {'CLUSTER_DASHBOARD_URL': f'{user_url}'}
+        Helper.replace_in_file(
+            values_file_path, values_file_path_execution, values_to_replace, 100)
+        cluster.install_folder(folder="07.dashboard")
+        cluster.export_secret(secret_name="admin-user",
+                            namespace="kube-system",
+                            output_file_name="dashboard",
+                            decode=True)
+        ingress_address = cluster.get_ingress_address(
+            'kubernetes-dashboard-ingress', 'kubernetes-dashboard')
+        core_dns = CoreDNS(os.path.dirname(__file__))
+        core_dns.add_records(f"{user_url}={ingress_address}")
 
 template_path = os.path.join(
     cluster.execution.templates_folder, "08.openvpn", "vpn-ng-template.json")
@@ -85,4 +85,4 @@ openvpn_chart.install_chart(release_name="stable",
                             additional_values=[f"--values {values_file_path}"], timeout=600)
 keygen_script_path = os.path.join(vpn_working_folder,"keygen", "generate-client-key.sh")
 cluster.execution.run_command(
-    f'{keygen_script_path} "{cluster.execution.local_parameters["USERS"]}" openvpn openvpn {cluster.execution.output_folder} 2>&1')
+    f'{keygen_script_path} "{cluster.execution.local_parameters["USERS"]}" openvpn openvpn {cluster.execution.output_folder} 2>&1',show_output=False)

@@ -43,7 +43,8 @@
     "description": "Selection of databases to available in the cluster",
     "pages": [
       "redis-page",
-      "elasticsearch-page"
+      "elasticsearch-page",
+      "mysql-page"
     ]
   },
   {

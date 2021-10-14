@@ -15,9 +15,21 @@
     "debug": 0
   },
   "NAMESPACE": {
-    "debug": "dynamodb"
+    "debug": "mysql"
   },
-  "DYNAMOO_DNS_RECORD":{
-    "debug": "dynamodb.fennec.io"
+  "MYSQL_DNS_RECORD":{
+    "debug": "mysql.fennec.io"
+  },
+  "MYSQL_USERNAME":{
+    "debug": "fennec"
+  },
+  "MYSQL_PASSWORD":{
+    "debug": "fennec"
+  },
+  "MYSQL_ROOT_PASSWORD":{
+    "debug": "fennec-root"
+  },
+  "MYSQL_DB_NAME":{
+    "debug": "fennec"
   }
 }

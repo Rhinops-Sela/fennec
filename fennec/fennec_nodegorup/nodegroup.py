@@ -23,7 +23,7 @@ class Nodegroup():
         nodegroups = self.execution.run_command(
             f'eksctl get nodegroups --cluster {self.execution.cluster_name} --region {self.execution.cluster_region}',show_output=False)
         if self.execution.get_local_parameter("NODEGROUP_NAME") in nodegroups.log:
-            Helper.print_log("Node group already exists, skipping")
+            Helper.print_log(f'Node group already {self.execution.get_local_parameter("NODEGROUP_NAME")} exists, skipping')
             return True
         self.add_tags()
         self.__add_node_role()

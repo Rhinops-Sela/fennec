@@ -1,0 +1,31 @@
+{
+  "primary":{
+    "nodeSelector": {
+      "role": "mysql"
+    },
+    "tolerations": [
+      {
+        "key": "mysql",
+        "operator": "Equal",
+        "value": "true"
+      }
+    ],
+    "resources":{
+      "limits": {
+        "cpu": 3,
+        "memory": 7
+      }
+    }
+  },
+  "metrics": {
+    "enabled": true
+  },
+  "service": {
+    "type": "ClusterIP",
+    "edgeService": {
+      "name": "edge",
+      "targetPort": 4566,
+      "port": 80
+    }
+  }
+}

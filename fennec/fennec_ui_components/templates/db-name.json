@@ -1,0 +1,7 @@
+{
+  "controlType": "text",
+  "tooltip": "DB name to create",
+  "displayName": "DB Name",
+  "serverValue": "MYSQL_DB_NAME",
+  "regexValidation": ".*"
+}

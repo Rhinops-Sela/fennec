@@ -8,7 +8,6 @@ from fennec_executers.kubectl_executer import Kubectl
 
 execution = Execution(os.path.dirname(__file__))
 dynamodb_url = execution.get_local_parameter('DYNAMO_DNS_RECORD')
-dynamodb_url = execution.get_local_parameter('DYNAMO_DNS_RECORD')
 dynamodb_admin_url = execution.get_local_parameter('DYNAMO_ADMIN_DNS_RECORD')
 namespace = execution.get_local_parameter('NAMESPACE')
 template_path = os.path.join(
