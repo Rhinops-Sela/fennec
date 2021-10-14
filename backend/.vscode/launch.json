@@ -20,6 +20,8 @@
         "AWS_ACCESS_KEY_ID": "${env:FENNEC_AWS_ACCESS_KEY_ID}",
         "AWS_SECRET_ACCESS_KEY": "${env:FENNEC_AWS_SECRET_ACCESS_KEY}",
         "AWS_DEFAULT_REGION": "${env:FENNEC_AWS_DEFAULT_REGION}",
+        "CLUSTER_NAMES": "fennec,fennec-1",
+        "REGIONS": "eu-west-2,eu-west-1",
         "ADMIN_ARN": "arn:aws:iam::027065296145:user/iliag",
         "FENNEC_ROOT": "../fennec",
         "COMPONENTS_ROOT": "../components",
