@@ -70,7 +70,7 @@ class Helper:
     def write_connection_info(connection_info:str, output_folder:str):
         output_file = os.path.join(output_folder, "connection_info.info")
         f = open(output_file, "a+")
-        f.write(f'break_line{connection_info}')
+        f.write(f'\n{connection_info}')
         f.close()
 
     @staticmethod

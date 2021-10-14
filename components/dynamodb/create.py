@@ -51,7 +51,7 @@ core_dns.add_records(dns_records)
 
 connection_info = f'dynamodb: \naws dynamodb --endpoint-url=http://dynamodb-localstack.{namespace}.svc.cluster.local:4566 list-tables'
 if dns_records:
-    connection_info += f'\naws dynamodb -endpoint-url={dynamodb_record}:4566 dynamodb list-tables'
+    connection_info += f'\naws dynamodb -endpoint-url={dynamodb_url}:4566 dynamodb list-tables'
 connection_info += f'\nadmin - dynamodb-local-admin.{namespace}.svc.cluster.local'
 if dynamodb_admin_url:
     connection_info += f'\nadmin - {dynamodb_admin_url}'
