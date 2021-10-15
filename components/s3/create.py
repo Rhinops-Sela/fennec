@@ -9,8 +9,8 @@ from fennec_executers.kubectl_executer import Kubectl
 execution = Execution(os.path.dirname(__file__))
 s3_url = execution.get_local_parameter('S3_DNS_RECORD')
 namespace = execution.get_local_parameter('NAMESPACE')
-hostname = f"http://s3-localstack.{namespace}.svc.cluster.local:4566"
-external_hostname = f"http://sns-localstack.{namespace}:4566"
+hostname = f"http://s3-localstack.{namespace}.svc.cluster.local:80"
+external_hostname = f"http://sns-localstack.{namespace}:80"
 if s3_url:
     external_hostname = s3_url
 template_path = os.path.join(
@@ -41,7 +41,7 @@ core_dns = CoreDNS(os.path.dirname(__file__))
 
 core_dns.add_records(dns_records)
 
-connection_info = f's3: \naws s3 --endpoint-url=http://s3-localstack.{namespace}.svc.cluster.local:4566 ls'
+connection_info = f's3: \naws s3 --endpoint-url=http://s3-localstack.{namespace}.svc.cluster.local:80 ls'
 if dns_records:
-    connection_info += f'\naws s3 -endpoint-url={s3_url}:4566 s3 ls'
+    connection_info += f'\naws s3 -endpoint-url={s3_url}:80 s3 ls'
 Helper.write_connection_info(connection_info, execution.output_folder)

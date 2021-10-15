@@ -36,7 +36,7 @@ helm_chart.install_chart(release_name="localstack-charts",
                          additional_values=[f"--values {execution_file}"])
 core_dns = CoreDNS(os.path.dirname(__file__))
 core_dns.add_records(f"{sqs_url}=sqs-localstack.{namespace}.svc.cluster.local")
-connection_info = f'sqs: \naws --endpoint-url=http://sqs-localstack.{namespace}.svc.cluster.local:4566 sqs create-queue --queue-name fennec'
+connection_info = f'sqs: \naws --endpoint-url=http://sqs-localstack.{namespace}.svc.cluster.local:80 sqs create-queue --queue-name fennec'
 if sqs_url:
-    connection_info += f'\naws --endpoint-url={sqs_url}:4566 sqs create-queue --queue-name fennec'
+    connection_info += f'\naws --endpoint-url={sqs_url}:80 sqs create-queue --queue-name fennec'
 Helper.write_connection_info(connection_info, execution.output_folder)
