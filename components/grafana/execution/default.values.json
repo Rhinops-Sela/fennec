@@ -1,8 +1,0 @@
-{
-  "SKIP_IF_EXISTS": {
-    "debug": true
-  },
-  "GRAFANA_DNS_RECORD": {
-    "debug": "grafana.fennec.io"
-  }
-}

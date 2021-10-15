@@ -1,0 +1,37 @@
+{
+  "name": "s3",
+  "executer": "python",
+  "displayName": "S3",
+  "image": "assets/component_logos/s3.png",
+  "description": "S3 configuration & parameters",
+  "inputs": [
+    { "template": "skip-if-installed" },
+    {
+      "template": "spot",
+      "group_enabler_master": "use_spot",
+      "value": true
+    },
+    {
+      "template": "spot-on-demand-base-capacity",
+      "sub_group": "use_spot",
+      "value": "0"
+    },
+    {
+      "template": "spot-on-demand-cpacity",
+      "sub_group": "use_spot",
+      "value": "0"
+    },
+    {
+      "template": "spot-allocation",
+      "sub_group": "use_spot"
+    },
+    {
+      "template": "namespace"
+    },
+    {
+      "template": "dns-entry",
+      "serverValue": "S3_DNS_RECORD",
+      "displayName": "S3 DNS Record"
+    }
+  ]
+}

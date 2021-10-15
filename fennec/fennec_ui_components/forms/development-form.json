@@ -15,6 +15,7 @@
     "pages": [
       "dynamodb-page",
       "sqs-page",
+      "s3-page",
       "sns-page",
       "lambda-page"
     ]
@@ -24,8 +25,6 @@
     "description": "Configuration & Parameters for monitoring the cluster",
     "displayName": "Monitoring",
     "pages": [
-      "grafana-page",
-      "prometheus-page",
       "datadog-page"
     ]
   },

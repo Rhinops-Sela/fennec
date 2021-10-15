@@ -1,0 +1,30 @@
+{
+  "extraEnvVars": [
+    {
+      "name": "DEFAULT_REGION",
+      "value": "eu-west-2"
+    },
+    {
+      "name": "SERVICES",
+      "value": "S3"
+    }
+  ],
+  "nodeSelector": {
+    "role": "S3"
+  },
+  "tolerations": [
+    {
+      "key": "S3",
+      "operator": "Equal",
+      "value": "true"
+    }
+  ],
+  "service": {
+    "type": "ClusterIP",
+    "edgeService": {
+      "name": "edge",
+      "targetPort": 4566,
+      "port": 80
+    }
+  }
+}
