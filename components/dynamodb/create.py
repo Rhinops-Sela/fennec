@@ -10,6 +10,11 @@ execution = Execution(os.path.dirname(__file__))
 dynamodb_url = execution.get_local_parameter('DYNAMO_DNS_RECORD')
 dynamodb_admin_url = execution.get_local_parameter('DYNAMO_ADMIN_DNS_RECORD')
 namespace = execution.get_local_parameter('NAMESPACE')
+hostname = f"http://sns-localstack.{namespace}.svc.cluster.local:4566"
+external_hostname = f"http://sns-localstack.{namespace}:4566"
+if dynamodb_url:
+    external_hostname = dynamodb_url
+
 template_path = os.path.join(
     execution.templates_folder, "dynamodb-ng-template.json")
 nodegroup = Nodegroup(os.path.dirname(__file__), template_path)
@@ -21,7 +26,9 @@ values_file_path = os.path.join(
     execution.execution_folder, "values.json")
 
 values_file_object = Helper.file_to_object(values_file_path)
-values_file_object['extraEnvVars'][0]['value'] = helm_chart.execution.cluster_region
+values_file_object['extraEnvVars'][1]['value'] = external_hostname
+values_file_object['extraEnvVars'][2]['value'] = hostname
+values_file_object['extraEnvVars'][3]['value'] = helm_chart.execution.cluster_region
 execution_file = os.path.join(
     os.path.dirname(__file__), "dynamodb-execute.values.json")
 Helper.to_json_file(values_file_object, execution_file)
@@ -44,7 +51,8 @@ ui_deployment_template_output = os.path.join(
     kubectl.execution.templates_folder, "admin", "01.deployment-execute.json")
 Helper.replace_in_file(
     ui_deployment_template, ui_deployment_template_output, values_to_replace)
-kubectl.install_folder("admin", execution.templates_folder, namespace=namespace)
+kubectl.install_folder(
+    "admin", execution.templates_folder, namespace=namespace)
 
 core_dns.add_records(dns_records)
 
@@ -55,4 +63,3 @@ connection_info += f'\nadmin - dynamodb-local-admin.{namespace}.svc.cluster.loca
 if dynamodb_admin_url:
     connection_info += f'\nadmin - {dynamodb_admin_url}'
 Helper.write_connection_info(connection_info, execution.output_folder)
-

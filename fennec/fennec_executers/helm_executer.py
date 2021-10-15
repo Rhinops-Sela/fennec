@@ -23,7 +23,7 @@ class Helm(Kubectl):
             f"chart: {self.chart_name} in namespace: {self.namespace_name} not installed")
         return False
 
-    def install_chart(self, release_name: str, chart_url: str = "", additional_values=[], timeout=300, deployment_name = "", allow_skip=True):
+    def install_chart(self, release_name: str, chart_url: str = "", additional_values=[], timeout=300, deployment_name = "", allow_skip=True, show_output=False):
         if self.installed and self.execution.get_local_parameter('SKIP_IF_EXISTS') and allow_skip:
             Helper.print_log("Chart alredy installed - skipping")
             return True
@@ -37,9 +37,9 @@ class Helm(Kubectl):
             deployment_name = self.chart_name
         self.execution.run_command("helm repo update")
         self.create_namespace(self.namespace_name)
-        install_command = f"helm {verb} --wait --timeout {timeout}s {deployment_name} {release_name}/{self.chart_name} -n {self.namespace_name} {self.combine_additoinal_values(additional_values)}"
+        install_command = f"helm {verb} --wait --debug --timeout {timeout}s {deployment_name} {release_name}/{self.chart_name} -n {self.namespace_name} {self.combine_additoinal_values(additional_values)}"
         Helper.print_log("Installing Chart")
-        self.execution.run_command(install_command)
+        self.execution.run_command(install_command,show_output=show_output)
 
     def uninstall_chart(self, delete_namespace=False):
         if self.installed:

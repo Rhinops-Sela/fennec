@@ -1,5 +1,20 @@
 {
+  "persistence": {
+    "enabled": true
+  },
   "extraEnvVars": [
+    {
+      "name": "EDGE_PORT",
+      "value": "80"
+    },
+    {
+      "name": "HOSTNAME_EXTERNAL",
+      "value": "HOSTNAME_EXTERNAL"
+    },
+    {
+      "name": "HOSTNAME",
+      "value": "HOSTNAME"
+    },
     {
       "name": "DEFAULT_REGION",
       "value": "eu-west-2"
@@ -10,11 +25,11 @@
     }
   ],
   "nodeSelector": {
-    "role": "S3"
+    "role": "s3"
   },
   "tolerations": [
     {
-      "key": "S3",
+      "key": "s3",
       "operator": "Equal",
       "value": "true"
     }

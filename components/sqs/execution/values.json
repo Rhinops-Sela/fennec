@@ -1,5 +1,20 @@
 {
+  "persistence": {
+    "enabled": true
+  },
   "extraEnvVars": [
+    {
+      "name": "EDGE_PORT",
+      "value": "80"
+    },
+    {
+      "name": "HOSTNAME_EXTERNAL",
+      "value": "HOSTNAME_EXTERNAL"
+    },
+    {
+      "name": "HOSTNAME",
+      "value": "HOSTNAME"
+    },
     {
       "name": "DEFAULT_REGION",
       "value": "eu-west-2"
@@ -23,7 +38,7 @@
     "type": "ClusterIP",
     "edgeService": {
       "name": "edge",
-      "targetPort": 4566,
+      "targetPort": 80,
       "port": 80
     }
   }

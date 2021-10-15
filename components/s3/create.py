@@ -9,6 +9,10 @@ from fennec_executers.kubectl_executer import Kubectl
 execution = Execution(os.path.dirname(__file__))
 s3_url = execution.get_local_parameter('S3_DNS_RECORD')
 namespace = execution.get_local_parameter('NAMESPACE')
+hostname = f"http://s3-localstack.{namespace}.svc.cluster.local:4566"
+external_hostname = f"http://sns-localstack.{namespace}:4566"
+if s3_url:
+    external_hostname = s3_url
 template_path = os.path.join(
     execution.templates_folder, "s3-ng-template.json")
 nodegroup = Nodegroup(os.path.dirname(__file__), template_path)
@@ -20,7 +24,9 @@ values_file_path = os.path.join(
     execution.execution_folder, "values.json")
 
 values_file_object = Helper.file_to_object(values_file_path)
-values_file_object['extraEnvVars'][0]['value'] = helm_chart.execution.cluster_region
+values_file_object['extraEnvVars'][1]['value'] = external_hostname
+values_file_object['extraEnvVars'][2]['value'] = hostname
+values_file_object['extraEnvVars'][3]['value'] = helm_chart.execution.cluster_region
 execution_file = os.path.join(
     os.path.dirname(__file__), "s3-execute.values.json")
 Helper.to_json_file(values_file_object, execution_file)
@@ -39,4 +45,3 @@ connection_info = f's3: \naws s3 --endpoint-url=http://s3-localstack.{namespace}
 if dns_records:
     connection_info += f'\naws s3 -endpoint-url={s3_url}:4566 s3 ls'
 Helper.write_connection_info(connection_info, execution.output_folder)
-
