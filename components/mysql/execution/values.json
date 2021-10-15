@@ -1,5 +1,5 @@
 {
-  "primary":{
+  "primary": {
     "nodeSelector": {
       "role": "mysql"
     },
@@ -10,7 +10,7 @@
         "value": "true"
       }
     ],
-    "resources":{
+    "resources": {
       "limits": {
         "cpu": 3,
         "memory": "6Gi"
@@ -23,13 +23,5 @@
   },
   "metrics": {
     "enabled": true
-  },
-  "service": {
-    "type": "ClusterIP",
-    "edgeService": {
-      "name": "edge",
-      "targetPort": 4566,
-      "port": 80
-    }
   }
 }
