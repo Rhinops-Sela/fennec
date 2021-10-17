@@ -1,5 +1,5 @@
 {
-  "auth":{
+  "auth": {
     "enabled": false
   },
   "master": {
@@ -23,5 +23,8 @@
     "nodeSelector": {
       "role": "redis"
     }
+  },
+  "networkPolicy": {
+    "enabled": true
   }
 }

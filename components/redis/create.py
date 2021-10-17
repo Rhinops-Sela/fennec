@@ -18,6 +18,9 @@ values_file_path = os.path.join(
     execution.execution_folder, "values.json")
 
 values_file_object = Helper.file_to_object(values_file_path)
+# if helm_chart.execution.domain_name:
+#     values_file_object['master']['hostAliases'][0] = f'dynamodb-{namespace}.{helm_chart.execution.domain_name}'
+
 # values_file_object['master']['extraFlags'] = str(execution.get_local_parameter('EXTRA_FLAGS']).split(',')
 # values_file_object['cluster']['slaveCount'] = execution.get_local_parameter('NUMBER_SLAVES']
 
