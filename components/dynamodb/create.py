@@ -29,9 +29,9 @@ values_file_object = Helper.file_to_object(values_file_path)
 values_file_object['extraEnvVars'][1]['value'] = external_hostname
 values_file_object['extraEnvVars'][2]['value'] = hostname
 values_file_object['extraEnvVars'][3]['value'] = helm_chart.execution.cluster_region
-if helm_chart.execution.get_local_parameter("DOMAIN_NAME"):
+if helm_chart.execution.domain_name:
     values_file_object['ingress']['enabled'] = True
-    values_file_object['ingress']['hosts'][0]['host'] = f'dynamodb-{namespace}.{helm_chart.execution.get_local_parameter("DOMAIN_NAME")}'
+    values_file_object['ingress']['hosts'][0]['host'] = f'dynamodb-{namespace}.{helm_chart.execution.domain_name}'
 
 execution_file = os.path.join(
     os.path.dirname(__file__), "dynamodb-execute.values.json")
@@ -41,10 +41,6 @@ helm_chart.install_chart(release_name="localstack-charts",
                          chart_url="https://localstack.github.io/helm-charts",
                          deployment_name="dynamodb",
                          additional_values=[f"--values {execution_file}"])
-dynamodb_record = f"{dynamodb_url}=dynamodb-localstack.{namespace}.svc.cluster.local"
-admin_record = f"{dynamodb_admin_url}=dynamodb-local-admin.{nodegroup.execution.get_local_parameter('NAMESPACE')}.svc.cluster.local"
-dns_records = f"{admin_record};{dynamodb_record}"
-core_dns = CoreDNS(os.path.dirname(__file__))
 
 kubectl = Kubectl(os.path.dirname(__file__))
 values_to_replace = {
@@ -58,11 +54,8 @@ Helper.replace_in_file(
 kubectl.install_folder(
     "admin", execution.templates_folder, namespace=namespace)
 
-core_dns.add_records(dns_records)
 
 connection_info = f'dynamodb: \naws dynamodb --endpoint-url=http://dynamodb-localstack.{namespace}.svc.cluster.local:4566 list-tables'
-if dns_records:
-    connection_info += f'\naws dynamodb -endpoint-url={dynamodb_url}:4566 dynamodb list-tables'
 connection_info += f'\nadmin - dynamodb-local-admin.{namespace}.svc.cluster.local'
 if dynamodb_admin_url:
     connection_info += f'\nadmin - {dynamodb_admin_url}'

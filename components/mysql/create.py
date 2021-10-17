@@ -1,5 +1,4 @@
 import os
-from fennec_core_dns.core_dns import CoreDNS
 from fennec_executers.helm_executer import Helm
 from fennec_execution.execution import Execution
 from fennec_helpers.helper import Helper
@@ -34,13 +33,5 @@ helm_chart.install_chart(release_name="bitnami",
                              --set auth.password={password} \
                              --set auth.database={database}"])
 mysql_record = f"{mysql_url}=mysql-localstack.{namespace}.svc.cluster.local"
-dns_records = f"{mysql_record}"
-core_dns = CoreDNS(os.path.dirname(__file__))
-
-core_dns.add_records(dns_records)
-
 connection_info = f'mysql: \n mysql.{namespace}.svc.cluster.local:3306\DB name: {database}\nusername: {username}\nroot password:{root_password}\npassword:{password}'
-if dns_records:
-    connection_info += f'\n{mysql_url}:3306'
-
 Helper.write_connection_info(connection_info, execution.output_folder)

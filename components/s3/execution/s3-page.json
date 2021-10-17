@@ -27,11 +27,6 @@
     },
     {
       "template": "namespace"
-    },
-    {
-      "template": "dns-entry",
-      "serverValue": "S3_DNS_RECORD",
-      "displayName": "S3 DNS Record"
     }
   ]
 }

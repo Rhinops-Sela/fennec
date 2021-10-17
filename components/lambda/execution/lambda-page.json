@@ -27,11 +27,6 @@
     },
     {
       "template": "namespace"
-    },
-    {
-      "template": "dns-entry",
-      "displayName": "Lambda Dns Record",
-      "serverValue": "LAMBDA_DNS_RECORD"
     }
   ]
 }

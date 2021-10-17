@@ -1,5 +1,4 @@
 import os
-from fennec_core_dns.core_dns import CoreDNS
 from fennec_executers.helm_executer import Helm
 from fennec_execution.execution import Execution
 from fennec_helpers.helper import Helper
@@ -27,5 +26,3 @@ helm_chart.install_chart(release_name="localstack-charts",
                                   chart_url="https://localstack.github.io/helm-charts",
                                   deployment_name="lambda",
                                   additional_values=[f"--values {execution_file}"])
-core_dns = CoreDNS(os.path.dirname(__file__))
-core_dns.add_records(f"{lambda_url}=lambda-localstack.{namespace}.svc.cluster.local")

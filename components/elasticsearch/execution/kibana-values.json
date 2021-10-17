@@ -12,9 +12,22 @@
     "role": "elk"
   },
   "kibanaConfig": {
-    "kibana.yml": "monitoring.enabled: false"
+    "kibana.yml": "monitoring.enabled: true"
   },
   "service":{
     "port": 80
+  },
+  "ingress": {
+    "enabled":false,
+    "hosts": [
+      {
+        "host": "HOSTNAME",
+        "paths": [
+          {
+            "path": "/"
+          }
+        ]
+      }
+    ]
   }
 }

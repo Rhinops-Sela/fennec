@@ -29,7 +29,3 @@ kafka_chart.install_chart(release_name="bitnami",
                                   chart_url="https://charts.bitnami.com/bitnami",
                                   additional_values=[f"--values {execution_file}"], 
                                   timeout = 360)
-core_dns = CoreDNS(os.path.dirname(__file__))
-core_dns.add_records(f"{kafka_url}=kafka-headless.{namespace}.svc.cluster.local")
-if execution.get_local_parameter('INSTALL_ZOOKEEPER'):                                  
-    core_dns.add_records(f"{zookeeper_url}=kafka-zookeeper-headless.{namespace}.svc.cluster.local")

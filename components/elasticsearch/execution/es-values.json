@@ -15,5 +15,18 @@
          "operator": "Equal",
          "value": "true"
       }
-   ]
+   ],
+   "ingress": {
+     "enabled":false,
+     "hosts": [
+       {
+         "host": "HOSTNAME",
+         "paths": [
+           {
+             "path": "/"
+           }
+         ]
+       }
+     ]
+   }
 }

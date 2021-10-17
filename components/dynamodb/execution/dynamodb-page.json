@@ -27,16 +27,6 @@
     },
     {
       "template": "namespace"
-    },
-    {
-      "template": "dns-entry",
-      "serverValue": "DYNAMO_DNS_RECORD",
-      "displayName": "DynamoDb DNS Record"
-    },
-    {
-      "template": "dns-entry",
-      "serverValue": "DYNAMO_ADMIN_DNS_RECORD",
-      "displayName": "DynamoDb Admin DNS Record"
     }
   ]
 }

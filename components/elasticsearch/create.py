@@ -19,6 +19,10 @@ values_file_path = os.path.join(
 values_file_object = Helper.file_to_object(values_file_path)
 values_file_object['replicas'] = execution.get_local_parameter('REPLICAS')
 values_file_object['minimumMasterNodes'] = execution.get_local_parameter('NUMBER_MASTERS')
+if elasticsearch_chart.execution.domain_name:
+    values_file_object['ingress']['enabled'] = True
+    values_file_object['ingress']['hosts'][0]['host'] = f'es-{namespace}.{elasticsearch_chart.execution.domain_name}'
+
 execution_file = os.path.join(
     os.path.dirname(__file__), "elasticsearch-execute.values.json")
 Helper.to_json_file(values_file_object, execution_file)
@@ -26,8 +30,8 @@ elasticsearch_chart.install_chart(release_name="elastic",
                                   chart_url="https://helm.elastic.co",
                                   additional_values=[f"--values {execution_file}"], 
                                   timeout = 360)
-core_dns = CoreDNS(os.path.dirname(__file__))
-core_dns.add_records(f"{es_url}=elasticsearch-master.{namespace}.svc.cluster.local")
+#core_dns = CoreDNS(os.path.dirname(__file__))
+#core_dns.add_records(f"{es_url}=elasticsearch-master.{namespace}.svc.cluster.local")
 
 if execution.get_local_parameter('INSTALL_KIBANA'):
     kibana_chart = Helm(os.path.dirname(__file__), namespace, "kibana")
@@ -37,10 +41,13 @@ if execution.get_local_parameter('INSTALL_KIBANA'):
     values_file_object = Helper.file_to_object(values_file_path)
     values_file_object[
         'elasticsearchHosts'] = f"http://elasticsearch-master-headless:9200"
+    if kibana_chart.execution.domain_name:
+        values_file_object['ingress']['enabled'] = True
+        values_file_object['ingress']['hosts'][0]['host'] = f'kibana-{namespace}.{elasticsearch_chart.execution.domain_name}'
     execution_file = os.path.join(
         os.path.dirname(__file__), "kibana-execute.values.json")
     Helper.to_json_file(values_file_object, execution_file)
     kibana_chart.install_chart(release_name="elastic",
                                       chart_url="https://helm.elastic.co",
                                       additional_values=[f"--values {execution_file}"])
-    core_dns.add_records(f"{kibana_url}=kibana-kibana.{namespace}.svc.cluster.local")
+    #core_dns.add_records(f"{kibana_url}=kibana-kibana.{namespace}.svc.cluster.local")

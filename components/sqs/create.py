@@ -1,5 +1,4 @@
 import os
-from fennec_core_dns.core_dns import CoreDNS
 from fennec_executers.helm_executer import Helm
 from fennec_execution.execution import Execution
 from fennec_helpers.helper import Helper
@@ -26,9 +25,11 @@ values_file_object = Helper.file_to_object(values_file_path)
 values_file_object['extraEnvVars'][1]['value'] = external_hostname
 values_file_object['extraEnvVars'][2]['value'] = hostname
 values_file_object['extraEnvVars'][3]['value'] = helm_chart.execution.cluster_region
-if helm_chart.execution.get_local_parameter("DOMAIN_NAME"):
+if helm_chart.execution.domain_name:
+    ingress=f'sqs-{namespace}.{helm_chart.execution.domain_name}'
+    Helper.print_log(f"Adding Ingress: {ingress}")
     values_file_object['ingress']['enabled'] = True
-    values_file_object['ingress']['hosts'][0]['host'] = f'sqs-{namespace}.{helm_chart.execution.get_local_parameter("DOMAIN_NAME")}'
+    values_file_object['ingress']['hosts'][0]['host'] = ingress
 
 execution_file = os.path.join(
     os.path.dirname(__file__), "sqs-execute.values.json")
@@ -38,8 +39,6 @@ helm_chart.install_chart(release_name="localstack-charts",
                          chart_url="https://localstack.github.io/helm-charts",
                          deployment_name="sqs",
                          additional_values=[f"--values {execution_file}"])
-core_dns = CoreDNS(os.path.dirname(__file__))
-core_dns.add_records(f"{sqs_url}=sqs-localstack.{namespace}.svc.cluster.local")
 connection_info = f'sqs: \naws --endpoint-url=http://sqs-localstack.{namespace}.svc.cluster.local:4566 sqs create-queue --queue-name fennec'
 if sqs_url:
     connection_info += f'\naws --endpoint-url={sqs_url}:4566 sqs create-queue --queue-name fennec'

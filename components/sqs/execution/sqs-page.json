@@ -27,11 +27,6 @@
     },
     {
       "template": "namespace"
-    },
-    {
-      "template": "dns-entry",
-      "displayName": "SQS Dns Record",
-      "serverValue": "SQS_DNS_RECORD"
     }
   ]
 }

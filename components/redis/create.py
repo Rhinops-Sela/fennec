@@ -1,5 +1,4 @@
 import os
-from fennec_core_dns.core_dns import CoreDNS
 from fennec_executers.helm_executer import Helm
 from fennec_execution.execution import Execution
 from fennec_helpers.helper import Helper
@@ -33,8 +32,6 @@ Helper.to_json_file(values_file_object, execution_file)
 helm_chart.install_chart(release_name="bitnami",
                                   chart_url="https://charts.bitnami.com/bitnami",
                                   additional_values=[f"--values {execution_file}"])
-core_dns = CoreDNS(os.path.dirname(__file__))
-core_dns.add_records(f"{redis_url}=redis-headless.{namespace}.svc.cluster.local;{redis_admin_url}=redis-ui.{namespace}.svc.cluster.local")
 
 ui_foler = os.path.join(execution.execution_folder, 'ui')
 admin_deployment = os.path.join(ui_foler, 'deployment.json')

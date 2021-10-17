@@ -31,6 +31,10 @@ class Execution:
         return False if os.getenv('API_USER') else True
 
     @property
+    def domain_name(self):
+        return self.global_parameters["DOMAIN_NAME"]
+
+    @property
     def execution_folder(self):
         return os.path.join(self.working_folder, "execution")
 

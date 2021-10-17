@@ -41,12 +41,6 @@
       "serverValue": "BROKERS"
     },
     {
-      "template": "dns-entry",
-      "tooltip": "Url to used for access to the Kafka",
-      "displayName": "Kafka DNS Record",
-      "serverValue": "KAFKA_DNS_RECORD"
-    },
-    {
       "controlType": "checkbox",
       "group_enabler_master": "zookeeper_installer",
       "tooltip": "Install Zookeeper",
@@ -58,13 +52,6 @@
       "template": "image_tag",
       "serverValue": "ZOOKEEPR_IMAGE_TAG",
       "sub_group": "zookeeper_installer"
-    },
-    {
-      "template": "dns-entry",
-      "sub_group": "zookeeper_installer",
-      "tooltip": "Url to used for access to Kafka Zookeeper",
-      "displayName": "Zookeeper DNS Record",
-      "serverValue": "ZOOKEEPER_DNS_RECORD"
     }
   ]
 }
