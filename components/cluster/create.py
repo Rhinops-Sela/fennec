@@ -8,7 +8,8 @@ from fennec_nodegorup.nodegroup import Nodegroup
 
 cluster = Cluster(os.path.dirname(__file__))
 allow_skip = cluster.execution.get_local_parameter('SKIP_IF_EXISTS')
-vpn_working_folder = os.path.join(cluster.execution.templates_folder,"08.openvpn")
+vpn_working_folder = os.path.join(
+    cluster.execution.templates_folder, "08.openvpn")
 if not cluster.check_if_cluster_exists() or not allow_skip:
     cluster.create()
 
@@ -17,9 +18,9 @@ if not cluster.check_if_cluster_exists() or not allow_skip:
     values_file_path = os.path.join(
         cluster.execution.templates_folder, "05.cert-manager", "cert-manager_values.yaml")
     cert_manater_chart.install_chart(release_name="jetstack",  chart_url="https://charts.jetstack.io",
-                                    additional_values=[f"--values {values_file_path}"])
+                                     additional_values=[f"--values {values_file_path}"])
     cluster.install_folder(folder='05.cert-manager/kubectl',
-                        namespace="cert-manager")
+                           namespace="cert-manager")
 
     # Install HPA
     install_HPA = cluster.execution.get_local_parameter('INSTALL_CLUSTER_HPA')
@@ -58,15 +59,16 @@ if not cluster.check_if_cluster_exists() or not allow_skip:
             cluster.execution.templates_folder, "07.dashboard", "ingress.yaml")
         values_file_path_execution = os.path.join(
             cluster.execution.templates_folder, "07.dashboard", "ingress-execute.yaml")
-        user_url = cluster.execution.get_local_parameter('CLUSTER_DASHBOARD_URL')
+        user_url = cluster.execution.get_local_parameter(
+            'CLUSTER_DASHBOARD_URL')
         values_to_replace = {'CLUSTER_DASHBOARD_URL': f'{user_url}'}
         Helper.replace_in_file(
             values_file_path, values_file_path_execution, values_to_replace, 100)
         cluster.install_folder(folder="07.dashboard")
         cluster.export_secret(secret_name="admin-user",
-                            namespace="kube-system",
-                            output_file_name="dashboard",
-                            decode=True)
+                              namespace="kube-system",
+                              output_file_name="dashboard",
+                              decode=True)
         ingress_address = cluster.get_ingress_address(
             'kubernetes-dashboard-ingress', 'kubernetes-dashboard')
         core_dns = CoreDNS(os.path.dirname(__file__))
@@ -78,11 +80,24 @@ if not cluster.check_if_cluster_exists() or not allow_skip:
         nodegroup.create()
         openvpn_chart = Helm(os.path.dirname(__file__), "openvpn")
         values_file_path = os.path.join(
-            cluster.execution.templates_folder,"08.openvpn", "values.yaml")
+            cluster.execution.templates_folder, "08.openvpn", "values.yaml")
         openvpn_chart.create_namespace("openvpn")
-        openvpn_chart.install_file(file=os.path.join(vpn_working_folder,"prerequisites", "openvpn-pv-claim.yaml"), namespace="openvpn")
+        openvpn_chart.install_file(file=os.path.join(
+            vpn_working_folder, "prerequisites", "openvpn-pv-claim.yaml"), namespace="openvpn")
         openvpn_chart.install_chart(release_name="stable",
                                     additional_values=[f"--values {values_file_path}"], timeout=600)
-keygen_script_path = os.path.join(vpn_working_folder,"keygen", "generate-client-key.sh")
+# Install External DNS
+install_cluster_exgternal_dns = cluster.execution.get_local_parameter('ROUTE_53_ZONE_ID')
+if install_cluster_exgternal_dns:
+    Helper.print_log("Will deploy external DNS component")
+    deployment_file = os.path.join(
+        cluster.execution.templates_folder, "09.external_dns", "deployment.yaml")
+    deployment_file_execution = os.path.join(
+        cluster.execution.templates_folder, "09.external_dns", "deployment_execution.yaml")
+    Helper.replace_in_file(deployment_file, deployment_file_execution, {
+        'CLUSTER_NAME': f'{cluster.execution.cluster_name}'})
+    cluster.install_file(deployment_file_execution, namespace='external-dns')
+keygen_script_path = os.path.join(
+    vpn_working_folder, "keygen", "generate-client-key.sh")
 cluster.execution.run_command(
     f'{keygen_script_path} "{cluster.execution.local_parameters["USERS"]}" openvpn openvpn {cluster.execution.output_folder} 2>&1')

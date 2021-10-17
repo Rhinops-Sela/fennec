@@ -1,4 +1,8 @@
 {
+  "ROUTE_53_ZONE_ID": {
+    "debug": "Z09854781EPH1KKIXJ848",
+    "global": true
+  },
   "FENNEC_OUTPUTS_FOLDER": {
     "debug": "",
     "global": true

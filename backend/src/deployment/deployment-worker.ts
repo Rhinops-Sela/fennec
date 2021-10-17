@@ -123,6 +123,10 @@ export class DeploymentExecuter {
           variableName: "FENNEC_OUTPUTS_FOLDER",
           variableValue: this.output_folder,
         });
+        this.globalVariables.push({
+          variableName: "ROUTE_53_ZONE_ID",
+          variableValue: process.env.ROUTE_53_ZONE_ID || "",
+        });
         for (let input of page.inputs) {
           if (input.global) {
             this.globalVariables.push({

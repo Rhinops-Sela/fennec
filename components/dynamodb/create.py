@@ -10,8 +10,8 @@ execution = Execution(os.path.dirname(__file__))
 dynamodb_url = execution.get_local_parameter('DYNAMO_DNS_RECORD')
 dynamodb_admin_url = execution.get_local_parameter('DYNAMO_ADMIN_DNS_RECORD')
 namespace = execution.get_local_parameter('NAMESPACE')
-hostname = f"http://sns-localstack.{namespace}.svc.cluster.local:80"
-external_hostname = f"http://sns-localstack.{namespace}:80"
+hostname = f"http://sns-localstack.{namespace}.svc.cluster.local:4566"
+external_hostname = f"http://sns-localstack.{namespace}:4566"
 if dynamodb_url:
     external_hostname = dynamodb_url
 
@@ -56,9 +56,9 @@ kubectl.install_folder(
 
 core_dns.add_records(dns_records)
 
-connection_info = f'dynamodb: \naws dynamodb --endpoint-url=http://dynamodb-localstack.{namespace}.svc.cluster.local:80 list-tables'
+connection_info = f'dynamodb: \naws dynamodb --endpoint-url=http://dynamodb-localstack.{namespace}.svc.cluster.local:4566 list-tables'
 if dns_records:
-    connection_info += f'\naws dynamodb -endpoint-url={dynamodb_url}:80 dynamodb list-tables'
+    connection_info += f'\naws dynamodb -endpoint-url={dynamodb_url}:4566 dynamodb list-tables'
 connection_info += f'\nadmin - dynamodb-local-admin.{namespace}.svc.cluster.local'
 if dynamodb_admin_url:
     connection_info += f'\nadmin - {dynamodb_admin_url}'

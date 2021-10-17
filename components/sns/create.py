@@ -8,8 +8,8 @@ from fennec_nodegorup.nodegroup import Nodegroup
 execution = Execution(os.path.dirname(__file__))
 namespace = execution.get_local_parameter('NAMESPACE')
 sns_url = execution.get_local_parameter('SNS_DNS_RECORD')
-hostname = f"http://sns-localstack.{namespace}.svc.cluster.local:80"
-external_hostname = f"http://sns-localstack.{namespace}:80"
+hostname = f"http://sns-localstack.{namespace}.svc.cluster.local:4566"
+external_hostname = f"http://sns-localstack.{namespace}:4566"
 if sns_url:
     external_hostname = sns_url
 
@@ -37,7 +37,7 @@ helm_chart.install_chart(release_name="localstack-charts",
                          additional_values=[f"--values {execution_file}"])
 core_dns = CoreDNS(os.path.dirname(__file__))
 core_dns.add_records(f"{sns_url}=sns-localstack.{namespace}.svc.cluster.local")
-connection_info = f'sns: \naws --endpoint-url=http://sns-localstack.{namespace}.svc.cluster.local:80 sns list-topics'
+connection_info = f'sns: \naws --endpoint-url=http://sns-localstack.{namespace}.svc.cluster.local:4566 sns list-topics'
 if execution.get_local_parameter('SNS_DNS_RECORD'):
-    connection_info += f'\naws --endpoint-url={execution.get_local_parameter("SNS_DNS_RECORD")}:80 sns list-topics'
+    connection_info += f'\naws --endpoint-url={execution.get_local_parameter("SNS_DNS_RECORD")}:4566 sns list-topics'
 Helper.write_connection_info(connection_info, execution.output_folder)

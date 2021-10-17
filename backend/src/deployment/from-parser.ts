@@ -56,11 +56,17 @@ export class FormParser {
           input[templateKey] = loadedTemplateObj[templateKey];
         }
       }
-      if(input['serverValue'] == "CLUSTER_NAME"){
-        input['options']=process.env.CLUSTER_NAMES?.split(',')
-      }
-      if(input['serverValue'] == "CLUSTER_REGION"){
-        input['options']=process.env.REGIONS?.split(',')
+      switch (input['serverValue']) {
+        case "CLUSTER_NAME": {
+          if(process.env.CLUSTER_NAMES)
+            input['options']=process.env.CLUSTER_NAMES?.split(',')
+          break;
+        }
+        case "CLUSTER_REGION": {
+          if(process.env.CLUSTER_REGION)
+            input['options']=process.env.REGIONS?.split(',')
+          break;
+        }
       }
       return input;
     } catch (error) {

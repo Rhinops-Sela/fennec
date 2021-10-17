@@ -32,7 +32,7 @@
                   "env": [
                      {
                         "name": "DYNAMO_ENDPOINT",
-                        "value": "dynamodb-localstack:80"
+                        "value": "dynamodb-localstack:4566"
                      },
                      {
                         "name": "AWS_REGION",

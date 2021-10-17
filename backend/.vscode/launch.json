@@ -23,6 +23,7 @@
         "CLUSTER_NAMES": "fennec,fennec-1",
         "REGIONS": "eu-west-2,eu-west-1",
         "ADMIN_ARN": "arn:aws:iam::027065296145:user/iliag",
+        "ROUTE_53_ZONE_ID": "Z09854781EPH1KKIXJ848",
         "FENNEC_ROOT": "../fennec",
         "COMPONENTS_ROOT": "../components",
         "WORKING_ROOT": "../working_folder",
