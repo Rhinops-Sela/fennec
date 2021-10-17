@@ -6,7 +6,7 @@ sed -i "/socketUrl/c\  \"socketUrl\": \"$SOCKET_URL\"," /usr/share/nginx/html/as
 echo "cat config.json"
 cat /usr/share/nginx/html/assets/config.json
 
-nginx stop
-nginx start
+/etc/init.d/nginx stop
+/etc/init.d/nginx start
 
 pm2 start /app/backend/dist/src/index.js && nginx -g 'daemon off;'
