@@ -27,6 +27,10 @@ values_file_object = Helper.file_to_object(values_file_path)
 values_file_object['extraEnvVars'][1]['value'] = external_hostname
 values_file_object['extraEnvVars'][2]['value'] = hostname
 values_file_object['extraEnvVars'][3]['value'] = helm_chart.execution.cluster_region
+if helm_chart.execution.get_local_parameter("DOMAIN_NAME"):
+    values_file_object['ingress']['enabled'] = True
+    values_file_object['ingress']['hosts'][0]['host'] = f's3-{namespace}.{helm_chart.execution.get_local_parameter("DOMAIN_NAME")}'
+
 execution_file = os.path.join(
     os.path.dirname(__file__), "s3-execute.values.json")
 Helper.to_json_file(values_file_object, execution_file)

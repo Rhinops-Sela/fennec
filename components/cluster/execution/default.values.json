@@ -3,6 +3,10 @@
     "debug": "Z09854781EPH1KKIXJ848",
     "global": true
   },
+  "DOMAIN_NAME": {
+    "debug": "fennec.io",
+    "global": true
+  },
   "FENNEC_OUTPUTS_FOLDER": {
     "debug": "",
     "global": true
