@@ -1,18 +1,21 @@
 import { Injectable } from '@angular/core';
-import config from '../../../assets/config.json';
+//import config from '../../../assets/config.json';
 import { IDomain } from 'src/app/interfaces/common/IDomain';
 import axios, { AxiosResponse } from 'axios';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { saveAs } from 'file-saver';
+import { environment } from "src/environments/environment";
 @Injectable({
   providedIn: 'root',
 })
 export class BackendService {
-  backendUrl = `${config.backendUrl}:${config.backendPort}`;
+  backendUrl: string = '';
   workingFolders: string[];
   deploymentIdentifier: string;
-  constructor(private http: HttpClient) {}
-
+  constructor(private http: HttpClient) {
+    this.backendUrl = environment.backendUrl;
+  }
+  
   async getFormTemplate(): Promise<IDomain[]> {
     try {
       const form = await axios.get(`${this.backendUrl}/deployment/form`);
@@ -32,7 +35,9 @@ export class BackendService {
       .toPromise()
       .then((blob) => {
         saveAs(blob, 'deployment_outpus.zip');
-        axios.post(`${this.backendUrl}/deployment/deleteoutput`, {identifier: identifier})
+        axios.post(`${this.backendUrl}/deployment/deleteoutput`, {
+          identifier: identifier,
+        });
       })
       .catch((err) => console.error('download error = ', err));
   }

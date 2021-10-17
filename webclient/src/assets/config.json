@@ -1,5 +1,4 @@
 {
-  "backendUrl": "http://a0f6a9600615045e49c86957c6c61eb8-410783522.eu-west-2.elb.amazonaws.com",
-  "backendPort": "3000",
-  "socketUrl": "http://a0f6a9600615045e49c86957c6c61eb8-410783522.eu-west-2.elb.amazonaws.com:9090"
+  "backendUrl": "http://localhost:3000",
+  "socketUrl": "http://localhost:9090"
 }
