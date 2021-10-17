@@ -127,6 +127,10 @@ export class DeploymentExecuter {
           variableName: "ROUTE_53_ZONE_ID",
           variableValue: process.env.ROUTE_53_ZONE_ID || "",
         });
+        this.globalVariables.push({
+          variableName: "DOMAIN_NAME",
+          variableValue: process.env.DOMAIN_NAME || "",
+        });
         for (let input of page.inputs) {
           if (input.global) {
             this.globalVariables.push({

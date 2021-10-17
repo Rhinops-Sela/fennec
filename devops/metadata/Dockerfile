@@ -13,7 +13,8 @@ ENV AWS_SECRET_ACCESS_KEY=1
 ENV AWS_DEFAULT_REGION=eu-west-2
 ENV BACKEND_URL=http://localhost
 ENV SOCKET_URL=http://localhost:9090
-
+ENV DOMAIN_NAME=fennec.io
+ENV ROUTE_53_ZONE_ID=Z09854781EPH1KKIXJ848,
 
 # add webclient
 COPY nginx.conf /etc/nginx/nginx.conf
