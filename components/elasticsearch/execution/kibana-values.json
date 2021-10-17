@@ -14,11 +14,14 @@
   "kibanaConfig": {
     "kibana.yml": "monitoring.enabled: true"
   },
-  "service":{
+  "service": {
     "port": 80
   },
   "ingress": {
-    "enabled":false,
+    "enabled": false,
+    "annotations": {},
+    "className": "nginx",
+    "pathtype": "ImplementationSpecific",
     "hosts": [
       {
         "host": "HOSTNAME",
@@ -28,6 +31,7 @@
           }
         ]
       }
-    ]
+    ],
+    "tls": []
   }
 }

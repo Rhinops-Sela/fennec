@@ -17,16 +17,20 @@
       }
    ],
    "ingress": {
-     "enabled":false,
-     "hosts": [
-       {
-         "host": "HOSTNAME",
-         "paths": [
-           {
-             "path": "/"
-           }
-         ]
-       }
-     ]
-   }
+      "enabled": false,
+      "annotations": {},
+      "className": "nginx",
+      "pathtype": "ImplementationSpecific",
+      "hosts": [
+        {
+          "host": "HOSTNAME",
+          "paths": [
+            {
+              "path": "/"
+            }
+          ]
+        }
+      ],
+      "tls": []
+    }
 }

@@ -1,5 +1,4 @@
 import os
-from fennec_core_dns.core_dns import CoreDNS
 from fennec_executers.helm_executer import Helm
 from fennec_execution.execution import Execution
 from fennec_helpers.helper import Helper
@@ -7,7 +6,6 @@ from fennec_nodegorup.nodegroup import Nodegroup
 
 execution = Execution(os.path.dirname(__file__))
 namespace = execution.get_local_parameter('NAMESPACE')
-es_url = execution.get_local_parameter('ES_DNS_RECORD')
 template_path = os.path.join(
     execution.templates_folder, "elk-ng-template.json")
 nodegroup = Nodegroup(os.path.dirname(__file__), template_path)
@@ -19,6 +17,7 @@ values_file_path = os.path.join(
 values_file_object = Helper.file_to_object(values_file_path)
 values_file_object['replicas'] = execution.get_local_parameter('REPLICAS')
 values_file_object['minimumMasterNodes'] = execution.get_local_parameter('NUMBER_MASTERS')
+Helper.print_log(f'!!!!!!!!!!!{elasticsearch_chart.execution.domain_name}!!!!!!!!!!')
 if elasticsearch_chart.execution.domain_name:
     values_file_object['ingress']['enabled'] = True
     values_file_object['ingress']['hosts'][0]['host'] = f'es-{namespace}.{elasticsearch_chart.execution.domain_name}'
@@ -30,12 +29,9 @@ elasticsearch_chart.install_chart(release_name="elastic",
                                   chart_url="https://helm.elastic.co",
                                   additional_values=[f"--values {execution_file}"], 
                                   timeout = 360)
-#core_dns = CoreDNS(os.path.dirname(__file__))
-#core_dns.add_records(f"{es_url}=elasticsearch-master.{namespace}.svc.cluster.local")
 
 if execution.get_local_parameter('INSTALL_KIBANA'):
     kibana_chart = Helm(os.path.dirname(__file__), namespace, "kibana")
-    kibana_url = execution.get_local_parameter('KIBANA_DNS_RECORD')
     values_file_path = os.path.join(
         execution.execution_folder, "kibana-values.json")
     values_file_object = Helper.file_to_object(values_file_path)
@@ -50,4 +46,3 @@ if execution.get_local_parameter('INSTALL_KIBANA'):
     kibana_chart.install_chart(release_name="elastic",
                                       chart_url="https://helm.elastic.co",
                                       additional_values=[f"--values {execution_file}"])
-    #core_dns.add_records(f"{kibana_url}=kibana-kibana.{namespace}.svc.cluster.local")
