@@ -35,12 +35,12 @@ RUN cd $FENNEC_ROOT \
   && ls \
   && pip3 install $FENNEC_ROOT/
 
-RUN sed -i '/backendUrl/c\  \"backendUrl\": \"$BACKEND_URL",' /usr/share/nginx/html/assets/config.json
-RUN sed -i '/socketUrl/c\  \"socketUrl\": \"$SOCKET_URL",' /usr/share/nginx/html/assets/config.json
-RUN echo "cat config.json" && cat /usr/share/nginx/html/assets/config.json
+COPY devops/metadata/script.sh /app/.
 
 #Exposing node port	
+EXPOSE 80
 EXPOSE 3000
 EXPOSE 9090
 
-CMD ["sh", "-c","pm2 start /app/backend/dist/src/index.js && nginx -g \"daemon off;\""]
+ENTRYPOINT [ "/script.sh" ]
+
