@@ -36,12 +36,12 @@ RUN cd $FENNEC_ROOT \
   && ls \
   && pip3 install $FENNEC_ROOT/
 
-COPY devops/metadata/script.sh /app/.
+COPY script.sh /app/.
 
 #Exposing node port	
 EXPOSE 80
 EXPOSE 3000
 EXPOSE 9090
 
-ENTRYPOINT [ "/script.sh" ]
+ENTRYPOINT [ "/app/script.sh" ]
 
