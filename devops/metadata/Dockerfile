@@ -38,7 +38,10 @@ RUN cd $FENNEC_ROOT \
 
 COPY script.sh /app/.
 RUN cd /app \
-  && chmod +x /script.sh
+  && ls -lrt \
+  && chmod +x script.sh 
+  
+  
 
 #Exposing node port	
 EXPOSE 80
