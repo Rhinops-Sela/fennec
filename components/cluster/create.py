@@ -86,17 +86,17 @@ if not cluster.check_if_cluster_exists() or not allow_skip:
             vpn_working_folder, "prerequisites", "openvpn-pv-claim.yaml"), namespace="openvpn")
         openvpn_chart.install_chart(release_name="stable",
                                     additional_values=[f"--values {values_file_path}"], timeout=600)
-# Install External DNS
-install_cluster_exgternal_dns = cluster.execution.get_local_parameter('ROUTE_53_ZONE_ID')
-if install_cluster_exgternal_dns:
-    Helper.print_log("Will deploy external DNS component")
-    deployment_file = os.path.join(
-        cluster.execution.templates_folder, "09.external_dns", "deployment.yaml")
-    deployment_file_execution = os.path.join(
-        cluster.execution.templates_folder, "09.external_dns", "deployment_execution.yaml")
-    Helper.replace_in_file(deployment_file, deployment_file_execution, {
-        'CLUSTER_NAME': f'{cluster.execution.cluster_name}'})
-    cluster.install_file(deployment_file_execution, namespace='external-dns')
+    # Install External DNS
+    install_cluster_exgternal_dns = cluster.execution.get_local_parameter('ROUTE_53_ZONE_ID')
+    if install_cluster_exgternal_dns:
+        Helper.print_log("Will deploy external DNS component")
+        deployment_file = os.path.join(
+            cluster.execution.templates_folder, "09.external_dns", "deployment.yaml")
+        deployment_file_execution = os.path.join(
+            cluster.execution.templates_folder, "09.external_dns", "deployment_execution.yaml")
+        Helper.replace_in_file(deployment_file, deployment_file_execution, {
+            'CLUSTER_NAME': f'{cluster.execution.cluster_name}'})
+        cluster.install_file(deployment_file_execution, namespace='external-dns')
 keygen_script_path = os.path.join(
     vpn_working_folder, "keygen", "generate-client-key.sh")
 cluster.execution.run_command(
