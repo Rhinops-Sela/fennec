@@ -14,4 +14,7 @@ fetch('/assets/config.json')
     platformBrowserDynamic().bootstrapModule(AppModule)
       .catch(err => console.error(err));
 
+  }).catch(error => {
+    console.log(error)
+    console.log(error.message)
   });

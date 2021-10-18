@@ -116,7 +116,7 @@ jobs:
         run: |
           npm install
           npm install -g @angular/cli
-          ng build --prod
+          ng build --prod --sourceMap
         working-directory: ./webclient
 
       #Publish artifacts-webclient
