@@ -5,7 +5,6 @@ from fennec_helpers.helper import Helper
 from fennec_nodegorup.nodegroup import Nodegroup
 
 execution = Execution(os.path.dirname(__file__))
-mysql_url = execution.get_local_parameter('MYSQL_DNS_RECORD')
 namespace = execution.get_local_parameter('NAMESPACE')
 template_path = os.path.join(
     execution.templates_folder, "mysql-ng-template.json")
@@ -32,6 +31,5 @@ helm_chart.install_chart(release_name="bitnami",
                              --set auth.rootPassword={root_password} \
                              --set auth.password={password} \
                              --set auth.database={database}"])
-mysql_record = f"{mysql_url}=mysql-localstack.{namespace}.svc.cluster.local"
 connection_info = f'mysql: \n mysql.{namespace}.svc.cluster.local:3306\DB name: {database}\nusername: {username}\nroot password:{root_password}\npassword:{password}'
 Helper.write_connection_info(connection_info, execution.output_folder)
