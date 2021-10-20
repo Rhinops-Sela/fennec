@@ -40,7 +40,7 @@ class App {
   // Configure API endpoints.
   private routes(): void {
     this.express.use(
-      "/deployment",
+      "/api/deployment",
       deploymentRoutes
     );
 
