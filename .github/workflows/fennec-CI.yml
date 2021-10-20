@@ -198,7 +198,7 @@ jobs:
           workflow_conclusion: success
           commit: ${{github.event.pull_request.head.sha}}
           name: node_modules
-          path: ${{ github.workspace }}/build-workspace/backend/node_mudules
+          path: ${{ github.workspace }}/build-workspace/backend/node_modules
           check_artifacts:  true
  
       - name: download artifacts-backend
