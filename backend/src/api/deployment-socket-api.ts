@@ -4,22 +4,7 @@ import { DeploymentEvent } from "../enums/deployment";
 import { IDeploymentMessage } from "../interfaces/common/IDeploymentMessage";
 import { Logger } from "../logger/logger";
 import { DeploymentExecutionMaster } from "../deployment/deployment-execution-master";
-import cors from "cors";
 
-const options: cors.CorsOptions = {
-  allowedHeaders: [
-    "Authorization",
-    "Origin",
-    "X-Requested-With",
-    "Content-Type",
-    "Accept",
-    "X-Access-Token"
-  ],
-  credentials: true,
-  methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
-  origin: "*",
-  preflightContinue: false
-};
 
 export class DeploymentServer {
   private server: Server;
@@ -28,10 +13,14 @@ export class DeploymentServer {
   private socket: any;
   constructor(express: any) {
     this.port = process.env.SOCKET_PORT || 9090;
-    express.use(cors(options));
-    express.options("*", cors(options));
     this.server = createServer(express);
-    this.io = socketIo(this.server);
+    this.io = require("socket.io")(this.server, {
+      cors: {
+        origin: "*",
+        methods: ["GET", "POST", "OPTIONS"]
+      }
+    });
+  // this.io = socketIo(this.server);
     this.listen();
   }
 
