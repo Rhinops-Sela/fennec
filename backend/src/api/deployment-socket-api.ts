@@ -5,7 +5,6 @@ import { IDeploymentMessage } from "../interfaces/common/IDeploymentMessage";
 import { Logger } from "../logger/logger";
 import { DeploymentExecutionMaster } from "../deployment/deployment-execution-master";
 
-
 export class DeploymentServer {
   private server: Server;
   private io: SocketIO.Server;
@@ -14,13 +13,8 @@ export class DeploymentServer {
   constructor(express: any) {
     this.port = process.env.SOCKET_PORT || 9090;
     this.server = createServer(express);
-    this.io = require("socket.io")(this.server, {
-      cors: {
-        origin: "*",
-        methods: ["GET", "POST", "OPTIONS"]
-      }
-    });
-  // this.io = socketIo(this.server);
+    this.io = require("socket.io")(this.server, { origins: "*:*" });
+    // this.io = socketIo(this.server);
     this.listen();
   }
 
@@ -31,7 +25,7 @@ export class DeploymentServer {
     this.io.on(DeploymentEvent.CONNECT, (socket: any) => {
       Logger.info(`Connected client on port: ${this.port}`);
       this.socket = socket;
-      socket.on(DeploymentEvent.KILL, (deploymentIdetifier:string) => {
+      socket.on(DeploymentEvent.KILL, (deploymentIdetifier: string) => {
         DeploymentExecutionMaster.killProcess(deploymentIdetifier);
         Logger.info(`Kill Process Requested: ${deploymentIdetifier}`);
       });
@@ -41,10 +35,13 @@ export class DeploymentServer {
     });
   }
   static async delay(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
-  public sendMessage(deploymentIdentifier: string, deploymentMessage: IDeploymentMessage) {
+  public sendMessage(
+    deploymentIdentifier: string,
+    deploymentMessage: IDeploymentMessage
+  ) {
     if (this.socket) {
       this.socket.emit(deploymentIdentifier, deploymentMessage);
     }
