@@ -181,91 +181,91 @@ jobs:
           pwd
           mkdir -p "$GITHUB_WORKSPACE/build-workspace"
 
+      # - name: download artifacts-components
+      #   uses: dawidd6/action-download-artifact@v2
+      #   with:
+      #     workflow: fennec-CI.yml
+      #     workflow_conclusion: success
+      #     commit: ${{github.event.pull_request.head.sha}}
+      #     name: components
+      #     path: ${{ github.workspace }}/build-workspace/components/components
+      #     #check_artifacts:  true
+
+      # - name: download artifacts-backend
+      #   uses: dawidd6/action-download-artifact@v2
+      #   with:
+      #     workflow: fennec-CI.yml
+      #     workflow_conclusion: success
+      #     commit: ${{github.event.pull_request.head.sha}}
+      #     name: node_modules
+      #     path: ${{ github.workspace }}/build-workspace/backend/node_modules
+      #     #check_artifacts:  true
+ 
+      # - name: download artifacts-backend
+      #   uses: dawidd6/action-download-artifact@v2
+      #   with:
+      #     workflow: fennec-CI.yml
+      #     workflow_conclusion: success
+      #     commit: ${{github.event.pull_request.head.sha}}
+      #     name: dist
+      #     path: ${{ github.workspace }}/build-workspace/backend/dist
+      #     #check_artifacts:  true
+
+          
+      # - name: download artifacts-webclient
+      #   uses: dawidd6/action-download-artifact@v2
+      #   with:
+      #     workflow: fennec-CI.yml
+      #     workflow_conclusion: success
+      #     commit: ${{github.event.pull_request.head.sha}}
+      #     name: wizard
+      #     path: ${{ github.workspace }}/build-workspace/webclient/wizard
+      #     #check_artifacts:  true
+
+      # - name: download artifacts-fennec
+      #   uses: dawidd6/action-download-artifact@v2
+      #   with:
+      #     workflow: fennec-CI.yml
+      #     workflow_conclusion: success
+      #     commit: ${{github.event.pull_request.head.sha}}
+      #     name: fennec
+      #     path: ${{ github.workspace }}/build-workspace/fennec/fennec
+      #     #check_artifacts:  true
+
       - name: download artifacts-components
-        uses: dawidd6/action-download-artifact@v2
+        uses: actions/download-artifact@v2
+        id: download-components
         with:
-          workflow: fennec-CI.yml
-          workflow_conclusion: success
-          commit: ${{github.event.pull_request.head.sha}}
           name: components
           path: ${{ github.workspace }}/build-workspace/components/components
-          #check_artifacts:  true
-
-      - name: download artifacts-backend
-        uses: dawidd6/action-download-artifact@v2
-        with:
-          workflow: fennec-CI.yml
-          workflow_conclusion: success
-          commit: ${{github.event.pull_request.head.sha}}
-          name: node_modules
-          path: ${{ github.workspace }}/build-workspace/backend/node_modules
-          #check_artifacts:  true
- 
-      - name: download artifacts-backend
-        uses: dawidd6/action-download-artifact@v2
-        with:
-          workflow: fennec-CI.yml
-          workflow_conclusion: success
-          commit: ${{github.event.pull_request.head.sha}}
-          name: dist
-          path: ${{ github.workspace }}/build-workspace/backend/dist
-          #check_artifacts:  true
-
           
-      - name: download artifacts-webclient
-        uses: dawidd6/action-download-artifact@v2
-        with:
-          workflow: fennec-CI.yml
-          workflow_conclusion: success
-          commit: ${{github.event.pull_request.head.sha}}
-          name: wizard
-          path: ${{ github.workspace }}/build-workspace/webclient/wizard
-          #check_artifacts:  true
-
       - name: download artifacts-fennec
-        uses: dawidd6/action-download-artifact@v2
+        uses: actions/download-artifact@v2
+        id: download-fennec
         with:
-          workflow: fennec-CI.yml
-          workflow_conclusion: success
-          commit: ${{github.event.pull_request.head.sha}}
           name: fennec
           path: ${{ github.workspace }}/build-workspace/fennec/fennec
-          #check_artifacts:  true
 
-#       - name: download artifacts-components
-#         uses: actions/download-artifact@v2
-#         id: download-components
-#         with:
-#           name: components
-#           path: ${{ github.workspace }}/build-workspace/components/components
-          
-#       - name: download artifacts-fennec
-#         uses: actions/download-artifact@v2
-#         id: download-fennec
-#         with:
-#           name: fennec
-#           path: ${{ github.workspace }}/build-workspace/fennec/fennec
-
-#       - name: download artifacts-backend
-#         uses: actions/download-artifact@v2
-#         id: download-backend-dist
-#         with:
-#           name: dist
-#           path: ${{ github.workspace }}/build-workspace/backend/dist
+      - name: download artifacts-backend
+        uses: actions/download-artifact@v2
+        id: download-backend-dist
+        with:
+          name: dist
+          path: ${{ github.workspace }}/build-workspace/backend/dist
       
-#       - name: download artifacts-backend
-#         uses: actions/download-artifact@v2
-#         id: download-backend-node
-#         with:
-#           name: node_modules
-#           path: ${{ github.workspace }}/build-workspace/backend/node_modules
+      - name: download artifacts-backend
+        uses: actions/download-artifact@v2
+        id: download-backend-node
+        with:
+          name: node_modules
+          path: ${{ github.workspace }}/build-workspace/backend/node_modules
                
-#       - name: download artifacts-webclient
-#         uses: actions/download-artifact@v2
-#         id: download-webclient
-#         with:
-#           name: wizard
-#           path: ${{ github.workspace }}/build-workspace/webclient/wizard
+      - name: download artifacts-webclient
+        uses: actions/download-artifact@v2
+        id: download-webclient
+        with:
+          name: wizard
+          path: ${{ github.workspace }}/build-workspace/webclient/wizard
 
       - name: Copy nginx.conf to build workspace
         run: |
