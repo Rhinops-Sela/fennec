@@ -13,8 +13,12 @@ export class DeploymentServer {
   constructor(express: any) {
     this.port = process.env.SOCKET_PORT || 9090;
     this.server = createServer(express);
-    this.io = require("socket.io")(this.server, { origins: "*:*" });
-    // this.io = socketIo(this.server);
+    this.io = require("socket.io")(this.server, {
+      cors: {
+        origin: "*",
+        methods: ["GET", "POST"]
+      }
+    });
     this.listen();
   }
 
