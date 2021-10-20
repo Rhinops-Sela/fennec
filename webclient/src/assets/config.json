@@ -1,4 +1,4 @@
 {
   "backendUrl": "http://localhost:3000/api",
-  "socketUrl": "http://localhost:9090"
+  "socketUrl": "http://localhost:9090/stream"
 }

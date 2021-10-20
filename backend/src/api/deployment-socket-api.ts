@@ -26,7 +26,7 @@ export class DeploymentServer {
     this.server.listen(this.port, () => {
       Logger.info(`Running server on port ${this.port}`);
     });
-    this.io.on(DeploymentEvent.CONNECT, (socket: any) => {
+    this.io.of('/stream').on(DeploymentEvent.CONNECT, (socket: any) => {
       Logger.info(`Connected client on port: ${this.port}`);
       this.socket = socket;
       socket.on(DeploymentEvent.KILL, (deploymentIdetifier: string) => {
