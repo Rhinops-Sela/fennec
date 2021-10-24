@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fennec-configmap
+data:
+  backend_url: {{ .Values.configmap.backend_url }}
+  socket_url: {{ .Values.configmap.socket_url }}
+  cluster_names: {{ .Values.configmap.cluster_names }}
+  admin_arn: {{ .Values.configmap.admin_arn }}
+  domain_name: {{ .Values.configmap.domain_name }}
+  route_53_zone_id: {{ .Values.configmap.route_53_zone_id }}
+

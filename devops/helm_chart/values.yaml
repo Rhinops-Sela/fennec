@@ -1,0 +1,36 @@
+name: fennec
+deployment:
+  image:
+    registry: "blancahot" 
+    repository: "fennec" 
+    pullPolicy: Always
+    tag: "develop"
+  replicas: 1
+  rollingUpdate:
+    maxUnavailable: 25%
+  limits:
+    cpu: 1
+    memory: 2Gi
+  node: ip-10-0-140-211.eu-west-2.compute.internal
+service:
+  name: fennec
+  #omitClusterIP: true
+  type: ClusterIP
+  protocol: TCP
+  ports:
+    api: 3000
+    stream: 9090
+    ui: 80
+ingress:
+  enabled: true
+  host: home.fennec.io
+secrets:
+  aws_access_key_id: "KEYID"
+  aws_secret_access_key: "ACCESSKEY"
+configmap:
+  backend_url: "http://localhost:3000"
+  socket_url: "http://localhost:9090"
+  cluster_names: "fennec"
+  admin_arn: "arn:aws:iam::027065296145:user/iliag"
+  domain_name: "fennec.io"
+  route_53_zone_id: "Z09854781EPH1KKIXJ848"

@@ -1,0 +1,94 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}
+  labels:
+    app: {{ .Values.name }}
+spec:
+  replicas: {{ .Values.deployment.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.name }}
+    spec:
+      containers:
+      - name: {{ .Values.name }}
+        resources: 
+          requests: 
+            memory: {{ .Values.deployment.limits.memory }} 
+            cpu: {{ .Values.deployment.limits.cpu }}
+          limits: 
+            memory: {{ .Values.deployment.limits.memory }}
+            cpu: {{ .Values.deployment.limits.cpu }} 
+        env: 
+          - name: AWS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: aws-secret
+                key: AWS_ACCESS_KEY_ID
+          - name: AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: aws-secret
+                key: AWS_SECRET_ACCESS_KEY
+          - name: BACKEND_URL
+            valueFrom:
+              configMapKeyRef:
+                name: fennec-configmap           
+                key: backend_url
+          - name: SOCKET_URL
+            valueFrom:
+              configMapKeyRef:
+                name: fennec-configmap           
+                key: socket_url
+          - name: CLUSTER_NAMES
+            valueFrom:
+              configMapKeyRef:
+                name: fennec-configmap           
+                key: cluster_names     
+          - name: ADMIN_ARN
+            valueFrom:
+              configMapKeyRef:
+                name: fennec-configmap           
+                key: admin_arn   
+          - name: DOMAIN_NAME
+            valueFrom:
+              configMapKeyRef:
+                name: fennec-configmap           
+                key: domain_name     
+          - name: ROUTE_53_ZONE_ID
+            valueFrom:
+              configMapKeyRef:
+                name: fennec-configmap           
+                key: route_53_zone_id             
+        volumeMounts:
+        - name: config
+          mountPath: "/config"
+          readOnly: true
+        image: "{{ .Values.deployment.image.registry }}/{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"
+        imagePullPolicy: {{ .Values.deployment.image.pullPolicy | quote }}
+        ports:
+          - name: api
+            containerPort: {{ .Values.service.ports.api }}
+          - name: stream
+            containerPort: {{ .Values.service.ports.stream }}
+          - name: ui
+            containerPort: {{ .Values.service.ports.ui }}
+      tolerations:
+      - key: "elk"
+        operator: "Equal"
+        value: "true"
+        effect: "NoSchedule"
+      volumes:
+      - name: config
+        configMap:
+          name: fennec-configmap
+        
+
+
+
+
+        

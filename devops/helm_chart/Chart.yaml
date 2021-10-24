@@ -1,0 +1,4 @@
+apiVersion: v1
+description: A Helm chart for fennec
+name: fennec
+version: v1.0.0

@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.service.name }}
+  labels:
+    app: {{ .Values.service.name }}
+spec:
+  selector:
+    app: {{ .Values.service.name }}
+  type: {{ .Values.service.type }}
+  ports:
+    - name: api
+      port: {{ .Values.service.ports.api }}
+      targetPort: 3000
+    - name: stream
+      port: {{ .Values.service.ports.stream }}
+      targetPort: 9090
+    - name: ui
+      port: {{ .Values.service.ports.ui }}
+      targetPort: 80
+    
+
