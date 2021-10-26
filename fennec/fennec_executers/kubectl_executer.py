@@ -54,16 +54,19 @@ class Kubectl():
             base_folder = self.execution.templates_folder
         folder=os.path.join(base_folder,folder)
         self.__execute_folder(folder, namespace, False)
+        self.execution.write_connection_info()
 
     def install_folder(self, folder: str, base_folder:str="", namespace: str = ""):
         if base_folder == '':
             base_folder = self.execution.templates_folder
         folder=os.path.join(base_folder,folder)
         self.__execute_folder(folder, namespace, True)
+        self.execution.write_connection_info()
 
     def install_file(self, file: str, namespace: str):
         self.create_namespace(namespace)
         self.__execute_file(file, namespace, 'apply')
+        self.execution.write_connection_info()
 
     def patch_file(self, content: str, namespace: str, entity_type: str):
         self.execution.run_command(
@@ -71,6 +74,7 @@ class Kubectl():
 
     def uninstall_file(self, file: str, namespace: str):
         self.__execute_file(file, namespace, 'delete')
+        self.execution.write_connection_info()
 
     def __execute_file(self, file: str, namespace: str, verb: str):
         command = f"kubectl {verb} -f {file} -n {namespace}" if namespace else f"kubectl {verb} -f {file}"

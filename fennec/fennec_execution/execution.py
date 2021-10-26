@@ -161,5 +161,22 @@ class Execution:
             Helper.exit(rc, output_str)
 
         return command_result(rc, output_str)
+    
+    def write_connection_info(self):
+        namespace=self.get_local_parameter('NAMESPACE')
+        output_file = os.path.join(self.output_folder, "connection_info.info")
+        ingresses = self.run_command(f"kubectl get ingress -n {namespace} -o json")
+        ingresses = Helper.json_to_object(ingresses[1])
+        connection_info = f"You are working on namespace: {namespace}, in order to connect to the below urls\nplease connect to the VPN.\n"
+        connection_info += f"For connection to AWS services you need to set external-url to the service url listed below\n"
+        connection_info += f"URLS:\n\n"
+        for ingress_item in ingresses['items']:
+            for rule in ingress_item['spec']['rules']:
+                connection_info += f"{rule['host']}\n"
+        
+        f = open(output_file, "w")
+        f.write(f'\n{connection_info}')
+        f.close()
+
     # def get_parameters(self):
     #    self.default_values = json.load(self.default_values_file)

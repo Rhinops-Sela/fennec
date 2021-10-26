@@ -5,6 +5,7 @@ from fennec_helpers.helper import Helper
 from fennec_nodegorup.nodegroup import Nodegroup
 
 execution = Execution(os.path.dirname(__file__))
+execution.write_connection_info()
 sqs_url = execution.get_local_parameter('SQS_DNS_RECORD')
 namespace = execution.get_local_parameter('NAMESPACE')
 hostname = f"http://sqs-localstack.{namespace}.svc.cluster.local:80"

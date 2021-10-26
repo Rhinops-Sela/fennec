@@ -40,6 +40,7 @@ class Helm(Kubectl):
         install_command = f"helm {verb} --wait --debug --timeout {timeout}s {deployment_name} {release_name}/{self.chart_name} -n {self.namespace_name} {self.combine_additoinal_values(additional_values)}"
         Helper.print_log("Installing Chart")
         self.execution.run_command(install_command,show_output=show_output)
+        self.execution.write_connection_info()
 
     def uninstall_chart(self, delete_namespace=False):
         if self.installed:
@@ -50,3 +51,4 @@ class Helm(Kubectl):
                 self.delete_namespace(self.namespace_name, force=False)
         else:
             Helper.print_log(f"skipping...")
+        self.execution.write_connection_info()
