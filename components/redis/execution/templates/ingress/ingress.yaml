@@ -11,7 +11,7 @@ spec:
       paths:
       - backend:
           service:
-            name: redis-service
+            name: redis-headless
             port:
               name: tcp-port
         path: /
