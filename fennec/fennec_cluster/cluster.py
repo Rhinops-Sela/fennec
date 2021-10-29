@@ -69,8 +69,6 @@ class Cluster(Kubectl):
         cluster_region = self.execution.global_parameters['CLUSTER_REGION']
         values_to_replace = {'CLUSTER_NAME': f'{cluster_name}',
                              'CLUSTER_REGION': f'{cluster_region}'}
-        cluster_output = os.path.join(
-            self.execution.templates_folder, "00.cluster", "cluster-execute.json")
-        Helper.replace_in_file(
-            cluster_file, cluster_output, values_to_replace)
+        cluster_output= Helper.replace_in_file(
+            cluster_file, values_to_replace)
         return cluster_output

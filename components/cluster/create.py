@@ -57,13 +57,11 @@ if not cluster.check_if_cluster_exists() or not allow_skip:
     if install_cluster_dashboard:
         values_file_path = os.path.join(
             cluster.execution.templates_folder, "07.dashboard", "ingress.yaml")
-        values_file_path_execution = os.path.join(
-            cluster.execution.templates_folder, "07.dashboard", "ingress-execute.yaml")
         user_url = cluster.execution.get_local_parameter(
             'CLUSTER_DASHBOARD_URL')
         values_to_replace = {'CLUSTER_DASHBOARD_URL': f'{user_url}'}
-        Helper.replace_in_file(
-            values_file_path, values_file_path_execution, values_to_replace, 100)
+        values_file_path_execution = Helper.replace_in_file(
+            values_file_path, values_to_replace, 100)
         cluster.install_folder(folder="07.dashboard")
         cluster.export_secret(secret_name="admin-user",
                               namespace="kube-system",
@@ -92,9 +90,7 @@ if not cluster.check_if_cluster_exists() or not allow_skip:
         Helper.print_log("Will deploy external DNS component")
         deployment_file = os.path.join(
             cluster.execution.templates_folder, "09.external_dns", "deployment.yaml")
-        deployment_file_execution = os.path.join(
-            cluster.execution.templates_folder, "09.external_dns", "deployment_execution.yaml")
-        Helper.replace_in_file(deployment_file, deployment_file_execution, {
+        deployment_file_execution = Helper.replace_in_file(deployment_file, {
             'CLUSTER_NAME': f'{cluster.execution.cluster_name}'})
         cluster.install_file(deployment_file_execution, namespace='external-dns')
 keygen_script_path = os.path.join(

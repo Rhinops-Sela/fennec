@@ -643,9 +643,13 @@ kind: ConfigMap
 metadata:
   name: tcp-services
   namespace: ingress-nginx
+data:
+  "6000": "placehoder/tcp"
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: udp-services
   namespace: ingress-nginx
+data:
+  "8000": "placehoder/udp"

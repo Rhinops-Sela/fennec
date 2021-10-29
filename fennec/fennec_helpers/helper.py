@@ -3,6 +3,8 @@ import os
 import shutil
 import sys
 from pathlib import Path
+
+
 class Helper:
 
     @staticmethod
@@ -43,10 +45,12 @@ class Helper:
         shutil.copy(source, target)
 
     @staticmethod
-    def replace_in_file(source_file: str, output_file: str, strings_to_replace: dict, max=1):
+    def replace_in_file(source_file: str, strings_to_replace: dict, max=1):
+        output_file_name, output_file_extension = os.path.splitext(source_file)
+        output_file = f"{output_file_name}_execution{output_file_extension}"
         fin = open(source_file, "rt")
         fout = open(output_file + "_temp",
-                    "wt") if source_file == output_file else open(output_file, "wt")
+                    "wt+") if source_file == output_file else open(output_file, "wt+")
         file_content = ""
         for line in fin:
             file_content += line
@@ -59,11 +63,11 @@ class Helper:
         fout.close()
         if source_file == output_file:
             os.rename(output_file + "_temp", output_file)
-        return file_content
+        return output_file
 
     @staticmethod
-    def print_log(content):{
-        print(f'{content}\n') 
+    def print_log(content): {
+        print(f'{content}\n')
     }
 
     @staticmethod

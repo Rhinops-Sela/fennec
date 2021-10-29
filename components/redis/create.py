@@ -5,6 +5,7 @@ from fennec_helpers.helper import Helper
 from fennec_nodegorup.nodegroup import Nodegroup
 
 execution = Execution(os.path.dirname(__file__))
+
 redis_url = execution.get_local_parameter('REDIS_DNS_RECORD')
 redis_admin_url = execution.get_local_parameter('REDIS_ADMIN_DNS_RECORD')
 namespace = execution.get_local_parameter('NAMESPACE')
@@ -13,7 +14,8 @@ template_path = os.path.join(
 nodegroup = Nodegroup(os.path.dirname(__file__), template_path)
 nodegroup.create()
 
-helm_chart = Helm(os.path.dirname(__file__), namespace=namespace, chart_name="redis")
+helm_chart = Helm(os.path.dirname(__file__),
+                  namespace=namespace, chart_name="redis")
 values_file_path = os.path.join(
     execution.execution_folder, "values.json")
 
@@ -30,18 +32,23 @@ values_file_object = Helper.file_to_object(values_file_path)
 
 execution_file = os.path.join(
     os.path.dirname(__file__), "redis-execute.values.json")
-Helper.to_json_file(values_file_object, execution_file)    
+Helper.to_json_file(values_file_object, execution_file)
 
 helm_chart.install_chart(release_name="bitnami",
-                                  chart_url="https://charts.bitnami.com/bitnami",
-                                  additional_values=[f"--values {execution_file}"])
+                         chart_url="https://charts.bitnami.com/bitnami",
+                         additional_values=[f"--values {execution_file}"])
+ingress_port = execution.open_tcp_port_nginx('redis-headless', 6379)
+ingress_file = Helper.replace_in_file(os.path.join(execution.templates_folder, "ingress", "ingress.yaml"), {
+    'HOSTNAME': f'redis-{namespace}.{execution.domain_name}'})
+helm_chart.install_file(ingress_file,namespace)
 
 ui_foler = os.path.join(execution.execution_folder, 'ui')
 admin_deployment = os.path.join(ui_foler, 'deployment.json')
 admin_file_object = Helper.file_to_object(admin_deployment)
-admin_file_object['spec']['template']['spec']['containers'][0]['env'][0]['value'] = f'redis-master.{namespace}.svc.cluster.local'
+admin_file_object['spec']['template']['spec']['containers'][0][
+    'env'][0]['value'] = f'redis-master.{namespace}.svc.cluster.local'
 execution_file = os.path.join(
     os.path.dirname(__file__), "redis-admin-execute.values.json")
-Helper.to_json_file(admin_file_object, execution_file)   
-helm_chart.install_folder(base_folder=execution.execution_folder ,folder='ui', namespace=namespace)
-
+Helper.to_json_file(admin_file_object, execution_file)
+helm_chart.install_folder(
+    base_folder=execution.execution_folder, folder='ui', namespace=namespace)

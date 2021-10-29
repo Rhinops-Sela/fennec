@@ -47,10 +47,8 @@ values_to_replace = {
     'AWS_REGION': f'{kubectl.execution.cluster_region}'}
 ui_deployment_template = os.path.join(
     kubectl.execution.templates_folder, "admin", "01.deployment.json")
-ui_deployment_template_output = os.path.join(
-    kubectl.execution.templates_folder, "admin", "01.deployment-execute.json")
-Helper.replace_in_file(
-    ui_deployment_template, ui_deployment_template_output, values_to_replace)
+ui_deployment_template_output = Helper.replace_in_file(
+    ui_deployment_template, values_to_replace)
 kubectl.install_folder(
     "admin", execution.templates_folder, namespace=namespace)
 

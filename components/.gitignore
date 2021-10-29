@@ -7,5 +7,7 @@ outputs/
 *-execute*.json
 *-execute*.yaml
 *.pyc
+*.info
+output.json
 **/build/*
 **/dist/*

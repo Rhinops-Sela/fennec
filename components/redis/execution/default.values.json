@@ -15,7 +15,7 @@
     "debug": 0
   },
   "NAMESPACE": {
-    "debug": "redis"
+    "debug": "redis1"
   },
   "NUMBER_SLAVES":{
     "debug": 1
