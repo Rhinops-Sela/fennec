@@ -3,6 +3,8 @@ from pathlib import Path
 import subprocess
 from collections import namedtuple
 import os
+import time
+import inspect
 import stat
 import fcntl
 from typing import ChainMap
@@ -39,6 +41,10 @@ class Execution:
     @property
     def execution_folder(self):
         return os.path.join(self.working_folder, "execution")
+
+    @property
+    def locks_folder(self):
+        return os.path.join(self.execution_folder, '..', "locks")
 
     @property
     def templates_folder(self):
@@ -181,7 +187,8 @@ class Execution:
         f.write(f'\n{connection_info}')
         f.close()
 
-    def get_avaliable_port(self, starting_port: int, port_list, inner_object: str = ''):
+    @staticmethod
+    def get_avaliable_port(starting_port: int, port_list, inner_object: str = ''):
         find_avaliable_port = False
         while not find_avaliable_port:
             find_avaliable_port = True
@@ -196,51 +203,59 @@ class Execution:
         return starting_port
 
     def open_tcp_port_nginx(self, service_name: str, service_port: int):
-        output_file=os.path.join(self.working_folder,'output.json')
-        namespace = self.get_local_parameter('NAMESPACE')
-        config_map = Helper.json_to_object(self.run_command(
-            'kubectl get configmap tcp-services -o json -n ingress-nginx')[1])
-        port_to_use = self.get_avaliable_port(
-            6000, config_map['data'])
-        service_address = f'{namespace}/{service_name}:{service_port}'
-        config_map['data'][f'{port_to_use}'] = service_address
-        Helper.to_json_file(config_map, output_file)
-        self.run_command(
-            f'kubectl apply -f {output_file} -n ingress-nginx')
+        try:
+            # Creates the lock because the nginx is relevent for all executions
+            Helper.create_lock(locks_folder=self.locks_folder)
+            output_file = os.path.join(self.working_folder, 'output.json')
+            namespace = self.get_local_parameter('NAMESPACE')
+            config_map = Helper.json_to_object(self.run_command(
+                'kubectl get configmap tcp-services -o json -n ingress-nginx')[1])
+            port_to_use = Execution.get_avaliable_port(
+                6000, config_map['data'])
+            service_address = f'{namespace}/{service_name}:{service_port}'
+            config_map['data'][f'{port_to_use}'] = service_address
+            Helper.to_json_file(config_map, output_file)
+            self.run_command(
+                f'kubectl apply -f {output_file} -n ingress-nginx')
 
-        ngnix_deployment = Helper.json_to_object(self.run_command(
-            'kubectl get deployment ingress-nginx-controller -o json -n ingress-nginx')[1])
-        ngnix_deployment_lb_port = {
-            "containerPort": port_to_use,
-            "hostPort": port_to_use,
-            "name": f"{namespace}-{port_to_use}"
-        }
-        ngnix_deployment['spec']['template']['spec']['containers'][0]['ports'].append(
-            ngnix_deployment_lb_port)
-        Helper.to_json_file(ngnix_deployment, output_file)
-        self.run_command(
-            f'kubectl apply -f {output_file} -n ingress-nginx')
+            ngnix_deployment = Helper.json_to_object(self.run_command(
+                'kubectl get deployment ingress-nginx-controller -o json -n ingress-nginx')[1])
+            ngnix_deployment_lb_port = {
+                "containerPort": port_to_use,
+                "hostPort": port_to_use,
+                "name": f"{namespace}-{port_to_use}"
+            }
+            ngnix_deployment['spec']['template']['spec']['containers'][0]['ports'].append(
+                ngnix_deployment_lb_port)
+            Helper.to_json_file(ngnix_deployment, output_file)
+            self.run_command(
+                f'kubectl apply -f {output_file} -n ingress-nginx')
 
-        ngnix_service = Helper.json_to_object(self.run_command(
-            'kubectl get service ingress-nginx-controller -o json -n ingress-nginx')[1])
-        node_port_to_use = self.get_avaliable_port(
-            30000, ngnix_service['spec']['ports'], 'nodePort')
-        ngnix_service_lb_port = {
-            "name": f"{namespace}-{port_to_use}",
-            "nodePort": node_port_to_use,
-            "port": port_to_use,
-            "protocol": "TCP",
-            "targetPort": port_to_use
-        }
-        ngnix_service['spec']['ports'].append(
-            ngnix_service_lb_port)
-        Helper.to_json_file(ngnix_service, output_file)
-        self.run_command(
-            f'kubectl apply -f {output_file} -n ingress-nginx')
-        return port_to_use
+            ngnix_service = Helper.json_to_object(self.run_command(
+                'kubectl get service ingress-nginx-controller -o json -n ingress-nginx')[1])
+            node_port_to_use = Execution.get_avaliable_port(
+                30000, ngnix_service['spec']['ports'], 'nodePort')
+            ngnix_service_lb_port = {
+                "name": f"{namespace}-{port_to_use}",
+                "nodePort": node_port_to_use,
+                "port": port_to_use,
+                "protocol": "TCP",
+                "targetPort": port_to_use
+            }
+            ngnix_service['spec']['ports'].append(
+                ngnix_service_lb_port)
+            Helper.to_json_file(ngnix_service, output_file)
+            self.run_command(
+                f'kubectl apply -f {output_file} -n ingress-nginx')
+            return port_to_use
+        except:
+            Helper.print_log('Unable to opoen ports in redis')
+        finally:
+            Helper.release_lock(locks_folder=self.locks_folder)
 
     def delete_tcp_port_nginx(self, service_name: str, service_port: int):
-        output_file=os.path.join(self.working_folder,'output.json')
+        ports_to_use = []
+        output_file = os.path.join(self.working_folder, 'output.json')
         namespace = self.get_local_parameter('NAMESPACE')
         service_address = f'{namespace}/{service_name}:{service_port}'
         config_map = Helper.json_to_object(self.run_command(
@@ -248,29 +263,46 @@ class Execution:
         for port in config_map['data']:
             port_value = config_map['data'][port]
             if port_value == service_address:
-                del config_map['data'][port]
-                port_to_use = port
-                self.run_command(
-                    f'kubectl patch configmap tcp-services --type=json -p=\'[{{"op": "remove", "path": "/data/{port}"}}]\' -n ingress-nginx')
-                break
+                ports_to_use.append(port)
+        ngnix_deployment_objects_to_remove = []
         ngnix_deployment = Helper.json_to_object(self.run_command(
             'kubectl get deployment ingress-nginx-controller -o json -n ingress-nginx')[1])
         for deployment_port in ngnix_deployment['spec']['template']['spec']['containers'][0]['ports']:
-            if int(deployment_port['containerPort']) == int(port_to_use):
-                ngnix_deployment['spec']['template']['spec']['containers'][0]['ports'].remove(
-                    deployment_port)
-                break
+            for port_to_use in ports_to_use:
+                if int(deployment_port['containerPort']) == int(port_to_use):
+                    ngnix_deployment_objects_to_remove.append(deployment_port)
+                    break
+        for object_to_remove in ngnix_deployment_objects_to_remove:
+            ngnix_deployment['spec']['template']['spec']['containers'][0]['ports'].remove(
+                object_to_remove)
         Helper.to_json_file(ngnix_deployment, output_file)
         self.run_command(
             f'kubectl apply -f {output_file} -n ingress-nginx')
         ngnix_service = Helper.json_to_object(self.run_command(
             'kubectl get service ingress-nginx-controller -o json -n ingress-nginx')[1])
+        ngnix_service_items_to_remove = []
         for port_object in ngnix_service['spec']['ports']:
             port_value = port_object['port']
-            if int(port_value) == int(port_to_use):
-                ngnix_service['spec']['ports'].remove(
-                    port_object)
-                break
+            for port_to_use in ports_to_use:
+                if int(port_value) == int(port_to_use):
+                    ngnix_service_items_to_remove.append(port_object)
+
+                    break
+        for object_to_remove in ngnix_service_items_to_remove:
+            ngnix_service['spec']['ports'].remove(
+                object_to_remove)
         Helper.to_json_file(ngnix_service, output_file)
         self.run_command(
             f'kubectl apply -f {output_file} -n ingress-nginx')
+
+        for port in ports_to_use:
+            self.run_command(
+                f'kubectl patch configmap tcp-services --type=json -p=\'[{{"op": "remove", "path": "/data/{port}"}}]\' -n ingress-nginx')
+
+    def check_if_naemspace_exists(self, name: str) -> bool:
+        namespaces = self.run_command(
+            "kubectl get namespace -n all").log
+        for namespace in namespaces.split('\n'):
+            if name in namespace:
+                return True
+        return False

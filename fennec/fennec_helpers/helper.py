@@ -1,4 +1,6 @@
 import json
+import inspect
+import time
 import os
 import shutil
 import sys
@@ -6,6 +8,21 @@ from pathlib import Path
 
 
 class Helper:
+
+    @staticmethod
+    def create_lock(locks_folder: str):
+        lock_file = os.path.join(locks_folder, inspect.stack()[1].function)
+        attempts = 10
+        while os.path.isfile(lock_file) and attempts > -1:
+            Helper.print_log('wating for ngnix update to complete')
+            time.sleep(5)
+            attempts -= 1
+        open(lock_file, "w")
+
+    @staticmethod
+    def release_lock(locks_folder: str):
+        lock_file = os.path.join(locks_folder, inspect.stack()[1].function)
+        os.remove(lock_file)
 
     @staticmethod
     def exit(exit_code: int, message: str):

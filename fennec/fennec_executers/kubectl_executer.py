@@ -94,13 +94,13 @@ class Kubectl():
                 files_execute[file_to_execute], namespace, verb)
 
     def create_namespace(self, name: str):
-        if self.check_if_exists(name):
+        if self.execution.check_if_naemspace_exists(name):
             Helper.print_log(f"namespace: {name} already exsits, skipping")
             return
         self.execution.run_command(f"kubectl create namespace {name}")
 
     def delete_namespace(self, name: str, force=True):
-        if not self.check_if_exists(name):
+        if not self.execution.check_if_naemspace_exists(name):
             Helper.print_log(f"namespace: {name} doesn't exsit, skipping")
             return
         delete = force
@@ -115,14 +115,7 @@ class Kubectl():
         objects_in_namespace = self.get_all(name)
         return True if not objects_in_namespace else False
 
-    def check_if_exists(self, name: str) -> bool:
-        namespaces = self.execution.run_command(
-            "kubectl get namespace -n all").log
-        for namespace in namespaces.split('\n'):
-            if name in namespace:
-                return True
-        return False
-
+    
     def get_ingress_address(self, ingress_name, namespace='all-namespaces',max_tries=10):
         for i in range(max_tries):
             try:
