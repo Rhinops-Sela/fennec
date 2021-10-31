@@ -1,6 +1,7 @@
 name: fennec-download-artifacts-build-push
 
 on:
+  workflow_dispatch:
   workflow_run:
     workflows: ["fennec-CI"]
     types:
