@@ -4,13 +4,12 @@ from fennec_execution.execution import Execution
 
 from fennec_helpers.helper import Helper
 
-execution = Execution(os.path.dirname(__file__))
-datadog_chart = Helm(os.path.dirname(__file__), "datadog")
+datadog_chart = Helm(os.path.dirname(__file__))
 values_file_path = os.path.join(
-    execution.execution_folder, "values.json")
+    datadog_chart.execution.execution_folder, "values.json")
 values_file_object = Helper.file_to_object(values_file_path)
-values_file_object['datadog']['apiKey'] = execution.get_local_parameter('DD_API_KEY')
-values_file_object['datadog']['appKey'] = execution.get_local_parameter('DD_APP_KEY')
+values_file_object['datadog']['apiKey'] = datadog_chart.execution.get_local_parameter('DD_API_KEY')
+values_file_object['datadog']['appKey'] = datadog_chart.execution.get_local_parameter('DD_APP_KEY')
 execution_file = os.path.join(
     os.path.dirname(__file__), "datadog-execute.values.json")
 Helper.to_json_file(values_file_object, execution_file)

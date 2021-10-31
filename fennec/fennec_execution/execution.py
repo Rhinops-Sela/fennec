@@ -7,7 +7,6 @@ import time
 import inspect
 import stat
 import fcntl
-from typing import ChainMap
 
 from fennec_helpers.helper import Helper
 
@@ -24,6 +23,7 @@ class Execution:
         self.__load_local_parameters__()
         self.__load_global_parameters__()
         self.set_aws_credentials()
+        self.namespace = self.get_local_parameter('NAMESPACE')
 
     @property
     def output_folder(self):
@@ -171,19 +171,23 @@ class Execution:
         return command_result(rc, output_str)
 
     def write_connection_info(self, service_name: str, ingress_port=80, aws_mock=False):
-        namespace = self.get_local_parameter('NAMESPACE')
         output_file = os.path.join(self.output_folder, "connection_info.info")
         ingresses = self.run_command(
-            f"kubectl get ingress -n {namespace} -o json")
+            f"kubectl get ingress -n {self.namespace} -o json")
         ingresses = Helper.json_to_object(ingresses[1])
-        connection_info = f"You are working on namespace: {namespace}, in order to connect to the below urls\nplease connect to the VPN.\n"
-        connection_info += f"For connection to AWS services you need to set external-url to the service url listed below\n"
+        connection_info = f"You are working on namespace: {self.namespace}, in order to connect to the below urls\nplease connect to the VPN.\n"
+        if aws_mock:
+            connection_info += f"For connection to AWS services you need to set external-url to the service url listed below\n"
         connection_info += f"URLS:\n\n"
         for ingress_item in ingresses['items']:
             for rule in ingress_item['spec']['rules']:
-                connection_info += f"{rule['host']}\n"
+                if service_name in rule['host']:
+                    port=""
+                    if ingress_port != 80:
+                        port=f":{ingress_port}"
+                    connection_info += f"{rule['host']}{port}\n"
 
-        f = open(output_file, "w")
+        f = open(output_file, "+a")
         f.write(f'\n{connection_info}')
         f.close()
 
