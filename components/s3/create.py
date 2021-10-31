@@ -40,4 +40,3 @@ helm_chart.install_chart(release_name="localstack-charts",
                          additional_values=[f"--values {execution_file}"])
 s3_record = f"{s3_url}=s3-localstack.{namespace}.svc.cluster.local"
 connection_info = f's3: \naws s3 --endpoint-url=http://s3-localstack.{namespace}.svc.cluster.local:4566 ls'
-Helper.write_connection_info(connection_info, execution.output_folder)

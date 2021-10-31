@@ -40,4 +40,3 @@ helm_chart.install_chart(release_name="localstack-charts",
 connection_info = f'sns: \naws --endpoint-url=http://sns-localstack.{namespace}.svc.cluster.local:4566 sns list-topics'
 if execution.get_local_parameter('SNS_DNS_RECORD'):
     connection_info += f'\naws --endpoint-url={execution.get_local_parameter("SNS_DNS_RECORD")}:4566 sns list-topics'
-Helper.write_connection_info(connection_info, execution.output_folder)

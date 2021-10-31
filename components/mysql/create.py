@@ -17,7 +17,7 @@ helm_chart = Helm(os.path.dirname(__file__),
                   namespace=namespace, chart_name="mysql")
 ingress_file = Helper.replace_in_file(os.path.join(execution.templates_folder, "ingress", "ingress.yaml"), {
     'HOSTNAME': f'mysql-{namespace}.{execution.domain_name}'})
-helm_chart.install_file(ingress_file, namespace)
+helm_chart.install_file(ingress_file,namespace)            
 values_file_path = os.path.join(
     execution.execution_folder, "values.json")
 
@@ -38,8 +38,5 @@ helm_chart.install_chart(release_name="bitnami",
                              --set auth.database={database}"])
 ingress_file = Helper.replace_in_file(os.path.join(execution.templates_folder, "ingress", "ingress.yaml"), {
     'HOSTNAME': f'mysql-{namespace}.{execution.domain_name}'})
-helm_chart.install_file(ingress_file, namespace)
-ingress_port = execution.open_tcp_port_nginx(
-    service_name='mysql-headless', service_port=3306)
-# connection_info = f'mysql: \n mysql.{namespace}.svc.cluster.local:3306\DB name: {database}\nusername: {username}\nroot password:{root_password}\npassword:{password}'
-# Helper.write_connection_info(connection_info, execution.output_folder)
+helm_chart.install_file(ingress_file,namespace)
+ingress_port = execution.open_tcp_port_nginx(service_name= 'mysql-headless',service_port= 3306)

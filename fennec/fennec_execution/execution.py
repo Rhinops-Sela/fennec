@@ -170,7 +170,7 @@ class Execution:
 
         return command_result(rc, output_str)
 
-    def write_connection_info(self):
+    def write_connection_info(self, service_name: str, ingress_port=80, aws_mock=False):
         namespace = self.get_local_parameter('NAMESPACE')
         output_file = os.path.join(self.output_folder, "connection_info.info")
         ingresses = self.run_command(
@@ -204,10 +204,11 @@ class Execution:
 
     def open_tcp_port_nginx(self, service_name: str, service_port: int):
         try:
-            self.delete_tcp_port_nginx(service_name,service_port)
+            self.delete_tcp_port_nginx(service_name, service_port)
             namespace = self.get_local_parameter('NAMESPACE')
             # Creates the lock because the nginx is relevent for all executions
-            Helper.create_lock(locks_folder=self.locks_folder, function_name=f'{service_name}-{namespace}')
+            Helper.create_lock(locks_folder=self.locks_folder,
+                               function_name=f'{service_name}-{namespace}')
             output_file = os.path.join(self.working_folder, 'output.json')
             config_map = Helper.json_to_object(self.run_command(
                 'kubectl get configmap tcp-services -o json -n ingress-nginx')[1])
@@ -253,7 +254,8 @@ class Execution:
             Helper.print_log('Unable to opoen ports in redis')
             Helper.print_log(e)
         finally:
-            Helper.release_lock(locks_folder=self.locks_folder, function_name=f'{service_name}-{namespace}')
+            Helper.release_lock(locks_folder=self.locks_folder,
+                                function_name=f'{service_name}-{namespace}')
 
     def delete_tcp_port_nginx(self, service_name: str, service_port: int):
         ports_to_use = []

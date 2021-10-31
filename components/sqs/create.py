@@ -5,7 +5,6 @@ from fennec_helpers.helper import Helper
 from fennec_nodegorup.nodegroup import Nodegroup
 
 execution = Execution(os.path.dirname(__file__))
-execution.write_connection_info()
 sqs_url = execution.get_local_parameter('SQS_DNS_RECORD')
 namespace = execution.get_local_parameter('NAMESPACE')
 hostname = f"http://sqs-localstack.{namespace}.svc.cluster.local:80"
@@ -43,4 +42,3 @@ helm_chart.install_chart(release_name="localstack-charts",
 connection_info = f'sqs: \naws --endpoint-url=http://sqs-localstack.{namespace}.svc.cluster.local:4566 sqs create-queue --queue-name fennec'
 if sqs_url:
     connection_info += f'\naws --endpoint-url={sqs_url}:4566 sqs create-queue --queue-name fennec'
-Helper.write_connection_info(connection_info, execution.output_folder)
