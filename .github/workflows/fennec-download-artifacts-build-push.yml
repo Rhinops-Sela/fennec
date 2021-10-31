@@ -26,6 +26,7 @@ jobs:
           commit: ${{github.event.pull_request.head.sha}}
           name: components
           path: ${{ github.workspace }}/build-workspace/components/components
+          check_artifacts: true
 
       - name: download artifacts-backend
         uses: dawidd6/action-download-artifact@v2
@@ -35,6 +36,7 @@ jobs:
           commit: ${{github.event.pull_request.head.sha}}
           name: node_modules
           path: ${{ github.workspace }}/build-workspace/backend/node_modules
+          check_artifacts: true
  
       - name: download artifacts-backend
         uses: dawidd6/action-download-artifact@v2
@@ -44,6 +46,7 @@ jobs:
           commit: ${{github.event.pull_request.head.sha}}
           name: dist
           path: ${{ github.workspace }}/build-workspace/backend/dist
+          check_artifacts: true
      
       - name: download artifacts-webclient
         uses: dawidd6/action-download-artifact@v2
@@ -53,6 +56,7 @@ jobs:
           commit: ${{github.event.pull_request.head.sha}}
           name: wizard
           path: ${{ github.workspace }}/build-workspace/webclient/wizard
+          check_artifacts: true
 
       - name: download artifacts-fennec
         uses: dawidd6/action-download-artifact@v2
@@ -62,6 +66,7 @@ jobs:
           commit: ${{github.event.pull_request.head.sha}}
           name: fennec
           path: ${{ github.workspace }}/build-workspace/fennec/fennec
+          check_artifacts: true
           
       - name: Copy nginx.conf to build workspace
         run: |
