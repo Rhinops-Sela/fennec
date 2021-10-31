@@ -1,26 +1,23 @@
 import os
 from fennec_executers.helm_executer import Helm
-from fennec_execution.execution import Execution
 from fennec_helpers.helper import Helper
 from fennec_nodegorup.nodegroup import Nodegroup
-from fennec_executers.kubectl_executer import Kubectl
 
-execution = Execution(os.path.dirname(__file__))
-s3_url = execution.get_local_parameter('S3_DNS_RECORD')
-namespace = execution.get_local_parameter('NAMESPACE')
+helm_chart = Helm(os.path.dirname(__file__), chart_name="localstack")
+s3_url = helm_chart.execution.get_local_parameter('S3_DNS_RECORD')
+namespace = helm_chart.execution.get_local_parameter('NAMESPACE')
 hostname = f"http://s3-localstack.{namespace}.svc.cluster.local:4566"
 external_hostname = f"http://sns-localstack.{namespace}:4566"
 if s3_url:
     external_hostname = s3_url
 template_path = os.path.join(
-    execution.templates_folder, "s3-ng-template.json")
+    helm_chart.execution.templates_folder, "s3-ng-template.json")
 nodegroup = Nodegroup(os.path.dirname(__file__), template_path)
 nodegroup.create()
 
-helm_chart = Helm(os.path.dirname(__file__),
-                  namespace=namespace, chart_name="localstack")
+
 values_file_path = os.path.join(
-    execution.execution_folder, "values.json")
+    helm_chart.execution.execution_folder, "values.json")
 
 values_file_object = Helper.file_to_object(values_file_path)
 values_file_object['extraEnvVars'][1]['value'] = external_hostname

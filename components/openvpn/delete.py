@@ -1,11 +1,10 @@
 import os
 from fennec_executers.helm_executer import Helm
-from fennec_execution.execution import Execution
 from fennec_nodegorup.nodegroup import Nodegroup
 
-execution = Execution(os.path.dirname(__file__))
+openvpn_chart = Helm(os.path.dirname(__file__), "openvpn")
 template_path = os.path.join(
-    execution.templates_folder, "vpn-ng-template.json")
+    openvpn_chart.execution.templates_folder, "vpn-ng-template.json")
 
 
 openvpn_chart = Helm(os.path.dirname(__file__), "openvpn")

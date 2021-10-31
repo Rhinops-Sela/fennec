@@ -1,20 +1,18 @@
 import os
 from fennec_executers.helm_executer import Helm
-from fennec_execution.execution import Execution
 from fennec_helpers.helper import Helper
 from fennec_nodegorup.nodegroup import Nodegroup
 
-execution = Execution(os.path.dirname(__file__))
-lambda_url = execution.get_local_parameter('LAMBDA_DNS_RECORD')
-namespace = execution.get_local_parameter('NAMESPACE')
+helm_chart = Helm(os.path.dirname(__file__), chart_name="localstack")
+lambda_url = helm_chart.execution.get_local_parameter('LAMBDA_DNS_RECORD')
+namespace = helm_chart.execution.get_local_parameter('NAMESPACE')
 template_path = os.path.join(
-    execution.templates_folder, "lambda-ng-template.json")
+    helm_chart.execution.templates_folder, "lambda-ng-template.json")
 nodegroup = Nodegroup(os.path.dirname(__file__), template_path)
 nodegroup.create()
 
-helm_chart = Helm(os.path.dirname(__file__), namespace=namespace, chart_name="localstack")
 values_file_path = os.path.join(
-    execution.execution_folder, "values.json")
+    helm_chart.execution.execution_folder, "values.json")
 
 values_file_object = Helper.file_to_object(values_file_path)
 values_file_object['extraEnvVars'][0]['value'] = helm_chart.execution.cluster_region
