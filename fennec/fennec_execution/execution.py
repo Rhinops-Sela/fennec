@@ -204,10 +204,11 @@ class Execution:
 
     def open_tcp_port_nginx(self, service_name: str, service_port: int):
         try:
-            # Creates the lock because the nginx is relevent for all executions
-            Helper.create_lock(locks_folder=self.locks_folder)
-            output_file = os.path.join(self.working_folder, 'output.json')
+            self.delete_tcp_port_nginx(service_name,service_port)
             namespace = self.get_local_parameter('NAMESPACE')
+            # Creates the lock because the nginx is relevent for all executions
+            Helper.create_lock(locks_folder=self.locks_folder, function_name=f'{service_name}-{namespace}')
+            output_file = os.path.join(self.working_folder, 'output.json')
             config_map = Helper.json_to_object(self.run_command(
                 'kubectl get configmap tcp-services -o json -n ingress-nginx')[1])
             port_to_use = Execution.get_avaliable_port(
@@ -248,10 +249,11 @@ class Execution:
             self.run_command(
                 f'kubectl apply -f {output_file} -n ingress-nginx')
             return port_to_use
-        except:
+        except Exception as e:
             Helper.print_log('Unable to opoen ports in redis')
+            Helper.print_log(e)
         finally:
-            Helper.release_lock(locks_folder=self.locks_folder)
+            Helper.release_lock(locks_folder=self.locks_folder, function_name=f'{service_name}-{namespace}')
 
     def delete_tcp_port_nginx(self, service_name: str, service_port: int):
         ports_to_use = []
@@ -264,6 +266,8 @@ class Execution:
             port_value = config_map['data'][port]
             if port_value == service_address:
                 ports_to_use.append(port)
+        if not ports_to_use:
+            Helper.print_log("No data to remove in nginx")
         ngnix_deployment_objects_to_remove = []
         ngnix_deployment = Helper.json_to_object(self.run_command(
             'kubectl get deployment ingress-nginx-controller -o json -n ingress-nginx')[1])

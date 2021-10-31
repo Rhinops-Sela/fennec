@@ -5,23 +5,30 @@ import os
 import shutil
 import sys
 from pathlib import Path
+import datetime
 
 
 class Helper:
 
     @staticmethod
-    def create_lock(locks_folder: str):
-        lock_file = os.path.join(locks_folder, inspect.stack()[1].function)
+    def create_lock(locks_folder: str, function_name: str):
         attempts = 10
+        lock_file = os.path.join(locks_folder, function_name)
         while os.path.isfile(lock_file) and attempts > -1:
-            Helper.print_log('wating for ngnix update to complete')
-            time.sleep(5)
-            attempts -= 1
+            file_age=(time.time()-os.path.getmtime(lock_file))/60
+            if file_age > attempts:
+                os.remove(lock_file)
+            else: 
+                Helper.print_log('wating for ngnix update to complete')
+                time.sleep(5)
+                attempts -= 1
+        if not os.path.exists(lock_file):
+            Path(os.path.dirname(lock_file)).mkdir(parents=True, exist_ok=True)
         open(lock_file, "w")
 
     @staticmethod
-    def release_lock(locks_folder: str):
-        lock_file = os.path.join(locks_folder, inspect.stack()[1].function)
+    def release_lock(locks_folder: str, function_name: str):
+        lock_file = os.path.join(locks_folder, function_name)
         os.remove(lock_file)
 
     @staticmethod

@@ -42,7 +42,7 @@ ingress_file = Helper.replace_in_file(os.path.join(execution.templates_folder, "
     'HOSTNAME': f'redis-{namespace}.{execution.domain_name}'})
 helm_chart.install_file(ingress_file,namespace)
 
-ui_foler = os.path.join(execution.execution_folder, 'ui')
+ui_foler = os.path.join(execution.templates_folder, 'ui')
 admin_deployment = os.path.join(ui_foler, 'deployment.json')
 admin_file_object = Helper.file_to_object(admin_deployment)
 admin_file_object['spec']['template']['spec']['containers'][0][

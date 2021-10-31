@@ -15,7 +15,7 @@
     "debug": 0
   },
   "NAMESPACE": {
-    "debug": "mysql"
+    "debug": "mysql1"
   },
   "MYSQL_DNS_RECORD":{
     "debug": "mysql.fennec.io"
