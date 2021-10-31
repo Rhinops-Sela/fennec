@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
-  name: mysql-ingress
+  name: kafka-ingress
 spec:
   rules:
   - host: HOSTNAME
@@ -11,8 +11,8 @@ spec:
       paths:
       - backend:
           service:
-            name: mysql-headless
+            name: kafka-headless
             port:
-              name: mysql
+              name: tcp-client
         path: /
         pathType: Prefix
