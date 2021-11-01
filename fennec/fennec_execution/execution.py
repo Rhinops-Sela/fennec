@@ -170,23 +170,27 @@ class Execution:
 
         return command_result(rc, output_str)
 
-    def write_connection_info(self, service_name: str, ingress_port=80, aws_mock=False):
+    def write_connection_info(self, services_names, ingress_port=80, aws_mock=False):
         output_file = os.path.join(self.output_folder, "connection_info.info")
         ingresses = self.run_command(
             f"kubectl get ingress -n {self.namespace} -o json")
         ingresses = Helper.json_to_object(ingresses[1])
         connection_info = f"You are working on namespace: {self.namespace}, in order to connect to the below urls\nplease connect to the VPN.\n"
-        if aws_mock:
-            connection_info += f"For connection to AWS services you need to set external-url to the service url listed below\n"
         connection_info += f"URLS:\n\n"
+        ingress_url=""
         for ingress_item in ingresses['items']:
             for rule in ingress_item['spec']['rules']:
-                if service_name in rule['host']:
-                    port=""
-                    if ingress_port != 80:
-                        port=f":{ingress_port}"
-                    connection_info += f"{rule['host']}{port}\n"
-
+                for service_name in services_names:
+                    if service_name in rule['host']:
+                        port=""
+                        if ingress_port != 80:
+                            port=f":{ingress_port}"
+                        ingress_url=f"{rule['host']}{port}\n"
+                        connection_info += ingress_url
+        if aws_mock and ingress_url:
+            connection_info += f"For connection to AWS services you need to set --endpoint-url to the service url listed below\n"
+            connection_info += f"aws SERVICE_NMAE --endpoint-url=URL COMMAND\n"
+            connection_info += f"i.e. : aws dynamodb --endpoint-url={ingress_url} create-table ... \n"
         f = open(output_file, "+a")
         f.write(f'\n{connection_info}')
         f.close()

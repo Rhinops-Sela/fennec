@@ -15,7 +15,7 @@
     "debug": 0
   },
   "NAMESPACE": {
-    "debug": "dynamodb"
+    "debug": "dynamodb1"
   },
   "DYNAMOO_DNS_RECORD":{
     "debug": "dynamodb.fennec.io"
