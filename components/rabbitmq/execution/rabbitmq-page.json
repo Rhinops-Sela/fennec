@@ -1,0 +1,44 @@
+{
+  "name": "rabbitmq",
+  "executer": "python",
+  "mandatory": false,
+  "displayName": "Rabbitmq",
+  "image": "assets/component_logos/rabbitmq.png",
+  "description": "rabbitmq configuration & parameters",
+  "inputs": [
+    { "template": "skip-if-installed" },
+    {
+      "template": "spot",
+      "group_enabler_master": "use_spot",
+      "value": true
+    },
+    {
+      "template": "spot-on-demand-base-capacity",
+      "sub_group": "use_spot",
+      "value": "0"
+    },
+    {
+      "template": "spot-on-demand-cpacity",
+      "sub_group": "use_spot",
+      "value": "0"
+    },
+    {
+      "template": "spot-allocation",
+      "sub_group": "use_spot"
+    },
+    {
+      "template": "namespace"
+    },
+    {
+      "template": "image_tag",
+      "serverValue": "RABBITMQ_IMAGE_TAG"
+    },
+    {
+      "controlType": "text",
+      "tooltip": "# of borkers",
+      "displayName": "Brokers",
+      "regexValidation": "^[0-9]*$",
+      "serverValue": "BROKERS"
+    }
+  ]
+}

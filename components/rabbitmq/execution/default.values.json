@@ -1,0 +1,30 @@
+{
+  "SKIP_IF_EXISTS": {
+    "debug": true
+  },
+  "NAMESPACE": {
+    "debug": "rabbitmq"
+  },
+  "BROKERS": {
+    "debug": "3"
+  },
+  "USE_SPOT": {
+    "debug": true
+  },
+  "ALLOCATION_STRATEGY": {
+    "debug": "lowest-price"
+  },
+  "ON_DEMEND_BASE_CAPACITY": {
+    "debug": 0
+  },
+  "ON_DEMEND_ABOVE_BASE_PERCENTAGE": {
+    "debug": 0
+  },
+  "RABBITMQ_DNS_RECORD": {
+    "debug": "rabbitmq.fennec.io"
+  },
+  "RABBITMQ_IMAGE_TAG": {
+    "debug": "3.9.8",
+    "default": "3.9.8"
+  }
+}
