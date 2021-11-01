@@ -1,0 +1,40 @@
+{
+  "apiVersion": "eksctl.io/v1alpha5",
+  "kind": "ClusterConfig",
+  "nodeGroups": [
+    {
+      "name": "postgresql",
+      "minSize": 1,
+      "maxSize": 100,
+      "desiredCapacity": 1,
+      "volumeSize": 50,
+      "volumeType": "gp2",
+      "privateNetworking": true,
+      "iam": {
+        "withAddonPolicies": {
+          "autoScaler": true
+        }
+      },
+      "labels": {
+        "role": "postgresql"
+      },
+      "instancesDistribution": {
+        "instanceTypes": [
+          "c5.xlarge",
+          "c5a.xlarge"
+        ]
+      },
+      "taints": {
+        "postgresql": "true:NoSchedule"
+      },
+      "tags": {
+        "k8s.io/cluster-autoscaler/node-template/label/role": "postgresql",
+        "k8s.io/cluster-autoscaler/node-template/taint/postgresql": "true:NoSchedule"
+      }
+    }
+  ],
+  "metadata": {
+    "name": "fennec",
+    "region": "eu-west-2"
+  }
+}

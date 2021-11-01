@@ -43,7 +43,8 @@
     "pages": [
       "redis-page",
       "elasticsearch-page",
-      "mysql-page"
+      "mysql-page",
+      "postgresql-page"
     ]
   },
   {

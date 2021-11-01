@@ -1,0 +1,35 @@
+{
+  "SKIP_IF_EXISTS": {
+    "debug": true
+  },
+  "USE_SPOT": {
+    "debug": true
+  },
+  "ALLOCATION_STRATEGY": {
+    "debug": "lowest-price"
+  },
+  "ON_DEMEND_BASE_CAPACITY": {
+    "debug": 0
+  },
+  "ON_DEMEND_ABOVE_BASE_PERCENTAGE": {
+    "debug": 0
+  },
+  "NAMESPACE": {
+    "debug": "postgresql1"
+  },
+  "POSTGRESQL_DNS_RECORD":{
+    "debug": "postgresql.fennec.io"
+  },
+  "POSTGRESQL_USERNAME":{
+    "debug": "fennec"
+  },
+  "POSTGRESQL_PASSWORD":{
+    "debug": "fennec"
+  },
+  "POSTGRESQL_ROOT_PASSWORD":{
+    "debug": "fennec-root"
+  },
+  "POSTGRESQL_DB_NAME":{
+    "debug": "fennec"
+  }
+}

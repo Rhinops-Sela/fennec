@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  name: postgresql-ingress
+spec:
+  rules:
+  - host: HOSTNAME
+    http:
+      paths:
+      - backend:
+          service:
+            name: postgresql-headless
+            port:
+              name: postgresql
+        path: /
+        pathType: Prefix
