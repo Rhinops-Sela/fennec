@@ -57,10 +57,21 @@
       "desiredCapacity": 1,
       "volumeSize": 50,
       "volumeType": "gp2",
+      "ssh": {
+        "allow": true,
+        "enableSsm": true
+      },
       "privateNetworking": true,
       "iam": {
         "attachPolicyARNs": [
-          "arn:aws:iam::aws:policy/AmazonRoute53FullAccess"
+          "arn:aws:iam::aws:policy/AmazonRoute53FullAccess",
+          "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
+          "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
+          "arn:aws:iam::aws:policy/ElasticLoadBalancingFullAccess",
+          "arn:aws:iam::aws:policy/AmazonS3FullAccess",
+          "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess",
+          "arn:aws:iam::aws:policy/AmazonMSKFullAccess",
+          "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAcces"
         ],
         "withAddonPolicies": {
           "autoScaler": true
