@@ -71,7 +71,7 @@ class Helper:
     @staticmethod
     def replace_in_file(source_file: str, strings_to_replace: dict, max=1):
         output_file_name, output_file_extension = os.path.splitext(source_file)
-        output_file = f"{output_file_name}_execution{output_file_extension}"
+        output_file = f"{output_file_name}-execute{output_file_extension}"
         fin = open(source_file, "rt")
         fout = open(output_file + "_temp",
                     "wt+") if source_file == output_file else open(output_file, "wt+")
