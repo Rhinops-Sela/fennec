@@ -58,9 +58,23 @@
       "value": true
     },
     {
+      "template": "spot",
+      "group_enabler_master": "use_spot",
+      "value": true
+    },
+    {
+      "controlType": "checkbox",
+      "tooltip": "Install VPN?",
+      "displayName": "VPN",
+      "serverValue": "INSTALL_VPN",
+      "group_enabler_master": "instal_vpn",
+      "defaultValue": true
+    },
+    {
       "controlType": "textarea",
       "tooltip": "Please provide comma (,) separated list of users",
       "displayName": "List of VPN users",
+      "sub_group": "instal_vpn",
       "serverValue": "USERS",
       "regexValidation": ".*",
       "value": "fennec-vpn"

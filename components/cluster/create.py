@@ -10,7 +10,7 @@ cluster = Cluster(os.path.dirname(__file__))
 allow_skip = cluster.execution.get_local_parameter('SKIP_IF_EXISTS')
 vpn_working_folder = os.path.join(
     cluster.execution.templates_folder, "08.openvpn")
-if not cluster.check_if_cluster_exists() or not allow_skip or True:
+if not cluster.check_if_cluster_exists() or not allow_skip:
     cluster.create()
 
     # Install cert-manager
@@ -93,7 +93,9 @@ if not cluster.check_if_cluster_exists() or not allow_skip or True:
         deployment_file_execution = Helper.replace_in_file(deployment_file, {
             'CLUSTER_NAME': f'{cluster.execution.cluster_name}'})
         cluster.install_file(deployment_file_execution, namespace='external-dns')
-keygen_script_path = os.path.join(
-    vpn_working_folder, "keygen", "generate-client-key.sh")
-cluster.execution.run_command(
-    f'{keygen_script_path} "{cluster.execution.local_parameters["USERS"]}" openvpn openvpn {cluster.execution.output_folder} 2>&1')
+install_vpn = cluster.execution.get_local_parameter('INSTALL_VPN')
+if install_vpn:
+    keygen_script_path = os.path.join(
+        vpn_working_folder, "keygen", "generate-client-key.sh")
+    cluster.execution.run_command(
+        f'{keygen_script_path} "{cluster.execution.local_parameters["USERS"]}" openvpn openvpn {cluster.execution.output_folder} 2>&1')
