@@ -15,9 +15,9 @@ values_file_path = os.path.join(
 values_file_object = Helper.file_to_object(values_file_path)
 values_file_object['replicas'] = elasticsearch_chart.execution.get_local_parameter('REPLICAS')
 values_file_object['minimumMasterNodes'] = elasticsearch_chart.execution.get_local_parameter('NUMBER_MASTERS')
-if elasticsearch_chart.elasticsearch_chart.execution.domain_name:
+if elasticsearch_chart.execution.domain_name:
     values_file_object['ingress']['enabled'] = True
-    values_file_object['ingress']['hosts'][0]['host'] = f'es-{namespace}.{elasticsearch_chart.elasticsearch_chart.execution.domain_name}'
+    values_file_object['ingress']['hosts'][0]['host'] = f'es-{namespace}.{elasticsearch_chart.execution.domain_name}'
 
 execution_file = os.path.join(
     os.path.dirname(__file__), "elasticsearch-execute.values.json")
@@ -36,7 +36,7 @@ if elasticsearch_chart.execution.get_local_parameter('INSTALL_KIBANA'):
         'elasticsearchHosts'] = f"http://elasticsearch-master-headless:9200"
     if kibana_chart.elasticsearch_chart.execution.domain_name:
         values_file_object['ingress']['enabled'] = True
-        values_file_object['ingress']['hosts'][0]['host'] = f'kibana-{namespace}.{elasticsearch_chart.elasticsearch_chart.execution.domain_name}'
+        values_file_object['ingress']['hosts'][0]['host'] = f'kibana-{namespace}.{elasticsearch_chart.execution.domain_name}'
     execution_file = os.path.join(
         os.path.dirname(__file__), "kibana-execute.values.json")
     Helper.to_json_file(values_file_object, execution_file)
