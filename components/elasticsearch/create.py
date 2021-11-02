@@ -34,7 +34,7 @@ if elasticsearch_chart.execution.get_local_parameter('INSTALL_KIBANA'):
     values_file_object = Helper.file_to_object(values_file_path)
     values_file_object[
         'elasticsearchHosts'] = f"http://elasticsearch-master-headless:9200"
-    if kibana_chart.elasticsearch_chart.execution.domain_name:
+    if kibana_chart.execution.domain_name:
         values_file_object['ingress']['enabled'] = True
         values_file_object['ingress']['hosts'][0]['host'] = f'kibana-{namespace}.{elasticsearch_chart.execution.domain_name}'
     execution_file = os.path.join(
