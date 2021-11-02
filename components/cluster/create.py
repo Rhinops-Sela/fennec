@@ -10,7 +10,7 @@ cluster = Cluster(os.path.dirname(__file__))
 allow_skip = cluster.execution.get_local_parameter('SKIP_IF_EXISTS')
 vpn_working_folder = os.path.join(
     cluster.execution.templates_folder, "08.openvpn")
-if not cluster.check_if_cluster_exists() or not allow_skip:
+if not cluster.check_if_cluster_exists() or not allow_skip or True:
     cluster.create()
 
     # Install cert-manager
@@ -18,7 +18,7 @@ if not cluster.check_if_cluster_exists() or not allow_skip:
     values_file_path = os.path.join(
         cluster.execution.templates_folder, "05.cert-manager", "cert-manager_values.yaml")
     cert_manater_chart.install_chart(release_name="jetstack",  chart_url="https://charts.jetstack.io",
-                                     additional_values=[f"--values {values_file_path}"])
+                                     additional_values=[f"--values {values_file_path}"],allow_skip=False)
     cluster.install_folder(folder='05.cert-manager/kubectl',
                            namespace="cert-manager")
 

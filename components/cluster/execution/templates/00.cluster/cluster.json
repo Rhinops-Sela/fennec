@@ -69,7 +69,7 @@
           "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
           "arn:aws:iam::aws:policy/ElasticLoadBalancingFullAccess",
           "arn:aws:iam::aws:policy/AmazonS3FullAccess",
-          "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAcces"
+          "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess"
         ],
         "withAddonPolicies": {
           "autoScaler": true

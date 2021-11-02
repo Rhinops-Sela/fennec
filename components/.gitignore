@@ -4,6 +4,7 @@ outputs/
 **/dist/*
 **/build/*
 *.kube
+*.ovpn
 *__pycache__*
 *-execute*.json
 *-execute*.yaml
