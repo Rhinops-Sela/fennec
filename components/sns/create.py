@@ -6,8 +6,8 @@ from fennec_nodegorup.nodegroup import Nodegroup
 helm_chart = Helm(os.path.dirname(__file__), chart_name="localstack")
 namespace = helm_chart.execution.get_local_parameter('NAMESPACE')
 sns_url = helm_chart.execution.get_local_parameter('SNS_DNS_RECORD')
-hostname = f"http://sns-localstack.{namespace}.svc.cluster.local:4566"
-external_hostname = f"http://sns-localstack.{namespace}:4566"
+hostname = f"http://sns-localstack.{namespace}.svc.cluster.local:80"
+external_hostname = f"http://sns-localstack.{namespace}:80"
 if sns_url:
     external_hostname = sns_url
 
