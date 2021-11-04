@@ -45,6 +45,11 @@
     "debug": "dashboard.fennec.io",
     "default": "dashboard.fennec.io"
   },
+  "INSTALL_VPN": {
+    "debug": false,
+    "default": false
+
+  },
   "INSTALL_INGRESS_CONTROLER": {
     "debug": true
   }
