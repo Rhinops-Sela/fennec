@@ -10,6 +10,7 @@ import app from "../app";
 import { IExecuter } from "../interfaces/server/IExecuter";
 import { DeploymentExecutionMaster } from "./deployment-execution-master";
 import { LogLine } from "./logline-message";
+import { checkServerIdentity } from "tls";
 export class DeploymentExecuter {
   private globalVariables: IGlobalVariable[] = [];
   private output_folder: string;
@@ -92,10 +93,8 @@ export class DeploymentExecuter {
     for (let domain of this.domains) {
       for (let page of domain.pages) {
         for (let input of page.inputs) {
-          if (!input.value) {
-            if (input.defaultValue != null) {
-              input.value = input.defaultValue;
-            }
+          if(input.value == null || input.value == undefined){
+            input.value = input.defaultValue
           }
         }
         let createMode = true;
