@@ -4,7 +4,7 @@
   "nodeGroups": [
     {
       "name": "redis",
-      "minSize": 1,
+      "minSize": 0,
       "maxSize": 100,
       "desiredCapacity": 1,
       "volumeSize": 50,

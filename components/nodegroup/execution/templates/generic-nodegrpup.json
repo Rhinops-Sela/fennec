@@ -11,7 +11,7 @@
       "instancesDistribution": {
         "instanceTypes": []
       },
-      "minSize": 1,
+      "minSize": 0,
       "maxSize": 500,
       "desiredCapacity": 1,
       "volumeSize": 50,

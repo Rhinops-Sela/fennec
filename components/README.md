@@ -30,7 +30,7 @@
   "nodeGroups": [
     {
       "name": "fennec-ng",
-      "minSize": 1,
+      "minSize": 0,
       "maxSize": 200,
       "desiredCapacity": 1,
       "volumeSize": 50,
