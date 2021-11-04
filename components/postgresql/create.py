@@ -32,7 +32,9 @@ helm_chart.install_chart(release_name="bitnami",
                              --set auth.username={username} \
                              --set auth.rootPassword={root_password} \
                              --set auth.password={password} \
-                             --set auth.database={database}"])
+                             --set auth.database={database} \
+                             --set postgresqlDatabase={database}"])
+
 ingress_file = Helper.replace_in_file(os.path.join(helm_chart.execution.templates_folder, "ingress", "ingress.yaml"), {
     'HOSTNAME': f'postgresql-{namespace}.{helm_chart.execution.domain_name}'})
 helm_chart.install_file(ingress_file,namespace)
