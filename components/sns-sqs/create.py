@@ -36,10 +36,10 @@ helm_chart.install_chart(release_name="localstack-charts",
 values_to_replace = {
     'AWS_REGION_PLACEHOLDER': f'{helm_chart.execution.cluster_region}',
     'INGRESS_ENDPOINT': f'http://sns-sqs-{namespace}.{helm_chart.execution.domain_name}',
-    'CLIENT_HOSTNAME': f'http://sns-sqs-client-{namespace}.{helm_chart.execution.domain_name}'}
+    'CLIENT_HOSTNAME': f'sns-sqs-client-{namespace}.{helm_chart.execution.domain_name}'}
 
 deployment_file = Helper.replace_in_file(os.path.join(
-    helm_chart.execution.templates_folder, "client", "deployment.json"), values_to_replace)
+    helm_chart.execution.templates_folder, "client", "deployment.json"), values_to_replace,max=2)
 service_file = Helper.replace_in_file(os.path.join(
     helm_chart.execution.templates_folder, "client", "service.json"), values_to_replace)
 ingress_file = Helper.replace_in_file(os.path.join(
