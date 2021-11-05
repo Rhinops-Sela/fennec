@@ -1,6 +1,7 @@
 {
   "persistence": {
-    "enabled": true
+    "enabled": true,
+    "size": "50Gi"
   },
   "extraEnvVars": [
     {

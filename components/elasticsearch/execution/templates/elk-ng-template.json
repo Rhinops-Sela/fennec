@@ -13,9 +13,9 @@
       },
       "instancesDistribution": {
         "instanceTypes": [
-          "m5.xlarge",
-          "m5.large",
-          "m5.2xlarge"
+          "c5.4xlarge",
+          "c5.xlarge",
+          "c5.2xlarge"
         ]
       },
       "minSize": 0,

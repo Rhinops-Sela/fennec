@@ -4,12 +4,16 @@
   },
   "master": {
     "persistence": {
-      "size": "20Gi"
+      "size": "4Gi"
     },
     "resources": {
       "requests": {
-        "memory": "1G",
-        "cpu": 1
+        "memory": "14G",
+        "cpu": 2
+      },
+      "limits": {
+        "memory": "14G",
+        "cpu": 2
       }
     },
     "tolerations": [

@@ -1,0 +1,8 @@
+/node_modules
+/config/aws-config.json
+.DS_Store
+
+
+config/aws-override.json
+
+config/real-aws-config.json

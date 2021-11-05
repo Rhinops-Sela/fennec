@@ -1,0 +1,4 @@
+{ 
+    "sqs_endpoint": "http://sqs-fennec.fennec.io:80",
+    "sns_endpoint": "http://sns-fennec.fennec.io:80"
+}

@@ -15,9 +15,9 @@
     "debug": 0
   },
   "NAMESPACE": {
-    "debug": "sqs"
+    "debug": "sns-sqs"
   },
   "SQS_DNS_RECORD":{
-    "debug": "sqs.fennec.io"
+    "debug": "sns-sqs.fennec.io"
   }
 }

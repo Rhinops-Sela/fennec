@@ -21,15 +21,15 @@
     },
     {
       "name": "SERVICES",
-      "value": "sqs"
+      "value": "sns,sqs"
     }
   ],
   "nodeSelector": {
-    "role": "sqs"
+    "role": "sns-sqs"
   },
   "tolerations": [
     {
-      "key": "sqs",
+      "key": "sns-sqs",
       "operator": "Equal",
       "value": "true"
     }

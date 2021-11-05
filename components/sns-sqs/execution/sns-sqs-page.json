@@ -1,9 +1,9 @@
 {
-  "name": "sqs",
+  "name": "sns-sqs",
   "executer": "python",
-  "displayName": "SQS",
-  "image": "assets/component_logos/sqs.png",
-  "description": "SQS configuration & parameters",
+  "displayName": "SNS-SQS",
+  "image": "assets/component_logos/sns.png",
+  "description": "SNS-SQS configuration & parameters",
   "inputs": [
     { "template": "skip-if-installed" },
     {

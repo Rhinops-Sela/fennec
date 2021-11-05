@@ -3,7 +3,7 @@
   "kind": "ClusterConfig",
   "nodeGroups": [
     {
-      "name": "sqs",
+      "name": "sns-sqs",
       "minSize": 0,
       "maxSize": 100,
       "desiredCapacity": 1,
@@ -16,7 +16,7 @@
         }
       },
       "labels": {
-        "role": "sqs"
+        "role": "sns-sqs"
       },
       "instancesDistribution": {
         "instanceTypes": [
@@ -25,11 +25,11 @@
         ]
       },
       "taints": {
-        "sqs": "true:NoSchedule"
+        "sns-sqs": "true:NoSchedule"
       },
       "tags": {
-        "k8s.io/cluster-autoscaler/node-template/label/role": "sqs",
-        "k8s.io/cluster-autoscaler/node-template/taint/sqs": "true:NoSchedule"
+        "k8s.io/cluster-autoscaler/node-template/label/role": "sns-sqs",
+        "k8s.io/cluster-autoscaler/node-template/taint/sns-sqs": "true:NoSchedule"
       }
     }
   ],

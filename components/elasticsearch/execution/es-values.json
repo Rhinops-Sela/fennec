@@ -1,36 +1,65 @@
 {
-   "clusterName": "elasticsearch",
-   "replicas": 1,
-   "minimumMasterNodes": 1,
-   "persistence": {
-      "enabled": true,
-      "annotations": {}
-   },
-   "nodeSelector": {
-      "role": "elk"
-   },
-   "tolerations": [
-      {
-         "key": "elk",
-         "operator": "Equal",
-         "value": "true"
-      }
-   ],
-   "ingress": {
-      "enabled": false,
-      "annotations": {},
-      "className": "nginx",
-      "pathtype": "ImplementationSpecific",
-      "hosts": [
-        {
-          "host": "HOSTNAME",
-          "paths": [
-            {
-              "path": "/"
-            }
-          ]
-        }
-      ],
-      "tls": []
+  "clusterName": "elasticsearch",
+  "roles": {
+    "master": "true",
+    "ingest": "true",
+    "data": "true"
+  },
+  "replicas": 1,
+  "minimumMasterNodes": 1,
+  "esJavaOpts": "-Xms10g -Xmx10g",
+  "resources": {
+    "requests": {
+      "cpu": "6000m",
+      "memory": "11Gi"
+    },
+    "limits": {
+      "cpu": "6000m",
+      "memory": "11Gi"
     }
+  },
+  "networkHost": "0.0.0.0",
+  "volumeClaimTemplate": {
+    "accessModes": ["ReadWriteOnce"],
+    "resources": {
+      "requests": {
+        "storage": "50Gi"
+      }
+    }
+  },
+  "rbac": {
+    "create": false,
+    "serviceAccountName": ""
+  },
+  "persistence": {
+    "enabled": true,
+    "annotations": {}
+  },
+  "nodeSelector": {
+    "role": "elk"
+  },
+  "tolerations": [
+    {
+      "key": "elk",
+      "operator": "Equal",
+      "value": "true"
+    }
+  ],
+  "ingress": {
+    "enabled": false,
+    "annotations": {},
+    "className": "nginx",
+    "pathtype": "ImplementationSpecific",
+    "hosts": [
+      {
+        "host": "HOSTNAME",
+        "paths": [
+          {
+            "path": "/"
+          }
+        ]
+      }
+    ],
+    "tls": []
+  }
 }

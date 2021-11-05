@@ -1,0 +1,63 @@
+{
+   "apiVersion": "apps/v1",
+   "kind": "Deployment",
+   "metadata": {
+      "name": "sns-sqs-client"
+   },
+   "spec": {
+      "selector": {
+         "matchLabels": {
+            "run": "sns-sqs-client"
+         }
+      },
+      "replicas": 1,
+      "template": {
+         "metadata": {
+            "labels": {
+               "run": "sns-sqs-client"
+            }
+         },
+         "spec": {
+            "tolerations": [
+               {
+                  "key": "sns-sqs",
+                  "operator": "Equal",
+                  "value": "true"
+               }
+            ],
+            "containers": [
+               {
+                  "name": "sns-sqs-client",
+                  "image": "iliagerman/fennec:sns-sqs-client",
+                  "env": [
+                     {
+                        "name": "SQS_ENDPOINT",
+                        "value": "INGRESS_ENDPOINT"
+                     },
+                     {
+                        "name": "SNS_ENDPOINT",
+                        "value": "INGRESS_ENDPOINT"
+                     },
+                     {
+                        "name": "PORT",
+                        "value": 8080
+                     },
+                     {
+                        "name": "AWS_REGION",
+                        "value": "AWS_REGION_PLACEHOLDER"
+                     }
+                  ],
+                  "ports": [
+                     {
+                        "containerPort": 8080
+                     }
+                  ]
+               }
+            ],
+            "nodeSelector": {
+               "role": "sns-sqs"
+            }
+         }
+      }
+   }
+}

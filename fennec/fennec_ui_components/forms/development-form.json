@@ -4,8 +4,7 @@
     "description": "EKS cluster configuration",
     "displayName": "Cluster",
     "pages": [
-      "cluster-page",
-      "nodegroup-page"
+      "cluster-page"
     ]
   },
   {
@@ -14,26 +13,9 @@
     "displayName": "AWS - Services",
     "pages": [
       "dynamodb-page",
-      "sqs-page",
       "s3-page",
-      "sns-page",
+      "sns-sqs-page",
       "lambda-page"
-    ]
-  },
-  {
-    "name": "monitoring",
-    "description": "Configuration & Parameters for monitoring the cluster",
-    "displayName": "Monitoring",
-    "pages": [
-      "datadog-page"
-    ]
-  },
-  {
-    "name": "network",
-    "description": "Networking configuration for the cluster",
-    "displayName": "Networking",
-    "pages": [
-      "coredns-page"
     ]
   },
   {

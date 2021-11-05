@@ -6,7 +6,7 @@
       "name": "dynamodb",
       "minSize": 0,
       "maxSize": 100,
-      "desiredCapacity": 1,
+      "desiredCapacity": 0,
       "volumeSize": 50,
       "volumeType": "gp2",
       "privateNetworking": true,
@@ -21,6 +21,7 @@
       "instancesDistribution": {
         "instanceTypes": [
           "t3.large",
+          "t3.xlarge",
           "t2.large"
         ]
       },

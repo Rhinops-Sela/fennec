@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  name: sns-sqs-ingress
+spec:
+  rules:
+  - host: CLIENT_HOSTNAME
+    http:
+      paths:
+      - backend:
+          service:
+            name: sns-sqs-client
+            port:
+              name: http
+        path: /
+        pathType: Prefix

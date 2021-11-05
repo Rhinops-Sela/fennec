@@ -7,7 +7,7 @@
       "minSize": 0,
       "maxSize": 100,
       "desiredCapacity": 1,
-      "volumeSize": 50,
+      "volumeSize": 20,
       "volumeType": "gp2",
       "privateNetworking": true,
       "iam": {
@@ -20,8 +20,7 @@
       },
       "instancesDistribution": {
         "instanceTypes": [
-          "t3.large",
-          "t2.large"
+          "m5.xlarge"
         ]
       },
       "taints": {
