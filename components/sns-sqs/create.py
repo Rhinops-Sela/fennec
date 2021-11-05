@@ -39,9 +39,9 @@ values_to_replace = {
     'CLIENT_HOSTNAME': f'http://sns-sqs-client-{namespace}.{helm_chart.execution.domain_name}'}
 
 deployment_file = Helper.replace_in_file(os.path.join(
-    helm_chart.execution.templates_folder, "client", "deployment.yaml"), values_to_replace)
+    helm_chart.execution.templates_folder, "client", "deployment.json"), values_to_replace)
 service_file = Helper.replace_in_file(os.path.join(
-    helm_chart.execution.templates_folder, "client", "service.yaml"), values_to_replace)
+    helm_chart.execution.templates_folder, "client", "service.json"), values_to_replace)
 ingress_file = Helper.replace_in_file(os.path.join(
     helm_chart.execution.templates_folder, "client", "ingress.yaml"), values_to_replace)
 
