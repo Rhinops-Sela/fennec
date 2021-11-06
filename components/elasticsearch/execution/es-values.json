@@ -35,9 +35,6 @@
     "enabled": true,
     "annotations": {}
   },
-  "nodeSelector": {
-    "role": "elk"
-  },
   "tolerations": [
     {
       "key": "elk",

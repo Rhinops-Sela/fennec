@@ -1,6 +1,7 @@
 output/
 locks/
 outputs/
+**/connection_info.html
 **/dist/*
 **/build/*
 *.kube

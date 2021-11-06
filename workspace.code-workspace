@@ -1,24 +1,31 @@
 {
 	"folders": [
 		{
+			"name": "backend",
 			"path": "backend"
 		},
 		{
+			"name": "components",
 			"path": "components"
 		},
 		{
-			"path": "devops"
-		},
-		{
+			"name": "webclient",
 			"path": "webclient"
 		},
 		{
+			"name": "devops",
+			"path": "devops"
+		},
+		{
+			"name": "fennec",
 			"path": "fennec"
 		},
 		{
+			"name": ".git",
 			"path": ".git"
 		},
 		{
+			"name": ".github",
 			"path": ".github"
 		}
 	]

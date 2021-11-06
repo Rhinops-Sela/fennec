@@ -9,6 +9,7 @@ from fennec_executers.kubectl_executer import Kubectl
 helm_chart = Helm(os.path.dirname(__file__),
                   chart_name="localstack")
 namespace = helm_chart.execution.get_local_parameter('NAMESPACE')
+helm_chart.execution.write_connection_info(services_names=[f'dynamodb-{namespace}',f'dynamodb-admin-{namespace}'],aws_mock=True)
 
 template_path = os.path.join(
     helm_chart.execution.templates_folder, "dynamodb-ng-template.json")

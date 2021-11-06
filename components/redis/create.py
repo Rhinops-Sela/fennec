@@ -50,4 +50,3 @@ execution_file = os.path.join(
     os.path.dirname(__file__), "redis-admin-execute.values.json")
 Helper.to_json_file(admin_file_object, execution_file)
 helm_chart.install_folder(
-    base_folder=helm_chart.execution.execution_folder, folder='ui', namespace=namespace)

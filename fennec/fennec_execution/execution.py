@@ -153,6 +153,7 @@ class Execution:
 
         process = subprocess.Popen(
             ['/bin/bash', '-c', f'{command}'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        counter=1000
         while True:
             output = process.stdout.readline()
             poll = process.poll()
@@ -161,7 +162,9 @@ class Execution:
                 if show_output:
                     print(output.decode('utf8'))
             if poll is not None:
-                break
+                if counter == 0:
+                    break
+                counter-=1
         command_result = namedtuple("output", ["exit_code", "log"])
         rc = process.poll()
 
@@ -171,28 +174,46 @@ class Execution:
         return command_result(rc, output_str)
 
     def write_connection_info(self, services_names, ingress_port=80, aws_mock=False):
-        output_file = os.path.join(self.output_folder, "connection_info.info")
-        ingresses = self.run_command(
+        cwd = os.path.dirname(os.path.realpath(__file__))
+        connection_info = ""
+        card_file = os.path.join(cwd, "connection_info_card.html")
+        page_file = os.path.join(cwd, "connection_info_page.html")
+        output_file = os.path.join(self.output_folder, "connection_info.html")
+        if os.path.exists(output_file):
+            page_file = output_file
+        connection_info = f'<p>You have installed the service in namespace: <mark class="red">{self.namespace}</mark>, in order to connect to the below urls<br>please connect to the <mark class="red">VPN</mark>.<br></p>'
+        ingresses_temp = self.run_command(
             f"kubectl get ingress -n {self.namespace} -o json")
-        ingresses = Helper.json_to_object(ingresses[1])
-        connection_info = f"You are working on namespace: {self.namespace}, in order to connect to the below urls\nplease connect to the VPN.\n"
-        connection_info += f"URLS:\n\n"
-        ingress_url=""
+        ingresses = Helper.json_to_object(ingresses_temp[1])
+        connection_info += f'<ul><mark class="red">URLS:</mark><ul>'
+        ingress_url = ""
         for ingress_item in ingresses['items']:
             for rule in ingress_item['spec']['rules']:
                 for service_name in services_names:
                     if service_name in rule['host']:
-                        port=""
+                        port = ""
                         if ingress_port != 80:
-                            port=f":{ingress_port}"
-                        ingress_url=f"{rule['host']}{port}\n"
-                        connection_info += ingress_url
+                            port = f":{ingress_port}"
+                        ingress_url = f"http://{rule['host']}{port}"
+                        connection_info += f' <li>{ingress_url} </li>'
+        connection_info+='</ul></ul>'                        
+        service_name=services_names[0].split('-')[0]
         if aws_mock and ingress_url:
-            connection_info += f"For connection to AWS services you need to set --endpoint-url to the service url listed below\n"
-            connection_info += f"aws SERVICE_NMAE --endpoint-url=URL COMMAND\n"
-            connection_info += f"i.e. : aws dynamodb --endpoint-url={ingress_url} create-table ... \n"
-        f = open(output_file, "+a")
-        f.write(f'\n{connection_info}')
+            connection_info += f'<br><p>For connecting to AWS services you need to set <mark class="red">--endpoint-url</mark> to the service url listed above.<br>'
+            connection_info += f'Command structure: aws <mark class="red">SERVICE_NMAE</mark> --endpoint-url=<mark class="red">URL</mark> <mark class="red">COMMAND</mark>'
+            connection_info += f"<li>aws {service_name} --endpoint-url={ingress_url} ACTION</li></p>"
+
+        values_to_replace = {
+            'SERVICE_NAME': f'{service_name}', 'CONNECTION_INFO': connection_info, 'IMAGE_PATH': 'info.png'}
+        new_card = Path(Helper.replace_in_file(
+            card_file, values_to_replace)).read_text()
+        values_to_replace = {
+            '<!--CARD_PLACE_HOLDER-->': new_card}
+        new_page = Path(Helper.replace_in_file(
+            page_file, values_to_replace)).read_text()
+
+        f = open(output_file, "w")
+        f.write(f'\n{new_page}')
         f.close()
 
     @staticmethod

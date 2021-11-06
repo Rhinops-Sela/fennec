@@ -1,6 +1,6 @@
 {
   "SKIP_IF_EXISTS": {
-    "debug": true
+    "debug": false
   },
   "USE_SPOT": {
     "debug": true
@@ -15,7 +15,7 @@
     "debug": 0
   },
   "NAMESPACE": {
-    "debug": "dynamodb1"
+    "debug": "fennec"
   },
   "DYNAMOO_DNS_RECORD":{
     "debug": "dynamodb.fennec.io"
