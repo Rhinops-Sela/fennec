@@ -6,6 +6,7 @@ data:
   BACKEND_URL: {{ .Values.configmap.backend_url }}
   SOCKET_URL: {{ .Values.configmap.socket_url }}
   CLUSTER_NAMES: {{ .Values.configmap.cluster_names }}
+  VPC_CIDR: {{ .Values.configmap.vpc_cidr }}
   CLUSTER_REGIONS: {{ .Values.configmap.cluster_regions }}
   ADMIN_ARN: {{ .Values.configmap.admin_arn }}
   DOMAIN_NAME: {{ .Values.configmap.domain_name }}
