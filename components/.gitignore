@@ -7,10 +7,8 @@ outputs/
 *.kube
 *.ovpn
 *__pycache__*
-*-execute*.json
-*-execute*.yaml
-*_execution*.json
-*_execution*.yaml
+*-execute*.*
+*_execution*.*
 *.pyc
 *.info
 output.json
