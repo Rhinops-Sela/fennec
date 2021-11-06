@@ -34,36 +34,9 @@ spec:
               secretKeyRef:
                 name: aws-secret
                 key: AWS_SECRET_ACCESS_KEY
-          - name: BACKEND_URL
-            valueFrom:
-              configMapKeyRef:
-                name: fennec-configmap           
-                key: backend_url
-          - name: SOCKET_URL
-            valueFrom:
-              configMapKeyRef:
-                name: fennec-configmap           
-                key: socket_url
-          - name: CLUSTER_NAMES
-            valueFrom:
-              configMapKeyRef:
-                name: fennec-configmap           
-                key: cluster_names     
-          - name: ADMIN_ARN
-            valueFrom:
-              configMapKeyRef:
-                name: fennec-configmap           
-                key: admin_arn   
-          - name: DOMAIN_NAME
-            valueFrom:
-              configMapKeyRef:
-                name: fennec-configmap           
-                key: domain_name     
-          - name: ROUTE_53_ZONE_ID
-            valueFrom:
-              configMapKeyRef:
-                name: fennec-configmap           
-                key: route_53_zone_id             
+        envFrom:
+          - configMapRef:
+              name: fennec-configmap
         volumeMounts:
         - name: config
           mountPath: "/config"

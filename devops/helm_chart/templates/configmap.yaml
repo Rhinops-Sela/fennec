@@ -3,10 +3,11 @@ kind: ConfigMap
 metadata:
   name: fennec-configmap
 data:
-  backend_url: {{ .Values.configmap.backend_url }}
-  socket_url: {{ .Values.configmap.socket_url }}
-  cluster_names: {{ .Values.configmap.cluster_names }}
-  admin_arn: {{ .Values.configmap.admin_arn }}
-  domain_name: {{ .Values.configmap.domain_name }}
-  route_53_zone_id: {{ .Values.configmap.route_53_zone_id }}
+  BACKEND_URL: {{ .Values.configmap.backend_url }}
+  SOCKET_URL: {{ .Values.configmap.socket_url }}
+  CLUSTER_NAMES: {{ .Values.configmap.cluster_names }}
+  CLUSTER_REGIONS: {{ .Values.configmap.cluster_regions }}
+  ADMIN_ARN: {{ .Values.configmap.admin_arn }}
+  DOMAIN_NAME: {{ .Values.configmap.domain_name }}
+  ROUTE_53_ZONE_ID: {{ .Values.configmap.route_53_zone_id }}
 

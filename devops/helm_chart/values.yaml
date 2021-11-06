@@ -30,6 +30,7 @@ secrets:
 configmap:
   backend_url: "http://localhost:3000"
   socket_url: "http://localhost:9090"
+  cluster_regions: "eu-west-2"
   cluster_names: "fennec"
   admin_arn: "arn:aws:iam::027065296145:user/iliag"
   domain_name: "fennec.io"
