@@ -73,4 +73,5 @@ class Cluster(Kubectl):
                              'VPC_CIDR': f'{vpc_cidr}'}
         cluster_output= Helper.replace_in_file(
             cluster_file, values_to_replace)
+        Helper.print_log(f'cluster_output: {cluster_output}')
         return cluster_output

@@ -50,7 +50,7 @@ class Nodegroup():
     def __create_execution_file__(self) -> str:
         self.template['nodeGroups'][0] = self.nodegroup
         execution_file = os.path.join(
-            self.execution.working_folder, "nodegroup-execute.json")
+            self.execution.working_folder, "nodegroup-execution.json")
         Helper.to_json_file(self.template, execution_file)
         return execution_file
 
