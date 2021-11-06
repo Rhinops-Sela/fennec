@@ -13,8 +13,6 @@
       },
       "instancesDistribution": {
         "instanceTypes": [
-          "c5.4xlarge",
-          "c5.xlarge",
           "c5.2xlarge"
         ]
       },
