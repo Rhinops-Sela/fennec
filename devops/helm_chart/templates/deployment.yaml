@@ -78,7 +78,7 @@ spec:
           - name: ui
             containerPort: {{ .Values.service.ports.ui }}
       tolerations:
-      - key: "elk"
+      - key: "{{ .Values.deployment.toleration }}"
         operator: "Equal"
         value: "true"
         effect: "NoSchedule"
