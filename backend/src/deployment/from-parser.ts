@@ -62,6 +62,11 @@ export class FormParser {
             input['options']=process.env.CLUSTER_NAMES?.split(',')
           break;
         }
+        case "VPC_CIDR": {
+          if(process.env.VPC_CIDR)
+            input['options']=process.env.VPC_CIDR
+          break;
+        }
         case "CLUSTER_REGION": {
           if(process.env.CLUSTER_REGIONS)
             input['options']=process.env.CLUSTER_REGIONS?.split(',')
