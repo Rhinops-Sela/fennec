@@ -38,4 +38,4 @@ ingress_file = Helper.replace_in_file(os.path.join(helm_chart.execution.template
 helm_chart.install_file(ingress_file,namespace)
 ingress_port = helm_chart.execution.open_tcp_port_nginx(service_name= 'mysql-headless',service_port= 3306)
 helm_chart.execution.write_connection_info(service_name="MySql", ingresses=[
-    f'mysql-{namespace}.{helm_chart.execution.domain_name}'])                                  
+    f'mysql-{namespace}.{helm_chart.execution.domain_name}:{ingress_port}'])                                  

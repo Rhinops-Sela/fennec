@@ -61,4 +61,4 @@ helm_chart.install_file(service_file, namespace)
 helm_chart.install_file(ingress_file, namespace)
 
 helm_chart.execution.write_connection_info(service_name="Redis", ingresses=[
-    f'redis-{namespace}.{helm_chart.execution.domain_name}',f'redis-ui-{namespace}.{helm_chart.execution.domain_name}'])
+    f'redis-{namespace}.{helm_chart.execution.domain_name}:{ingress_port}',f'redis-ui-{namespace}.{helm_chart.execution.domain_name}'])
