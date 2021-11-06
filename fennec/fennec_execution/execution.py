@@ -149,7 +149,7 @@ class Execution:
             Helper.set_permissions(self.kube_config_file, stat.S_IRWXU)
             command = f'export KUBECONFIG={self.kube_config_file} && {command}'
         Helper.set_permissions(command, 0o777)
-        print(command_origingal)
+        Helper.print_log(command_origingal)
 
         process = subprocess.Popen(
             ['/bin/bash', '-c', f'{command}'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -160,7 +160,7 @@ class Execution:
             if output:
                 output_str = output_str + output.decode('utf8')
                 if show_output:
-                    print(output.decode('utf8'))
+                    Helper.print_log(output.decode('utf8'))
             if poll is not None:
                 if counter == 0:
                     break
@@ -190,7 +190,7 @@ class Execution:
         if aws_mock:
             connection_info += f'<br><p>For connecting to AWS services you need to set <mark class="red">--endpoint-url</mark> to the service url listed above.<br>'
             connection_info += f'Command structure: aws <mark class="red">SERVICE_NMAE</mark> --endpoint-url=<mark class="red">URL</mark> <mark class="red">COMMAND</mark>'
-            connection_info += f"<li>aws {service_name.lower()} --endpoint-url={http}{ingresses[0]} ACTION</li></p>"
+            connection_info += f"<li>aws {service_name.lower()} --endpoint-url={ingresses[0]} ACTION</li></p>"
         values_to_replace = {
             'SERVICE_NAME': f'{service_name}', 'CONNECTION_INFO': connection_info}
         new_card = Path(Helper.replace_in_file(
