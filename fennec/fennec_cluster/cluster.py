@@ -41,7 +41,8 @@ class Cluster(Kubectl):
     def create(self):
         if not self.check_if_cluster_exists():
             command = f'eksctl create cluster -f "{self.__replace_cluster_values__()}"'
-            self.execution.run_command(command, kubeconfig=False)
+            Helper.print_log(command)
+            self.execution.run_command(command, kubeconfig=False,show_output=True)
         else:    
             Helper.print_log(
                 f"Cluster {self.name} already exists in region {self.execution.cluster_region}")
@@ -66,8 +67,8 @@ class Cluster(Kubectl):
         cluster_file = os.path.join(
             self.execution.templates_folder, "00.cluster", "cluster.json")
         cluster_name = self.execution.global_parameters['CLUSTER_NAME']
-        vpc_cidr = self.execution.global_parameters['VPC_CIDR']
         cluster_region = self.execution.global_parameters['CLUSTER_REGION']
+        vpc_cidr = self.execution.global_parameters['VPC_CIDR']
         values_to_replace = {'CLUSTER_NAME': f'{cluster_name}',
                              'CLUSTER_REGION': f'{cluster_region}',
                              'VPC_CIDR': f'{vpc_cidr}'}

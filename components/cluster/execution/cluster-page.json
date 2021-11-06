@@ -22,6 +22,14 @@
       "value": "eu-west-2"
     },
     {
+      "controlType": "text",
+      "serverValue": "VPC_CIDR",
+      "global": true,
+      "tooltip": "Will be used for VPC creation",
+      "displayName": "Cluster VPC CIDR",
+      "value": "10.88.0.0/16"
+    },
+    {
       "controlType": "checkbox",
       "tooltip": "Will ebable ingress and ELB creation for the cluster",
       "displayName": "Install Nginx?",
