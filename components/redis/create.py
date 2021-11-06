@@ -29,7 +29,7 @@ values_file_object = Helper.file_to_object(values_file_path)
 # if helm_chart.execution.get_local_parameter('DISABLED_COMMANDS']:
 #     values_file_object['master']['disableCommands'] = helm_chart.execution.get_local_parameter('DISABLED_COMMANDS'].split(',')
 #     values_file_object['slave']['disableCommands'] = helm_chart.execution.get_local_parameter('DISABLED_COMMANDS'].split(',')
-
+values_file_object['replica']['replicaCount'] = helm_chart.execution.get_local_parameter('REPLICAS')
 execution_file = os.path.join(
     os.path.dirname(__file__), "redis-execute.values.json")
 Helper.to_json_file(values_file_object, execution_file)

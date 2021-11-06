@@ -2,6 +2,9 @@
   "auth": {
     "enabled": false
   },
+  "replica":{
+    "replicaCount": 1
+  },
   "master": {
     "persistence": {
       "size": "4Gi"
