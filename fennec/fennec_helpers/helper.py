@@ -15,10 +15,10 @@ class Helper:
         attempts = 10
         lock_file = os.path.join(locks_folder, function_name)
         while os.path.isfile(lock_file) and attempts > -1:
-            file_age=(time.time()-os.path.getmtime(lock_file))/60
+            file_age = (time.time()-os.path.getmtime(lock_file))/60
             if file_age > attempts:
                 os.remove(lock_file)
-            else: 
+            else:
                 Helper.print_log('wating for ngnix update to complete')
                 time.sleep(5)
                 attempts -= 1
@@ -90,9 +90,9 @@ class Helper:
         return output_file
 
     @staticmethod
-    def print_log(content): {
+    def print_log(content):
         print(f'{content}\n')
-    }
+        time.sleep(1)
 
     @staticmethod
     def set_permissions(command: str, permission):

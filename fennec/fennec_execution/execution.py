@@ -174,6 +174,7 @@ class Execution:
         return command_result(rc, output_str)
 
     def write_connection_info(self, service_name: str, ingresses = [], aws_mock=False, http='http://'):
+        Helper.print_log('Will Create Connection Info File')
         cwd = os.path.dirname(os.path.realpath(__file__))
         connection_info = ""
         card_file = os.path.join(cwd, "connection_info_card.html")
