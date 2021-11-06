@@ -32,7 +32,7 @@
             "env": [
               {
                 "name": "REDIS_HOST",
-                "value": ""
+                "value": "REDIS_HOST_PLACEHOOLDER"
               }
             ],
             "ports": [

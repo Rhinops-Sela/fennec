@@ -6,7 +6,8 @@ from fennec_nodegorup.nodegroup import Nodegroup
 helm_chart = Helm(os.path.dirname(__file__), chart_name="redis")
 
 redis_url = helm_chart.execution.get_local_parameter('REDIS_DNS_RECORD')
-redis_admin_url = helm_chart.execution.get_local_parameter('REDIS_ADMIN_DNS_RECORD')
+redis_admin_url = helm_chart.execution.get_local_parameter(
+    'REDIS_ADMIN_DNS_RECORD')
 namespace = helm_chart.execution.get_local_parameter('NAMESPACE')
 template_path = os.path.join(
     helm_chart.execution.templates_folder, "redis-ng-template.json")
@@ -39,17 +40,25 @@ helm_chart.install_chart(release_name="bitnami",
 ingress_port = helm_chart.execution.open_tcp_port_nginx('redis-headless', 6379)
 ingress_file = Helper.replace_in_file(os.path.join(helm_chart.execution.templates_folder, "ingress", "ingress.yaml"), {
     'HOSTNAME': f'redis-{namespace}.{helm_chart.execution.domain_name}'})
-helm_chart.install_file(ingress_file,namespace)
+helm_chart.install_file(ingress_file, namespace)
 
 ui_foler = os.path.join(helm_chart.execution.templates_folder, 'ui')
-admin_deployment = os.path.join(ui_foler, 'deployment.json')
-admin_file_object = Helper.file_to_object(admin_deployment)
-admin_file_object['spec']['template']['spec']['containers'][0][
-    'env'][0]['value'] = f'redis-master.{namespace}.svc.cluster.local'
-execution_file = os.path.join(
-    os.path.dirname(__file__), "redis-admin-execute.values.json")
-Helper.to_json_file(admin_file_object, execution_file)
-helm_chart.install_folder(
-    base_folder=helm_chart.execution.execution_folder, folder='ui', namespace=namespace)
+
+
+values_to_replace = {
+    'REDIS_HOST_PLACEHOOLDER': f'redis-master.{namespace}.svc.cluster.local',
+    'HOSTNAME': f'redis-ui-{namespace}.{helm_chart.execution.domain_name}'}
+
+deployment_file = Helper.replace_in_file(os.path.join(
+    helm_chart.execution.templates_folder, "client", "deployment.json"), values_to_replace, max=2)
+service_file = Helper.replace_in_file(os.path.join(
+    helm_chart.execution.templates_folder, "client", "service.json"), values_to_replace)
+ingress_file = Helper.replace_in_file(os.path.join(
+    helm_chart.execution.templates_folder, "client", "ingress.yaml"), values_to_replace)
+
+helm_chart.install_file(deployment_file, namespace)
+helm_chart.install_file(service_file, namespace)
+helm_chart.install_file(ingress_file, namespace)
+
 helm_chart.execution.write_connection_info(service_name="Redis", ingresses=[
-    f'redis-{namespace}.{helm_chart.execution.domain_name}'])                                      
+    f'redis-{namespace}.{helm_chart.execution.domain_name}',f'redis-ui-{namespace}.{helm_chart.execution.domain_name}'])
