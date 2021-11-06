@@ -22,6 +22,10 @@
     "debug": "eu-west-2",
     "global": true
   },
+  "VPC_CIDR": {
+    "debug": "10.88.0.0/16",
+    "global": true
+  },
   "AWS_DEFAULT_REGION":{
     "debug":"eu-west-2"
   },

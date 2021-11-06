@@ -31,7 +31,7 @@ class Cluster(Kubectl):
     def check_if_cluster_exists(self):
         command = f'eksctl get clusters --region {self.region} -o json'
         clusters = self.execution.run_command(
-            command, show_output=True, kubeconfig=False).log
+            command, show_output=False, kubeconfig=False).log
         clusters_object = Helper.json_to_object(clusters)
         for cluster in clusters_object:
             if cluster['metadata']['name'] == self.name:
