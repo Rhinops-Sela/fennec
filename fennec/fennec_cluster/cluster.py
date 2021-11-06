@@ -68,7 +68,7 @@ class Cluster(Kubectl):
             self.execution.templates_folder, "00.cluster", "cluster.json")
         cluster_name = self.execution.global_parameters['CLUSTER_NAME']
         cluster_region = self.execution.global_parameters['CLUSTER_REGION']
-        vpc_cidr = self.execution.global_parameters['VPC_CIDR']
+        vpc_cidr = self.execution.get_local_parameter['VPC_CIDR']
         values_to_replace = {'CLUSTER_NAME': f'{cluster_name}',
                              'CLUSTER_REGION': f'{cluster_region}',
                              'VPC_CIDR': f'{vpc_cidr}'}

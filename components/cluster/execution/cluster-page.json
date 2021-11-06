@@ -24,7 +24,7 @@
     {
       "controlType": "text",
       "serverValue": "VPC_CIDR",
-      "global": true,
+      "global": false,
       "tooltip": "Will be used for VPC creation",
       "displayName": "Cluster VPC CIDR",
       "value": "10.88.0.0/16"
