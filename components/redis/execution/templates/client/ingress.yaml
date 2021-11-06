@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
-  name: redis-ingress
+  name: redis-client-ingress
 spec:
   rules:
   - host: HOSTNAME

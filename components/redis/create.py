@@ -52,7 +52,7 @@ values_to_replace = {
 deployment_file = Helper.replace_in_file(os.path.join(
     helm_chart.execution.templates_folder, "client", "deployment.json"), values_to_replace, max=2)
 service_file = Helper.replace_in_file(os.path.join(
-    helm_chart.execution.templates_folder, "client", "service.json"), values_to_replace)
+    helm_chart.execution.templates_folder, "client", "service.yaml"), values_to_replace)
 ingress_file = Helper.replace_in_file(os.path.join(
     helm_chart.execution.templates_folder, "client", "ingress.yaml"), values_to_replace)
 
