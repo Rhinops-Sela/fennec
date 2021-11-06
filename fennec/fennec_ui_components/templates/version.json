@@ -1,0 +1,11 @@
+{
+    "controlType": "select",
+    "tooltip": "Please Select version to install",
+    "displayName": "Version",
+    "options": [
+      "6.8"
+    ],
+    "regexValidation": ".*",
+    "serverValue": "VERSION",
+    "global": false
+  }

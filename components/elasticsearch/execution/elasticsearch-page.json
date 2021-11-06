@@ -38,6 +38,11 @@
       "value": "1"
     },
     {
+      "template": "version",
+      "serverValue": "ES_VERSION"
+
+    },
+    {
       "controlType": "checkbox",
       "group_enabler_master": "kibana_installer",
       "tooltip": "Install Kibana",

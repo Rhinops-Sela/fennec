@@ -33,5 +33,6 @@ ingress_file = Helper.replace_in_file(os.path.join(kafka_chart.execution.templat
 kafka_chart.install_file(ingress_file, namespace)
 ingress_port = kafka_chart.execution.open_tcp_port_nginx(
     service_name='kafka-headless', service_port=9092)
-kafka_chart.execution.write_connection_info(services_names=[f'kafka-{namespace}'])
+kafka_chart.execution.write_connection_info(service_name="Kafka", ingresses=[
+    f'kafka-{namespace}.{kafka_chart.execution.domain_name}'])
 

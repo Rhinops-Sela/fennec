@@ -48,3 +48,7 @@ ingress_file = Helper.replace_in_file(os.path.join(
 helm_chart.install_file(deployment_file,namespace)
 helm_chart.install_file(service_file,namespace)
 helm_chart.install_file(ingress_file,namespace)
+helm_chart.execution.write_connection_info(service_name="SQS", ingresses=[
+    f'sqs-{namespace}.{helm_chart.execution.domain_name}'],aws_mock=True)
+helm_chart.execution.write_connection_info(service_name="SNS", ingresses=[
+    f'sns-{namespace}.{helm_chart.execution.domain_name}'],aws_mock=True)    

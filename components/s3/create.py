@@ -38,4 +38,5 @@ helm_chart.install_chart(release_name="localstack-charts",
                          deployment_name="s3",
                          additional_values=[f"--values {execution_file}"])
 s3_record = f"{s3_url}=s3-localstack.{namespace}.svc.cluster.local"
-connection_info = f's3: \naws s3 --endpoint-url=http://s3-localstack.{namespace}.svc.cluster.local:4566 ls'
+helm_chart.execution.write_connection_info(service_name="S3", ingresses=[
+    f's3-{namespace}.{helm_chart.execution.domain_name}'],aws_mock=True)                                      

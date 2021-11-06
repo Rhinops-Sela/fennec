@@ -28,3 +28,5 @@ helm_chart.install_chart(release_name="localstack-charts",
                                   chart_url="https://localstack.github.io/helm-charts",
                                   deployment_name="lambda",
                                   additional_values=[f"--values {execution_file}"])
+helm_chart.execution.write_connection_info(service_name="Lambda", ingresses=[
+    f'lambda-{namespace}.{helm_chart.execution.domain_name}'],aws_mock=True)                                  
