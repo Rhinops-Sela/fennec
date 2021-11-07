@@ -8,7 +8,7 @@ helm_chart = Helm(os.path.dirname(__file__), chart_name="localstack")
 s3_url = helm_chart.execution.get_local_parameter('S3_DNS_RECORD')
 namespace = helm_chart.execution.get_local_parameter('NAMESPACE')
 hostname = f"http://s3-localstack.{namespace}.svc.cluster.local:80"
-external_hostname = f"http://sns-localstack.{namespace}:80"
+external_hostname = f"http://s3-localstack.{namespace}:80"
 if s3_url:
     external_hostname = s3_url
 template_path = os.path.join(
