@@ -37,7 +37,7 @@ class Helm(Kubectl):
             deployment_name = self.chart_name
         self.execution.run_command("helm repo update")
         self.create_namespace(self.namespace_name)
-        install_command = f"helm {verb} --wait --debug --timeout --create-namespace {timeout}s {deployment_name} {release_name}/{self.chart_name} -n {self.namespace_name} {self.combine_additoinal_values(additional_values)}"
+        install_command = f"helm {verb} --wait --debug --create-namespace --timeout {timeout}s {deployment_name} {release_name}/{self.chart_name} -n {self.namespace_name} {self.combine_additoinal_values(additional_values)}"
         Helper.print_log("Installing Chart")
         self.execution.run_command(install_command,show_output=show_output)
 
