@@ -153,7 +153,6 @@ class Execution:
 
         process = subprocess.Popen(
             ['/bin/bash', '-c', f'{command}'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        counter = 1000
         while True:
             output = process.stdout.readline()
             poll = process.poll()
@@ -162,9 +161,7 @@ class Execution:
                 if show_output:
                     Helper.print_log(output.decode('utf8'))
             if poll is not None:
-                if counter == 0:
                     break
-                counter -= 1
         command_result = namedtuple("output", ["exit_code", "log"])
         rc = process.poll()
 
