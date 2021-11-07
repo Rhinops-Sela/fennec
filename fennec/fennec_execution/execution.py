@@ -187,7 +187,7 @@ class Execution:
         if aws_mock:
             connection_info += f'<br><p>For connecting to AWS services you need to set <mark class="red">--endpoint-url</mark> to the service url listed above.<br>'
             connection_info += f'Command structure: aws <mark class="red">SERVICE_NMAE</mark> --endpoint-url=<mark class="red">URL</mark> <mark class="red">COMMAND</mark>'
-            connection_info += f"<li>aws {service_name.lower()} --endpoint-url={ingresses[0]} ACTION</li></p>"
+            connection_info += f"<li>aws {service_name.lower()} --endpoint-url={http}{ingresses[0]} ACTION</li></p>"
         values_to_replace = {
             'SERVICE_NAME': f'{service_name}', 'CONNECTION_INFO': connection_info}
         new_card = Path(Helper.replace_in_file(
