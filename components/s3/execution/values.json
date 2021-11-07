@@ -21,7 +21,7 @@
     },
     {
       "name": "SERVICES",
-      "value": "S3"
+      "value": "s3"
     }
   ],
   "nodeSelector": {
