@@ -27,7 +27,7 @@ values_file_object['extraEnvVars'][2][
     'value'] = f"http://dynamodb-localstack.{namespace}.svc.cluster.local:80"
 values_file_object['extraEnvVars'][3]['value'] = helm_chart.execution.cluster_region
 if helm_chart.execution.domain_name:
-    ingress = f'sqs-{namespace}.{helm_chart.execution.domain_name}'
+    ingress = f'dynamodb-{namespace}.{helm_chart.execution.domain_name}'
     Helper.print_log(f"Adding Ingress: {ingress}")
     values_file_object['ingress']['enabled'] = True
     values_file_object['ingress']['hosts'][0]['host'] = ingress
