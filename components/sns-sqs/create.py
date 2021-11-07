@@ -44,11 +44,11 @@ service_file = Helper.replace_in_file(os.path.join(
     helm_chart.execution.templates_folder, "client", "service.json"), values_to_replace)
 ingress_file = Helper.replace_in_file(os.path.join(
     helm_chart.execution.templates_folder, "client", "ingress.yaml"), values_to_replace)
-
+client_url = f'sns-sqs-client-{namespace}.{helm_chart.execution.domain_name}'
 helm_chart.install_file(deployment_file,namespace)
 helm_chart.install_file(service_file,namespace)
 helm_chart.install_file(ingress_file,namespace)
 helm_chart.execution.write_connection_info(service_name="SQS", ingresses=[
-    f'sqs-{namespace}.{helm_chart.execution.domain_name}'],aws_mock=True)
+    f'sqs-{namespace}.{helm_chart.execution.domain_name}',client_url],aws_mock=True)
 helm_chart.execution.write_connection_info(service_name="SNS", ingresses=[
-    f'sns-{namespace}.{helm_chart.execution.domain_name}'],aws_mock=True)    
+    f'sns-{namespace}.{helm_chart.execution.domain_name}',client_url],aws_mock=True)    
