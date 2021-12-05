@@ -24,6 +24,16 @@
       "value": "s3"
     }
   ],
+  "resources":{
+    "requests":{
+      "cpu": "1",
+      "memory": "6Gi"
+    },
+    "limits":{
+      "cpu": "1",
+      "memory": "6Gi"
+    }
+  },
   "nodeSelector": {
     "role": "s3"
   },
