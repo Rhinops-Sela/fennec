@@ -29,6 +29,7 @@
           "autoScaler": true
         }
       },
+      "availabilityZones": ["eu-west-2a"],
       "tags": {
         "k8s.io/cluster-autoscaler/node-template/role": "kafka",
         "k8s.io/cluster-autoscaler/node-template/taint/kafka": "true:NoSchedule"

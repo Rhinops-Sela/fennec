@@ -20,6 +20,7 @@ class Nodegroup():
 
         self.template['metadata']['name'] = self.execution.cluster_name
         self.template['metadata']['region'] = self.execution.cluster_region
+        self.template['nodeGroups'][0]['availabilityZones'] = f'{self.execution.cluster_az}'
         self.__add_instance_types__()
 
     def create(self):

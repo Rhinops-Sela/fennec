@@ -15,15 +15,12 @@
           "autoScaler": true
         }
       },
+      "availabilityZones": ["eu-west-2a"],
       "labels": {
         "role": "dynamodb"
       },
       "instancesDistribution": {
-        "instanceTypes": [
-          "t3.large",
-          "t3.xlarge",
-          "t2.large"
-        ]
+        "instanceTypes": ["t3.large", "t3.xlarge", "t2.large"]
       },
       "taints": {
         "dynamodb": "true:NoSchedule"

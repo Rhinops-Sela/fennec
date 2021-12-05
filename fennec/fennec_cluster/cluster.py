@@ -23,6 +23,10 @@ class Cluster(Kubectl):
     @property
     def region(self):
         return self.execution.global_parameters["CLUSTER_REGION"]
+    
+    @property
+    def az(self):
+        return self.execution.global_parameters["CLUSTER_AZ"]
 
     def __init__(self, working_folder: str):
         self.working_folder = working_folder

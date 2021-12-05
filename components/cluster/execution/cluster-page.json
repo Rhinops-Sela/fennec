@@ -22,6 +22,14 @@
       "value": "eu-west-2"
     },
     {
+      "template": "region",
+      "serverValue": "CLUSTER_AZ",
+      "global": true,
+      "tooltip": "Will be used as the cluster region for enire installation",
+      "displayName": "Cluster AZ (Will be used by nodegroups)",
+      "value": "eu-west-2a"
+    },
+    {
       "controlType": "text",
       "serverValue": "VPC_CIDR",
       "global": false,

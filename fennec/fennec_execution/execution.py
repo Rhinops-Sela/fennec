@@ -59,6 +59,10 @@ class Execution:
         return self.global_parameters["CLUSTER_REGION"]
 
     @property
+    def cluster_az(self):
+        return self.global_parameters["CLUSTER_AZ"]
+
+    @property
     def kube_config_file(self):
         if not self.__kube_config_file:
             self.create_kubernetes_client()

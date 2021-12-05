@@ -15,6 +15,7 @@
           "autoScaler": true
         }
       },
+      "availabilityZones": ["eu-west-2a"],
       "labels": {
         "role": "mysql"
       },
