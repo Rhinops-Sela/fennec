@@ -27,6 +27,16 @@
   "nodeSelector": {
     "role": "sns-sqs"
   },
+  "resources":{
+    "requests":{
+      "cpu": "1",
+      "memory": "6Gi"
+    },
+    "limits":{
+      "cpu": "1",
+      "memory": "6Gi"
+    }
+  },
   "tolerations": [
     {
       "key": "sns-sqs",

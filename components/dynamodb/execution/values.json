@@ -35,6 +35,16 @@
       "value": "true"
     }
   ],
+  "resources":{
+    "requests":{
+      "cpu": "1",
+      "memory": "6Gi"
+    },
+    "limits":{
+      "cpu": "1",
+      "memory": "6Gi"
+    }
+  },
   "service": {
     "type": "ClusterIP",
     "edgeService": {
