@@ -67,7 +67,7 @@ export class FormParser {
             input['options']=process.env.CLUSTER_REGIONS?.split(',')
           break;
         }
-        case "CLUSTER_REGION": {
+        case "CLUSTER_AZ": {
           if(process.env.CLUSTER_AZS)
             input['options']=process.env.CLUSTER_AZS?.split(',')
           break;

@@ -23,6 +23,7 @@
     "displayName": "Databases",
     "description": "Selection of databases to available in the cluster",
     "pages": [
+      "mongodb-page",
       "redis-page",
       "elasticsearch-page",
       "mysql-page"

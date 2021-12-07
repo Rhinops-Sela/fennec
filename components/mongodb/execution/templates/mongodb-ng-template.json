@@ -1,0 +1,42 @@
+{
+  "apiVersion": "eksctl.io/v1alpha5",
+  "kind": "ClusterConfig",
+  "metadata": {
+    "name": "fennec",
+    "region": "eu-west-2"
+  },
+  "nodeGroups": [
+    {
+      "name": "mongodb",
+      "labels":{
+        "role": "mongodb"
+      },
+      "instancesDistribution": {
+        "instanceTypes": [
+          "m5.xlarge",
+          "m5.large",
+          "m5.2xlarge"
+        ]
+      },
+      "minSize": 0,
+      "maxSize": 100,
+      "desiredCapacity": 1,
+      "availabilityZones": [
+        "eu-west-2a"
+      ],
+      "volumeSize": 50,
+      "volumeType": "gp2",
+      "privateNetworking": true,
+      "iam": {
+        "withAddonPolicies": {
+          "autoScaler": true
+        }
+      },
+      "tags": {
+        "k8s.io/cluster-autoscaler/node-template/role": "mongodb",
+        "k8s.io/cluster-autoscaler/node-template/taint/mongodb": "true:NoSchedule"
+      },
+      "taints": { "mongodb": "true:NoSchedule"}
+    }
+  ]
+}

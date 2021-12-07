@@ -1,0 +1,22 @@
+{
+  "podAnnotations": {
+    "cluster-autoscaler.kubernetes.io/safe-to-evict": "false"
+  },
+  "image":{
+    "tag": "4.4.10-debian-10-r44"
+  },
+  "auth":{
+    "enabled": false
+  },
+  "replicaCount": 1,
+  "nodeSelector": {
+    "role": "mongodb"
+  },
+  "tolerations": [
+    {
+      "key": "mongodb",
+      "operator": "Equal",
+      "value": "true"
+    }
+  ]
+}
