@@ -61,7 +61,7 @@ if install_cluster_dashboard:
     values_to_replace = {'CLUSTER_DASHBOARD_URL': f'{user_url}'}
     values_file_path_execution = Helper.replace_in_file(
         values_file_path, values_to_replace, 100)
-    cluster.install_folder(folder="07.dashboard")
+    cluster.install_folder(folder="07.dashboard", namespace="kubernetes-dashboard")
     cluster.export_secret(secret_name="admin-user",
                             namespace="kube-system",
                             output_file_name="dashboard",
