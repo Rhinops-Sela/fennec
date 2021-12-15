@@ -78,7 +78,7 @@ if not cluster.check_if_cluster_exists() or not allow_skip:
         deployment_file_execution = Helper.replace_in_file(deployment_file, {
             'CLUSTER_NAME': f'{cluster.execution.cluster_name}'})
         cluster.install_file(deployment_file_execution, namespace='external-dns')
-    install_vpn = cluster.execution.get_local_parameter('INSTALL_VPN')
+install_vpn = cluster.execution.get_local_parameter('INSTALL_VPN')
 if install_vpn:
     vpn_working_folder = os.path.join(
     cluster.execution.templates_folder, "08.openvpn")
