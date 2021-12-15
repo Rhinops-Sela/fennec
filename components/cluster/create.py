@@ -69,15 +69,15 @@ if not cluster.check_if_cluster_exists() or not allow_skip:
         core_dns = CoreDNS(os.path.dirname(__file__))
         core_dns.add_records(f"{user_url}={ingress_address}")
 
-        # Install External DNS
-    install_cluster_external_dns = cluster.execution.get_local_parameter('ROUTE_53_ZONE_ID')
-    if install_cluster_external_dns:
-        Helper.print_log("Will deploy external DNS component")
-        deployment_file = os.path.join(
-            cluster.execution.templates_folder, "09.external_dns", "deployment.yaml")
-        deployment_file_execution = Helper.replace_in_file(deployment_file, {
-            'CLUSTER_NAME': f'{cluster.execution.cluster_name}'})
-        cluster.install_file(deployment_file_execution, namespace='external-dns')
+# Install External DNS
+install_cluster_external_dns = cluster.execution.get_local_parameter('ROUTE_53_ZONE_ID')
+if install_cluster_external_dns:
+    Helper.print_log("Will deploy external DNS component")
+    deployment_file = os.path.join(
+        cluster.execution.templates_folder, "09.external_dns", "deployment.yaml")
+    deployment_file_execution = Helper.replace_in_file(deployment_file, {
+        'CLUSTER_NAME': f'{cluster.execution.cluster_name}'})
+    cluster.install_file(deployment_file_execution, namespace='external-dns')
 install_vpn = cluster.execution.get_local_parameter('INSTALL_VPN')
 if install_vpn:
     vpn_working_folder = os.path.join(
