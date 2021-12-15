@@ -8,8 +8,6 @@ from fennec_nodegorup.nodegroup import Nodegroup
 
 cluster = Cluster(os.path.dirname(__file__))
 allow_skip = cluster.execution.get_local_parameter('SKIP_IF_EXISTS')
-vpn_working_folder = os.path.join(
-    cluster.execution.templates_folder, "08.openvpn")
 if not cluster.check_if_cluster_exists() or not allow_skip:
     cluster.create()
     # Install cert-manager
@@ -82,6 +80,8 @@ if not cluster.check_if_cluster_exists() or not allow_skip:
         cluster.install_file(deployment_file_execution, namespace='external-dns')
     install_vpn = cluster.execution.get_local_parameter('INSTALL_VPN')
 if install_vpn:
+    vpn_working_folder = os.path.join(
+    cluster.execution.templates_folder, "08.openvpn")
     template_path = os.path.join(
             cluster.execution.templates_folder, "08.openvpn", "vpn-ng-template.json")
     nodegroup = Nodegroup(os.path.dirname(__file__), template_path)
